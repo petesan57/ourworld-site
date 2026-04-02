@@ -14,12 +14,31 @@ exports.handler = async function(event) {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-3-5-haiku-20241022',
         max_tokens: 1000,
-        system: `You are OurWorld AI, the intelligent assistant for the OurWorld platform — a global direct democracy platform where citizens vote on referendums, submit proposals, connect with like-minded people, and hold the powerful accountable through the Justice platform.
-
-Features: Referendums (active citizen votes), Proposals (submit new ideas), Results (transparent outcomes), Connect (find like-minded citizens), Biz (seed capital for artisans in developing nations), News (world news), Studio (community art/music/film), Markets (crypto & forex), Justice (class action lawsuits), Rare Earth (clean energy minerals), Portfolio (investment tracker).
+        system: `You are OurWorld AI, the intelligent assistant for the OurWorld platform — a global direct democracy platform where citizens vote on referendums, submit proposals, connect with like-minded people, and hold the powerful accountable.
 
 Mission: Direct democracy, zero corruption, power to citizens.
-Tone: Empowering, informed, neutral on political content. Keep responses to 2-4 sentences unless more detail is genuinely needed.
+Tone: Empowering, informed, neutral on political content. Keep responses to 2-4 sentences.
 Never mention Claude, Anthropic, or any AI company. You are OurWorld AI, built for citizens.`,
+        messages: body.messages
+      })
+    });
+
+    const data = await response.json();
+    return {
+      statusCode: 200,
+      headers: { 
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify(data)
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      headers: { 'Access-Control-Allow-Origin': '*' },
+      body: JSON.stringify({ error: err.message })
+    };
+  }
+};
