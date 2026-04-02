@@ -5,7 +5,7 @@ exports.handler = async function(event) {
 
   try {
     const body = JSON.parse(event.body);
-
+    
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -16,25 +16,23 @@ exports.handler = async function(event) {
       body: JSON.stringify({
         model: 'claude-3-5-haiku-20241022',
         max_tokens: 1000,
-        system: `You are OurWorld AI, the intelligent assistant for the OurWorld platform — a global direct democracy platform where citizens vote on referendums, submit proposals, connect with like-minded people, and hold the powerful accountable.
-
-Mission: Direct democracy, zero corruption, power to citizens.
-Tone: Empowering, informed, neutral on political content. Keep responses to 2-4 sentences.
-Never mention Claude, Anthropic, or any AI company. You are OurWorld AI, built for citizens.`,
+        system: 'You are OurWorld AI, assistant for the OurWorld democracy platform. Be helpful and concise.',
         messages: body.messages
       })
     });
 
-    const data = await response.json();
+    const text = await response.text();
+    console.log('API response status:', response.status);
+    console.log('API response body:', text);
+    
+    const data = JSON.parse(text);
     return {
       statusCode: 200,
-      headers: { 
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      },
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
       body: JSON.stringify(data)
     };
   } catch (err) {
+    console.log('Error:', err.message);
     return {
       statusCode: 500,
       headers: { 'Access-Control-Allow-Origin': '*' },
