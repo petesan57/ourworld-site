@@ -42,6 +42,18 @@ nav::-webkit-scrollbar { display: none; }
 .nav-links a:hover { color: var(--text); background: var(--bg3); }
 .nav-links a.active { color: var(--accent2); }
 
+/* Dropdown */
+.nav-dropdown { position: relative; }
+.nav-dropdown > .drop-toggle { color: var(--muted); font-size: 13px; text-decoration: none; padding: 6px 10px; border-radius: 6px; white-space: nowrap; transition: all 0.15s; cursor: pointer; display: flex; align-items: center; gap: 4px; background: none; border: none; font-family: inherit; }
+.nav-dropdown > .drop-toggle:hover { color: var(--text); background: var(--bg3); }
+.nav-dropdown > .drop-toggle.active { color: var(--accent2); }
+.nav-dropdown > .drop-toggle::after { content: '▾'; font-size: 10px; }
+.drop-menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 6px; min-width: 150px; z-index: 200; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+.nav-dropdown:hover .drop-menu, .nav-dropdown.open .drop-menu { display: block; }
+.drop-menu a { display: block; color: var(--muted); font-size: 13px; text-decoration: none; padding: 7px 12px; border-radius: 6px; white-space: nowrap; transition: all 0.15s; }
+.drop-menu a:hover { color: var(--text); background: var(--bg3); }
+.drop-menu a.active { color: var(--accent2); }
+
 section { display: none; padding: 40px 24px; max-width: 900px; margin: 0 auto; }
 section.active { display: block; }
 .hero { text-align: center; padding: 80px 24px 60px; max-width: 900px; margin: 0 auto; display: none; }
@@ -217,18 +229,43 @@ section.active { display: block; }
   <div class="nav-logo">Our<span>World</span></div>
   <div class="nav-links">
     <a href="#" class="active" onclick="show('home',this)">⚡ Dashboard</a>
-    <a href="#" onclick="show('referendums',this)">🗳️ Referendums</a>
-    <a href="#" onclick="show('proposals',this)">📋 Proposals</a>
-    <a href="#" onclick="show('results',this)">📊 Results</a>
+    <div class="nav-dropdown">
+      <button class="drop-toggle" id="peoplepower-toggle">✊ People Power</button>
+      <div class="drop-menu">
+        <a href="#" onclick="show('referendums',document.getElementById('peoplepower-toggle'))">🗳️ Referendums</a>
+        <a href="#" onclick="show('proposals',document.getElementById('peoplepower-toggle'))">📋 Proposals</a>
+        <a href="#" onclick="show('results',document.getElementById('peoplepower-toggle'))">📊 Results</a>
+        <a href="#" onclick="show('justice',document.getElementById('peoplepower-toggle'))">⚖️ Justice</a>
+      </div>
+    </div>
     <a href="#" onclick="show('about',this)">🛡️ About</a>
-    <a href="#" onclick="show('connect',this)">❤️ Connect</a>
-    <a href="#" onclick="show('biz',this)">🌱 Biz</a>
-    <a href="#" onclick="show('news',this)">📰 News</a>
-    <a href="#" onclick="show('studio',this)">🎨 Studio</a>
-    <a href="#" onclick="show('markets',this)">📈 Markets</a>
-    <a href="#" onclick="show('justice',this)">⚖️ Justice</a>
-    <a href="#" onclick="show('rare',this)">💎 Rare Earth</a>
-    <a href="#" onclick="show('portfolio',this)">💼 Portfolio</a>
+    <div class="nav-dropdown">
+      <button class="drop-toggle" id="social-toggle">🌐 Social</button>
+      <div class="drop-menu">
+        <a href="#" onclick="show('opinions',document.getElementById('social-toggle'))">💬 Opinions</a>
+        <a href="#" onclick="show('connect',document.getElementById('social-toggle'))">❤️ Connect</a>
+        <a href="#" onclick="show('share',document.getElementById('social-toggle'))">📤 Share</a>
+        <a href="#" onclick="show('shorts',document.getElementById('social-toggle'))">🎥 Shorts</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button class="drop-toggle" id="create-toggle">🎨 Create</button>
+      <div class="drop-menu">
+        <a href="#" onclick="show('studio',document.getElementById('create-toggle'))">🎨 Studio</a>
+        <a href="#" onclick="show('innovators',document.getElementById('create-toggle'))">💡 Innovators</a>
+        <a href="#" onclick="show('biz',document.getElementById('create-toggle'))">🌱 Biz</a>
+        <a href="#" onclick="show('video',document.getElementById('create-toggle'))">🎬 Video</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button class="drop-toggle" id="gogreen-toggle">🌿 Go Green</button>
+      <div class="drop-menu">
+        <a href="#" onclick="show('solar',document.getElementById('gogreen-toggle'))">☀️ Solar</a>
+        <a href="#" onclick="show('rare',document.getElementById('gogreen-toggle'))">💎 Rare Earth</a>
+        <a href="#" onclick="show('corruption',document.getElementById('gogreen-toggle'))">🔍 Corruption</a>
+        <a href="#" onclick="show('pollution',document.getElementById('gogreen-toggle'))">🌫️ Pollution</a>
+      </div>
+    </div>
   </div>
 </nav>
 
@@ -319,25 +356,32 @@ section.active { display: block; }
   <p style="margin-top:28px;color:var(--muted);font-size:13px;">Light Capitalism · Heavy Democracy · Zero Corruption</p>
 </section>
 
+<section id="opinions">
+  <div class="section-title">💬 Opinions</div>
+  <div class="section-sub">Share your views and debate with citizens worldwide.</div>
+  <p style="color:var(--muted);margin-top:40px;text-align:center;">Coming soon — opinion posts and debates.</p>
+</section>
+
 <section id="connect">
-  <div class="section-title">❤️ Community Connect</div>
-  <div class="section-sub">Find likeminded citizens who share your values.</div>
-  <div class="people-grid">
-    <div class="person-card"><div class="ava">LH</div><h4>Layla Hassan</h4><div class="loc">📍 Cairo, Egypt</div><div class="tags"><span class="tag">Environment</span><span class="tag">Justice</span><span class="tag">Housing</span></div><button class="msg-btn">💬 Message</button></div>
-    <div class="person-card"><div class="ava">MO</div><h4>Marcus Osei</h4><div class="loc">📍 Accra, Ghana</div><div class="tags"><span class="tag">Economy</span><span class="tag">Education</span></div><button class="msg-btn">💬 Message</button></div>
-    <div class="person-card"><div class="ava">PS</div><h4>Priya Sharma</h4><div class="loc">📍 Mumbai, India</div><div class="tags"><span class="tag">Healthcare</span><span class="tag">Rights</span></div><button class="msg-btn">💬 Message</button></div>
-    <div class="person-card"><div class="ava">AT</div><h4>Amara Touré</h4><div class="loc">📍 Dakar, Senegal</div><div class="tags"><span class="tag">Democracy</span><span class="tag">Youth</span></div><button class="msg-btn">💬 Message</button></div>
-  </div>
-  <div class="chat-feed">
-    <h4>&#x1F7E2; Live Chat</h4>
-    <div class="chat-msg"><div class="ava">LH</div><div class="body"><strong>Layla H.</strong> The new climate referendum is exactly what we needed!</div></div>
-    <div class="chat-msg"><div class="ava">MO</div><div class="body"><strong>Marcus O.</strong> Has anyone seen the latest proposal?</div></div>
-    <div class="chat-msg"><div class="ava">PS</div><div class="body"><strong>Priya S.</strong> Just voted yes on universal healthcare!</div></div>
-  </div>
+  <div class="section-title">❤️ Connect</div>
+  <div class="section-sub">Find like-minded citizens who share your values.</div>
+  <p style="color:var(--muted);margin-top:40px;text-align:center;">Coming soon — community connections.</p>
+</section>
+
+<section id="share">
+  <div class="section-title">📤 Share</div>
+  <div class="section-sub">Share ideas, articles and movements with the world.</div>
+  <p style="color:var(--muted);margin-top:40px;text-align:center;">Coming soon — share content with your network.</p>
+</section>
+
+<section id="shorts">
+  <div class="section-title">🎥 Shorts</div>
+  <div class="section-sub">Quick video updates from citizens around the globe.</div>
+  <p style="color:var(--muted);margin-top:40px;text-align:center;">Coming soon — short-form video feed.</p>
 </section>
 
 <section id="biz">
-  <div class="section-title">🌱 Seed Capital for Change</div>
+  <div class="section-title">🌱 Biz</div>
   <div class="section-sub">Connecting creators from developing nations with angel investors worldwide.</div>
   <div class="biz-grid">
     <div class="biz-card"><div class="biz-tag">Crafts · 🇳🇬 Nigeria</div><h3>Adaeze Pottery</h3><p>Hand-thrown terracotta pottery using ancestral techniques. Seeking micro-investment for kiln upgrade.</p><div class="biz-seeking">Seeking: $800</div><button class="interest-btn">Express Interest</button></div>
@@ -346,20 +390,7 @@ section.active { display: block; }
   </div>
 </section>
 
-<section id="news">
-  <div class="section-title">📰 News</div>
-  <div class="news-tabs">
-    <div class="news-tab active">⚡ Breaking</div>
-    <div class="news-tab">🏛️ Politics</div>
-    <div class="news-tab">🏆 Sport</div>
-    <div class="news-tab">👗 Fashion</div>
-    <div class="news-tab">⛅ Weather</div>
-    <div class="news-tab">✈️ Travel</div>
-  </div>
-  <div class="news-feature"><div class="news-badge">🌍 Breaking</div><h2>Global Leaders Convene Emergency Summit on Climate Crisis</h2><p>World leaders gathered in Geneva for an emergency session on climate change, pledging rapid action on emissions and renewable energy investment.</p><div style="font-size:12px;color:var(--muted);margin-top:10px;">World News · 2 min ago</div></div>
-  <div class="news-small"><div><h4>Stock Markets Plunge Amid Economic Uncertainty</h4><div class="src">Financial Times · 1 hr ago</div></div><span>📈</span></div>
-  <div class="news-small"><div><h4>Major Earthquake Strikes Pacific Rim, Tsunami Watch Issued</h4><div class="src">Reuters · 15 min ago</div></div><span>🌊</span></div>
-</section>
+
 
 <section id="studio">
   <div class="section-title">🎨 The Studio</div>
@@ -381,23 +412,7 @@ section.active { display: block; }
   </div>
 </section>
 
-<section id="markets">
-  <div class="section-title">📈 Markets</div>
-  <div class="section-sub">Live crypto and forex rates.</div>
-  <div class="market-tabs">
-    <div class="market-tab active">₿ Crypto</div>
-    <div class="market-tab">$ Forex</div>
-    <div class="market-tab">📊 News</div>
-  </div>
-  <div class="market-grid">
-    <div class="market-card"><div class="sym">BTC</div><div class="name">Bitcoin</div><div class="price">$97,240</div><div class="change up">+2.4%</div></div>
-    <div class="market-card"><div class="sym">ETH</div><div class="name">Ethereum</div><div class="price">$3,841</div><div class="change up">+1.8%</div></div>
-    <div class="market-card"><div class="sym">SOL</div><div class="name">Solana</div><div class="price">$189.40</div><div class="change down">-0.7%</div></div>
-    <div class="market-card"><div class="sym">BNB</div><div class="name">BNB</div><div class="price">$608.20</div><div class="change up">+3.1%</div></div>
-    <div class="market-card"><div class="sym">XRP</div><div class="name">Ripple</div><div class="price">$2.84</div><div class="change down">-1.2%</div></div>
-    <div class="market-card"><div class="sym">ADA</div><div class="name">Cardano</div><div class="price">$1.12</div><div class="change up">+5.3%</div></div>
-  </div>
-</section>
+
 
 <section id="justice">
   <div class="section-title">⚖️ Justice Platform</div>
@@ -410,6 +425,24 @@ section.active { display: block; }
   <div class="justice-card"><div class="j-tag">🌿 Environmental · In Court</div><h3>Shell Oil Spill — Niger Delta Class Action</h3><div class="vs">vs. Shell Nigeria</div><div class="j-meta"><span>👥 <strong>8,402</strong> supporters</span><span>💰 <strong>$34,200</strong> raised</span></div><button class="support-btn">Support This Case</button></div>
   <div class="justice-card"><div class="j-tag">🏢 Corporate · Gathering Support</div><h3>Amazon Warehouse Safety Violations</h3><div class="vs">vs. Amazon Inc.</div><div class="j-meta"><span>👥 <strong>3,120</strong> supporters</span><span>💰 <strong>$12,800</strong> raised</span></div><button class="support-btn">Support This Case</button></div>
   <div class="justice-card"><div class="j-tag">⚖️ Govt Overreach · Legal Review</div><h3>Mass Surveillance Database Challenge</h3><div class="vs">vs. Home Office UK</div><div class="j-meta"><span>👥 <strong>6,891</strong> supporters</span><span>💰 <strong>$28,500</strong> raised</span></div><button class="support-btn">Support This Case</button></div>
+</section>
+
+<section id="solar">
+  <div class="section-title">☀️ Solar</div>
+  <div class="section-sub">Harnessing the power of the sun for a cleaner future.</div>
+  <p style="color:var(--muted);margin-top:40px;text-align:center;">Coming soon — solar energy news, data and projects.</p>
+</section>
+
+<section id="corruption">
+  <div class="section-title">🔍 Corruption</div>
+  <div class="section-sub">Exposing and holding corrupt institutions accountable.</div>
+  <p style="color:var(--muted);margin-top:40px;text-align:center;">Coming soon — corruption tracking and reporting.</p>
+</section>
+
+<section id="pollution">
+  <div class="section-title">🌫️ Pollution</div>
+  <div class="section-sub">Tracking and fighting pollution across the globe.</div>
+  <p style="color:var(--muted);margin-top:40px;text-align:center;">Coming soon — pollution data, maps and campaigns.</p>
 </section>
 
 <section id="rare">
@@ -432,24 +465,7 @@ section.active { display: block; }
   </div>
 </section>
 
-<section id="portfolio">
-  <div class="section-title">💼 My Portfolio</div>
-  <div class="section-sub">Track investments across all asset classes.</div>
-  <div class="portfolio-summary">
-    <div class="p-stat"><div class="pl">Total Value</div><div class="pv">$124,850</div></div>
-    <div class="p-stat"><div class="pl">Total Invested</div><div class="pv">$98,200</div></div>
-    <div class="p-stat"><div class="pl">Total P&amp;L</div><div class="pv up">+$26,650</div></div>
-  </div>
-  <table class="holdings-table">
-    <thead><tr><th>Asset</th><th>Name</th><th>Value</th><th>P&amp;L</th></tr></thead>
-    <tbody>
-      <tr><td><strong>BTC</strong></td><td>Bitcoin</td><td>$43,758</td><td class="up">+$12,200</td></tr>
-      <tr><td><strong>ETH</strong></td><td>Ethereum</td><td>$31,496</td><td class="up">+$8,100</td></tr>
-      <tr><td><strong>EUR/USD</strong></td><td>Euro Dollar</td><td>$21,640</td><td class="up">+$340</td></tr>
-      <tr><td><strong>Nd</strong></td><td>Neodymium</td><td>$930</td><td class="down">-$90</td></tr>
-    </tbody>
-  </table>
-</section>
+
 
 <!-- CHATBOT -->
 <div id="chat-bubble" onclick="toggleChat()">
@@ -475,6 +491,20 @@ section.active { display: block; }
 </div>
 
 <script>
+// Dropdown click toggle
+document.querySelectorAll('.drop-toggle').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const dropdown = this.closest('.nav-dropdown');
+    const isOpen = dropdown.classList.contains('open');
+    document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+    if (!isOpen) dropdown.classList.add('open');
+  });
+});
+document.addEventListener('click', () => {
+  document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+});
+
 const SYSTEM = `You are OurWorld AI, the intelligent assistant for the OurWorld platform — a global direct democracy platform where citizens vote on referendums, submit proposals, connect with like-minded people, and hold the powerful accountable through the Justice platform.
 
 Features: Referendums (active citizen votes), Proposals (submit new ideas), Results (transparent outcomes), Connect (find like-minded citizens), Biz (seed capital for artisans in developing nations), News (world news), Studio (community art/music/film), Markets (crypto & forex), Justice (class action lawsuits), Rare Earth (clean energy minerals), Portfolio (investment tracker).
