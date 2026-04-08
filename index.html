@@ -34,12 +34,7 @@ nav {
   height: 56px;
   overflow: visible;
 }
-.nav-scroll {
-  display: flex; align-items: center; gap: 2px;
-  overflow-x: auto; overflow-y: visible;
-  flex: 1;
-}
-.nav-scroll::-webkit-scrollbar { display: none; }
+nav::-webkit-scrollbar { display: none; }
 .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; color: var(--text); margin-right: 24px; white-space: nowrap; }
 .nav-logo span { color: var(--accent2); }
 .nav-links { display: flex; gap: 2px; }
@@ -232,7 +227,6 @@ section.active { display: block; }
 
 <nav>
   <div class="nav-logo">Our<span>World</span></div>
-  <div class="nav-scroll">
   <div class="nav-links">
     <a href="#" class="active" onclick="show('home',this)">⚡ Dashboard</a>
     <div class="nav-dropdown">
@@ -272,7 +266,6 @@ section.active { display: block; }
         <a href="#" onclick="show('pollution',document.getElementById('gogreen-toggle'))">🌫️ Pollution</a>
       </div>
     </div>
-  </div>
   </div>
 </nav>
 
@@ -621,7 +614,7 @@ document.querySelectorAll('.news-tab, .market-tab, .studio-filter').forEach(tab 
     tab.closest('.news-tabs, .market-tabs, .studio-filters').querySelectorAll('div').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
   });
-});
+})
 </script>
 </body>
 </html>
