@@ -25,7 +25,7 @@ html { scroll-behavior: smooth; }
 body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; min-height: 100vh; }
 
 nav {
-  position: sticky; top: 0; z-index: 100;
+  position: sticky; top: 0; z-index: 1000;
   background: rgba(8,8,16,0.95);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
@@ -33,6 +33,7 @@ nav {
   display: flex; align-items: center;
   height: 56px;
   overflow-x: auto;
+  overflow-y: visible;
 }
 nav::-webkit-scrollbar { display: none; }
 .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; color: var(--text); margin-right: 24px; white-space: nowrap; }
