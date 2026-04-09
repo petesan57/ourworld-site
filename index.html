@@ -31,26 +31,37 @@ nav {
   border-bottom: 1px solid var(--border);
   padding: 0 24px;
   display: flex; align-items: center;
-  height: 56px;
+  height: 64px;
   overflow: visible;
 }
 nav::-webkit-scrollbar { display: none; }
-.nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; color: var(--text); margin-right: 24px; white-space: nowrap; }
-.nav-logo span { color: var(--accent2); }
-.nav-links { display: flex; gap: 2px; }
-.nav-links a { color: var(--muted); font-size: 13px; text-decoration: none; padding: 6px 10px; border-radius: 6px; white-space: nowrap; transition: all 0.15s; }
+
+/* Logo */
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  margin-right: 28px; text-decoration: none; flex-shrink: 0;
+}
+.nav-logo svg { width: 36px; height: 36px; flex-shrink: 0; }
+.nav-logo-text {
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px;
+  color: var(--text); white-space: nowrap; line-height: 1;
+}
+.nav-logo-text span { color: var(--accent2); }
+
+.nav-links { display: flex; gap: 4px; align-items: center; }
+.nav-links a { color: var(--muted); font-size: 15px; text-decoration: none; padding: 7px 12px; border-radius: 6px; white-space: nowrap; transition: all 0.15s; }
 .nav-links a:hover { color: var(--text); background: var(--bg3); }
 .nav-links a.active { color: var(--accent2); }
 
 /* Dropdown */
 .nav-dropdown { position: relative; }
-.nav-dropdown > .drop-toggle { color: var(--muted); font-size: 13px; text-decoration: none; padding: 6px 10px; border-radius: 6px; white-space: nowrap; transition: all 0.15s; cursor: pointer; display: flex; align-items: center; gap: 4px; background: none; border: none; font-family: inherit; }
+.nav-dropdown > .drop-toggle { color: var(--muted); font-size: 15px; text-decoration: none; padding: 7px 12px; border-radius: 6px; white-space: nowrap; transition: all 0.15s; cursor: pointer; display: flex; align-items: center; gap: 4px; background: none; border: none; font-family: inherit; }
 .nav-dropdown > .drop-toggle:hover { color: var(--text); background: var(--bg3); }
 .nav-dropdown > .drop-toggle.active { color: var(--accent2); }
 .nav-dropdown > .drop-toggle::after { content: '▾'; font-size: 10px; }
-.drop-menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 6px; min-width: 150px; z-index: 200; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+.drop-menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 6px; min-width: 160px; z-index: 200; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
 .nav-dropdown:hover .drop-menu, .nav-dropdown.open .drop-menu { display: block; }
-.drop-menu a { display: block; color: var(--muted); font-size: 13px; text-decoration: none; padding: 7px 12px; border-radius: 6px; white-space: nowrap; transition: all 0.15s; }
+.drop-menu a { display: block; color: var(--muted); font-size: 14px; text-decoration: none; padding: 8px 14px; border-radius: 6px; white-space: nowrap; transition: all 0.15s; }
 .drop-menu a:hover { color: var(--text); background: var(--bg3); }
 .drop-menu a.active { color: var(--accent2); }
 
@@ -226,7 +237,19 @@ section.active { display: block; }
 <body>
 
 <nav>
-  <div class="nav-logo">Our<span>World</span></div>
+  <!-- LOGO: compact SVG globe + OurWorld wordmark -->
+  <a class="nav-logo" href="#" onclick="show('home', document.querySelector('.nav-links a')); return false;">
+    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="18" cy="18" r="16" stroke="#818cf8" stroke-width="2.2"/>
+      <line x1="2" y1="18" x2="34" y2="18" stroke="#818cf8" stroke-width="1.4" opacity="0.6"/>
+      <ellipse cx="18" cy="18" rx="6.5" ry="16" stroke="#818cf8" stroke-width="1.4" opacity="0.6"/>
+      <ellipse cx="18" cy="18" rx="13" ry="16" stroke="#818cf8" stroke-width="1" opacity="0.3"/>
+      <ellipse cx="18" cy="11" rx="13.5" ry="4" stroke="#818cf8" stroke-width="1" opacity="0.4"/>
+      <ellipse cx="18" cy="25" rx="13.5" ry="4" stroke="#818cf8" stroke-width="1" opacity="0.4"/>
+    </svg>
+    <span class="nav-logo-text">Our<span>World</span></span>
+  </a>
+
   <div class="nav-links">
     <a href="#" class="active" onclick="show('home',this)">⚡ Dashboard</a>
     <div class="nav-dropdown">
@@ -390,8 +413,6 @@ section.active { display: block; }
   </div>
 </section>
 
-
-
 <section id="studio">
   <div class="section-title">🎨 The Studio</div>
   <div class="section-sub">Discover community creatives.</div>
@@ -411,8 +432,6 @@ section.active { display: block; }
     <div class="studio-card"><div class="studio-type">💃 Dance</div><h3>Roots &amp; Resistance</h3><div class="by">by Zara Okafor</div><div class="studio-meta"><span class="likes">♥ 98</span><span class="price">Free</span></div></div>
   </div>
 </section>
-
-
 
 <section id="justice">
   <div class="section-title">⚖️ Justice Platform</div>
@@ -465,8 +484,6 @@ section.active { display: block; }
   </div>
 </section>
 
-
-
 <!-- CHATBOT -->
 <div id="chat-bubble" onclick="toggleChat()">
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.02 2 11c0 2.64 1.13 5.02 2.95 6.74L4 22l4.5-1.5C9.9 21.14 10.93 21.4 12 21.4 17.52 21.4 22 17.38 22 12c0-5.52-4.48-10-10-10z"/></svg>
@@ -491,7 +508,6 @@ section.active { display: block; }
 </div>
 
 <script>
-// Dropdown click toggle
 document.querySelectorAll('.drop-toggle').forEach(btn => {
   btn.addEventListener('click', function(e) {
     e.stopPropagation();
@@ -504,14 +520,6 @@ document.querySelectorAll('.drop-toggle').forEach(btn => {
 document.addEventListener('click', () => {
   document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
 });
-
-const SYSTEM = `You are OurWorld AI, the intelligent assistant for the OurWorld platform — a global direct democracy platform where citizens vote on referendums, submit proposals, connect with like-minded people, and hold the powerful accountable through the Justice platform.
-
-Features: Referendums (active citizen votes), Proposals (submit new ideas), Results (transparent outcomes), Connect (find like-minded citizens), Biz (seed capital for artisans in developing nations), News (world news), Studio (community art/music/film), Markets (crypto & forex), Justice (class action lawsuits), Rare Earth (clean energy minerals), Portfolio (investment tracker).
-
-Mission: Direct democracy, zero corruption, power to citizens. Light Capitalism, Heavy Democracy, Zero Corruption.
-Tone: Empowering, informed, neutral on political content. Keep responses to 2-4 sentences unless more detail is genuinely needed.
-Never mention Claude, Anthropic, or any AI company. You are OurWorld AI, built for citizens.`;
 
 let history = [];
 let chatOpen = false;
@@ -614,7 +622,7 @@ document.querySelectorAll('.news-tab, .market-tab, .studio-filter').forEach(tab 
     tab.closest('.news-tabs, .market-tabs, .studio-filters').querySelectorAll('div').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
   });
-})
+});
 </script>
 </body>
 </html>
