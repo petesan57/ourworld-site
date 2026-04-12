@@ -228,6 +228,10 @@ section.active { display: block; }
 #chat-input { flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; color: var(--text); font-size: 13px; outline: none; font-family: inherit; height: 36px; resize: none; transition: border-color 0.15s; }
 #chat-input::placeholder { color: var(--muted); }
 #chat-input:focus { border-color: var(--accent); }
+#chat-mic { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
+#chat-mic:hover { background: var(--bg2); border-color: var(--accent); }
+#chat-mic.listening { background: var(--red); border-color: var(--red); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
 #chat-send { background: var(--accent); border: none; border-radius: 8px; width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s; }
 #chat-send:hover { background: #4338ca; }
 #chat-send svg { width: 15px; height: 15px; fill: white; }
@@ -498,10 +502,13 @@ section.active { display: block; }
     <button id="chat-close" onclick="toggleChat()">&#x2715;</button>
   </div>
   <div id="chat-messages">
-    <div class="c-msg bot"><div class="c-bubble">Welcome to Sanford AI - How Can I Help You Today?</div></div>
+    <div class="c-msg bot"><div class="c-bubble">Welcome to OurWorld AI — How Can I Help You Today?</div></div>
   </div>
   <div id="chat-input-area">
     <textarea id="chat-input" placeholder="Ask anything..." onkeydown="handleKey(event)"></textarea>
+    <button id="chat-mic" onclick="toggleMic()" title="Speak">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="white"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm-1 17.93V21H9v2h6v-2h-2v-2.07A8 8 0 0 0 20 11h-2a6 6 0 0 1-12 0H4a8 8 0 0 0 7 7.93z"/></svg>
+    </button>
     <button id="chat-send" onclick="sendMessage()"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button>
   </div>
   <div id="chat-footer">OurWorld AI · Powered by citizens, for citizens</div>
@@ -623,6 +630,30 @@ document.querySelectorAll('.news-tab, .market-tab, .studio-filter').forEach(tab 
     tab.classList.add('active');
   });
 });
+
+// Voice / Mic
+let recognition = null;
+let micActive = false;
+
+function toggleMic() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    alert('Sorry, your browser does not support voice input. Try Chrome.');
+    return;
+  }
+  if (micActive) {
+    recognition.stop();
+    return;
+  }
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.onstart = () => { micActive = true; document.getElementById('chat-mic').classList.add('listening'); };
+  recognition.onresult = (e) => { document.getElementById('chat-input').value = e.results[0][0].transcript; };
+  recognition.onend = () => { micActive = false; document.getElementById('chat-mic').classList.remove('listening'); };
+  recognition.onerror = () => { micActive = false; document.getElementById('chat-mic').classList.remove('listening'); };
+  recognition.start();
+}
 </script>
 </body>
 </html>
