@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OurWorld Video Chat</title>
+  <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0a1628;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    h1 { color: #4CAF50; margin-bottom: 10px; }
+    p { color: #aaa; margin-bottom: 30px; }
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 14px 30px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 10px;
+    }
+    button:hover { background: #45a049; }
+    #share-box {
+      display: none;
+      background: #1a2a3a;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      margin: 20px 0;
+      width: 90%;
+      max-width: 500px;
+    }
+    #room-link {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      font-size: 14px;
+      margin: 10px 0;
+    }
+    #call-frame {
+      display: none;
+      width: 90%;
+      max-width: 900px;
+      height: 600px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌍 OurWorld Video Chat</h1>
+  <p>Start a private video chat and share the link with someone.</p>
+
+  <button onclick="createRoom()">Start Video Chat</button>
+
+  <div id="share-box">
+    <p>Share this link with the person you want to chat with:</p>
+    <input type="text" id="room-link" readonly />
+    <button onclick="copyLink()">Copy Link</button>
+    <button onclick="joinRoom()">Join Now</button>
+  </div>
+
+  <div id="call-frame"></div>
+
+  <script>
+    let roomUrl = "";
+
+    async function createRoom() {
+      const res = await fetch("/.netlify/functions/video", { method: "POST" });
+      const data = await res.json();
+      roomUrl = data.url;
+
+      const fullLink = `${window.location.origin}/video-chat.html?room=${encodeURIComponent(roomUrl)}`;
+      document.getElementById("room-link").value = fullLink;
+      document.getElementById("share-box").style.display = "block";
+    }
+
+    function copyLink() {
+      const link = document.getElementById("room-link");
+      link.select();
+      document.execCommand("copy");
+      alert("Link copied!");
+    }
+
+    function joinRoom() {
+      launchCall(roomUrl);
+    }
+
+    function launchCall(url) {
+      const frame = document.getElementById("call-frame");
+      frame.style.display = "block";
+      const callFrame = window.DailyIframe.createFrame(frame, {
+        iframeStyle: { width: "100%", height: "100%", border: "none" }
+      });
+      callFrame.join({ url });
+    }
+
+    window.onload = () => {
+      const params = new URLSearchParams(window.location.search);
+      const room = params.get("room");
+      if (room) {
+        roomUrl = decodeURIComponent(room);
+        launchCall(roomUrl);
+      }
+    };
+  </script>
+
+</body>
+</html>
