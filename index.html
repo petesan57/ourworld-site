@@ -203,6 +203,36 @@ section.active { display: block; }
   .desktop-video { display: none; }
 }
 
+/* SOCIAL FEED */
+.feed-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.feed-live { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--green); font-weight: 500; }
+.feed-live .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 1.5s infinite; }
+.feed-compose { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 20px; }
+.feed-compose textarea { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px; color: var(--text); font-size: 14px; font-family: inherit; resize: none; outline: none; height: 80px; transition: border-color 0.15s; }
+.feed-compose textarea::placeholder { color: var(--muted); }
+.feed-compose textarea:focus { border-color: var(--accent); }
+.feed-compose-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+.feed-compose-footer span { font-size: 12px; color: var(--muted); }
+.feed-post-btn { background: var(--accent); color: white; border: none; border-radius: 8px; padding: 8px 20px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+.feed-post-btn:hover { background: #4338ca; }
+.feed-scroll { max-height: 580px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 4px; }
+.feed-scroll::-webkit-scrollbar { width: 4px; }
+.feed-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.feed-post { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 16px; transition: border-color 0.2s; }
+.feed-post:hover { border-color: var(--accent); }
+.feed-post-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+.feed-ava { width: 38px; height: 38px; border-radius: 50%; background: var(--bg3); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--accent2); flex-shrink: 0; }
+.feed-meta { flex: 1; }
+.feed-name { font-size: 14px; font-weight: 600; color: var(--text); }
+.feed-location { font-size: 12px; color: var(--muted); }
+.feed-time { font-size: 11px; color: var(--muted); white-space: nowrap; }
+.feed-body { font-size: 14px; color: var(--accent3); line-height: 1.6; margin-bottom: 12px; }
+.feed-actions { display: flex; gap: 20px; }
+.feed-action { background: none; border: none; color: var(--muted); font-size: 12px; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 5px; transition: color 0.15s; padding: 0; }
+.feed-action:hover { color: var(--accent2); }
+.feed-action.liked { color: #f43f5e; }
+.feed-tag-pill { display: inline-block; background: rgba(79,70,229,0.15); color: var(--accent2); border-radius: 20px; font-size: 11px; padding: 2px 10px; margin-bottom: 8px; }
+
 /* MODERATION TOAST */
 #mod-toast {
   position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
@@ -402,9 +432,135 @@ section.active { display: block; }
 </section>
 
 <section id="opinions">
-  <div class="section-title">💬 Opinions</div>
-  <div class="section-sub">Share your views and debate with citizens worldwide.</div>
-  <p style="color:var(--muted);margin-top:40px;text-align:center;">Coming soon — opinion posts and debates.</p>
+  <div class="feed-header">
+    <div>
+      <div class="section-title">💬 Opinions</div>
+      <div class="section-sub">Share your views and debate with citizens worldwide.</div>
+    </div>
+    <div class="feed-live"><div class="live-dot"></div> Live</div>
+  </div>
+
+  <!-- Compose box -->
+  <div class="feed-compose">
+    <textarea id="feed-input" placeholder="What's your view on the world today?"></textarea>
+    <div class="feed-compose-footer">
+      <span id="feed-char">280 characters remaining</span>
+      <button class="feed-post-btn" onclick="postToFeed()">Post ➜</button>
+    </div>
+  </div>
+
+  <!-- Scrollable feed -->
+  <div class="feed-scroll" id="feed-scroll">
+
+    <div class="feed-post">
+      <div class="feed-tag-pill">🌍 Climate</div>
+      <div class="feed-post-top">
+        <div class="feed-ava">AM</div>
+        <div class="feed-meta">
+          <div class="feed-name">Amara Diallo</div>
+          <div class="feed-location">🇸🇳 Dakar, Senegal</div>
+        </div>
+        <div class="feed-time">2m ago</div>
+      </div>
+      <div class="feed-body">Africa bears the heaviest cost of climate change yet contributes the least emissions. Direct democracy must give developing nations equal weight in global environmental decisions. This is the platform for that.</div>
+      <div class="feed-actions">
+        <button class="feed-action" onclick="toggleLike(this)">♥ <span>47</span></button>
+        <button class="feed-action">💬 <span>12 replies</span></button>
+        <button class="feed-action">↗ Share</button>
+      </div>
+    </div>
+
+    <div class="feed-post">
+      <div class="feed-tag-pill">⚖️ Democracy</div>
+      <div class="feed-post-top">
+        <div class="feed-ava">LK</div>
+        <div class="feed-meta">
+          <div class="feed-name">Lena Kovář</div>
+          <div class="feed-location">🇨🇿 Prague, Czech Republic</div>
+        </div>
+        <div class="feed-time">11m ago</div>
+      </div>
+      <div class="feed-body">Politicians promise change every election cycle and deliver almost none of it. OurWorld's model — citizens voting directly on issues — is the only logical evolution of democracy. We don't need representatives, we need referendums.</div>
+      <div class="feed-actions">
+        <button class="feed-action" onclick="toggleLike(this)">♥ <span>89</span></button>
+        <button class="feed-action">💬 <span>34 replies</span></button>
+        <button class="feed-action">↗ Share</button>
+      </div>
+    </div>
+
+    <div class="feed-post">
+      <div class="feed-tag-pill">🏥 Healthcare</div>
+      <div class="feed-post-top">
+        <div class="feed-ava">JO</div>
+        <div class="feed-meta">
+          <div class="feed-name">James Okonkwo</div>
+          <div class="feed-location">🇳🇬 Lagos, Nigeria</div>
+        </div>
+        <div class="feed-time">28m ago</div>
+      </div>
+      <div class="feed-body">Universal healthcare is not a luxury — it is a right. No child should die from a preventable illness because their family cannot afford a doctor. I am voting YES on the healthcare referendum and I urge everyone here to do the same.</div>
+      <div class="feed-actions">
+        <button class="feed-action" onclick="toggleLike(this)">♥ <span>134</span></button>
+        <button class="feed-action">💬 <span>56 replies</span></button>
+        <button class="feed-action">↗ Share</button>
+      </div>
+    </div>
+
+    <div class="feed-post">
+      <div class="feed-tag-pill">💰 Economy</div>
+      <div class="feed-post-top">
+        <div class="feed-ava">SP</div>
+        <div class="feed-meta">
+          <div class="feed-name">Sofia Papadaki</div>
+          <div class="feed-location">🇬🇷 Athens, Greece</div>
+        </div>
+        <div class="feed-time">45m ago</div>
+      </div>
+      <div class="feed-body">Greece lived through austerity imposed by institutions nobody voted for. A platform where citizens directly control economic policy isn't radical — it's overdue. Light capitalism and heavy democracy is exactly the balance we need.</div>
+      <div class="feed-actions">
+        <button class="feed-action" onclick="toggleLike(this)">♥ <span>62</span></button>
+        <button class="feed-action">💬 <span>19 replies</span></button>
+        <button class="feed-action">↗ Share</button>
+      </div>
+    </div>
+
+    <div class="feed-post">
+      <div class="feed-tag-pill">🌱 Environment</div>
+      <div class="feed-post-top">
+        <div class="feed-ava">HT</div>
+        <div class="feed-meta">
+          <div class="feed-name">Hiroshi Tanaka</div>
+          <div class="feed-location">🇯🇵 Tokyo, Japan</div>
+        </div>
+        <div class="feed-time">1h ago</div>
+      </div>
+      <div class="feed-body">Japan's coastline is already changing. We see it every year. Single-use plastics are a small but powerful symbol — if we can't agree to ban a plastic straw, how do we tackle carbon emissions? Vote for the ban. It matters.</div>
+      <div class="feed-actions">
+        <button class="feed-action" onclick="toggleLike(this)">♥ <span>78</span></button>
+        <button class="feed-action">💬 <span>23 replies</span></button>
+        <button class="feed-action">↗ Share</button>
+      </div>
+    </div>
+
+    <div class="feed-post">
+      <div class="feed-tag-pill">✊ Justice</div>
+      <div class="feed-post-top">
+        <div class="feed-ava">RB</div>
+        <div class="feed-meta">
+          <div class="feed-name">Rosa Benitez</div>
+          <div class="feed-location">🇲🇽 Mexico City, Mexico</div>
+        </div>
+        <div class="feed-time">2h ago</div>
+      </div>
+      <div class="feed-body">Corruption thrives in the dark. Transparency, citizen oversight, and zero tolerance — these aren't ideals, they are minimum requirements for a functioning society. OurWorld's justice platform gives ordinary people a real weapon against power.</div>
+      <div class="feed-actions">
+        <button class="feed-action" onclick="toggleLike(this)">♥ <span>201</span></button>
+        <button class="feed-action">💬 <span>88 replies</span></button>
+        <button class="feed-action">↗ Share</button>
+      </div>
+    </div>
+
+  </div>
 </section>
 
 <section id="connect">
@@ -715,7 +871,71 @@ async function sendMessage() {
   }
 }
 
-document.querySelectorAll('.news-tab, .market-tab, .studio-filter').forEach(tab => {
+// SOCIAL FEED
+const feedInput = document.getElementById('feed-input');
+if (feedInput) {
+  feedInput.addEventListener('input', function() {
+    const remaining = 280 - this.value.length;
+    const counter = document.getElementById('feed-char');
+    if (counter) {
+      counter.textContent = remaining + ' characters remaining';
+      counter.style.color = remaining < 30 ? 'var(--amber)' : 'var(--muted)';
+    }
+    if (this.value.length > 280) this.value = this.value.substring(0, 280);
+  });
+}
+
+function postToFeed() {
+  const input = document.getElementById('feed-input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  // Moderation check
+  if (isBlocked(text)) {
+    showModToast();
+    input.value = '';
+    return;
+  }
+
+  const scroll = document.getElementById('feed-scroll');
+  const post = document.createElement('div');
+  post.className = 'feed-post';
+  post.style.borderColor = 'var(--accent)';
+  post.innerHTML = `
+    <div class="feed-tag-pill">💬 Opinion</div>
+    <div class="feed-post-top">
+      <div class="feed-ava" style="background:var(--accent);color:white;">You</div>
+      <div class="feed-meta">
+        <div class="feed-name">You</div>
+        <div class="feed-location">🌍 OurWorld Citizen</div>
+      </div>
+      <div class="feed-time">Just now</div>
+    </div>
+    <div class="feed-body">${text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+    <div class="feed-actions">
+      <button class="feed-action" onclick="toggleLike(this)">♥ <span>0</span></button>
+      <button class="feed-action">💬 <span>0 replies</span></button>
+      <button class="feed-action">↗ Share</button>
+    </div>`;
+  scroll.insertBefore(post, scroll.firstChild);
+  input.value = '';
+  document.getElementById('feed-char').textContent = '280 characters remaining';
+  setTimeout(() => post.style.borderColor = '', 2000);
+}
+
+function toggleLike(btn) {
+  const span = btn.querySelector('span');
+  const count = parseInt(span.textContent);
+  if (btn.classList.contains('liked')) {
+    btn.classList.remove('liked');
+    span.textContent = count - 1;
+  } else {
+    btn.classList.add('liked');
+    span.textContent = count + 1;
+  }
+}
+
+
   tab.addEventListener('click', () => {
     tab.closest('.news-tabs, .market-tabs, .studio-filters').querySelectorAll('div').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
