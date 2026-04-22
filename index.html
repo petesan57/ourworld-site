@@ -203,6 +203,16 @@ section.active { display: block; }
   .desktop-video { display: none; }
 }
 
+/* MODERATION TOAST */
+#mod-toast {
+  position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+  background: #3b1a1a; border: 1px solid var(--red); color: #fca5a5;
+  border-radius: 10px; padding: 12px 20px; font-size: 13px; font-weight: 500;
+  z-index: 99999; display: none; text-align: center; max-width: 320px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+#mod-toast.show { display: block; }
+
 /* CHATBOT */
 #chat-bubble { position: fixed; bottom: 24px; right: 24px; width: 54px; height: 54px; border-radius: 50%; background: var(--bg3); border: 2px solid var(--accent); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 9999; transition: transform 0.2s; }
 #chat-bubble:hover { transform: scale(1.08); }
@@ -245,6 +255,9 @@ section.active { display: block; }
 </style>
 </head>
 <body>
+
+<!-- MODERATION TOAST — appears when blocked content is typed -->
+<div id="mod-toast">🚫 Please keep it respectful — that language isn't allowed on OurWorld.</div>
 
 <nav>
   <a class="nav-logo" href="#" onclick="show('home', document.querySelector('.nav-links a')); return false;">
@@ -400,7 +413,6 @@ section.active { display: block; }
   <div style="margin-top:24px;">
     <h3 style="font-family:'Syne',sans-serif;font-size:18px;margin-bottom:8px;">🎥 Community Video Chat</h3>
     <p style="color:var(--muted);font-size:14px;margin-bottom:16px;">Join the OurWorld community room — connect face to face with citizens worldwide.</p>
-    <!-- Desktop: embedded iframe -->
     <div class="desktop-video">
       <iframe
         src="https://ourworld.daily.co/ourworld-chat"
@@ -408,7 +420,6 @@ section.active { display: block; }
         allow="camera; microphone; fullscreen; speaker; display-capture"
       ></iframe>
     </div>
-    <!-- Mobile: open in new tab -->
     <div class="mobile-video" style="text-align:center;padding:40px 0;">
       <div style="font-size:48px;margin-bottom:16px;">🎥</div>
       <p style="color:var(--muted);font-size:14px;margin-bottom:24px;">Tap below to join the OurWorld community video room.</p>
@@ -537,6 +548,55 @@ section.active { display: block; }
 </div>
 
 <script>
+// ============================================================
+// CONTENT MODERATION — CUSTOM BLOCKLIST
+// To ADD a word: type it in the list below, lowercase,
+// in single quotes, followed by a comma. Example: 'badword',
+// To REMOVE a word: just delete its line.
+// ============================================================
+const BLOCKLIST = [
+  'fuck', 'f**k', 'fuk', 'fuuk',
+  'shit', 'sh1t', 'sht',
+  'cunt', 'c**t',
+  'bitch', 'b1tch',
+  'bastard',
+  'asshole', 'arsehole', 'a**hole',
+  'dick', 'd1ck',
+  'cock', 'c0ck',
+  'pussy',
+  'nigger', 'nigga', 'n1gger',
+  'faggot', 'fag', 'f4ggot',
+  'retard', 'ret4rd',
+  'whore', 'wh0re',
+  'slut', 'sl*t',
+  'twat',
+  'prick',
+  'wanker', 'w4nker',
+  'bollocks',
+  'motherfucker', 'mofo',
+  'kill yourself', 'kys',
+  'go die',
+  'rape', 'r4pe',
+  'nazi', 'n4zi',
+  'hitler'
+];
+
+// Returns true if text contains a blocked word/phrase
+function isBlocked(text) {
+  const lower = text.toLowerCase();
+  return BLOCKLIST.some(word => lower.includes(word));
+}
+
+// Shows a polite warning toast for 3.5 seconds then hides it
+let toastTimer = null;
+function showModToast() {
+  const toast = document.getElementById('mod-toast');
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
+}
+// ============================================================
+
 document.querySelectorAll('.drop-toggle').forEach(btn => {
   btn.addEventListener('click', function(e) {
     e.stopPropagation();
@@ -625,6 +685,15 @@ async function sendMessage() {
   const input = document.getElementById('chat-input');
   const text = input.value.trim();
   if (!text) return;
+
+  // ---- MODERATION CHECK — runs before anything is sent ----
+  if (isBlocked(text)) {
+    showModToast();
+    input.value = '';
+    return; // message is blocked, nothing sent to AI
+  }
+  // ---------------------------------------------------------
+
   input.value = '';
   addMsg('user', text);
   history.push({role:'user', content:text});
