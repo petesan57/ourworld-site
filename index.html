@@ -936,6 +936,7 @@ function toggleLike(btn) {
 }
 
 
+document.querySelectorAll('.news-tab, .market-tab, .studio-filter').forEach(tab => {
   tab.addEventListener('click', () => {
     tab.closest('.news-tabs, .market-tabs, .studio-filters').querySelectorAll('div').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
