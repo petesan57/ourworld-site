@@ -282,11 +282,19 @@ section.active { display: block; }
 #chat-send:hover { background: #4338ca; }
 #chat-send svg { width: 15px; height: 15px; fill: white; }
 #chat-footer { text-align: center; padding: 6px; font-size: 10px; color: #374151; border-top: 1px solid var(--bg3); background: var(--bg2); }
+
+/* INPUT RESET for forms inside sections */
+input[type="text"], input:not([type]) {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px; color: var(--text); font-size: 14px; font-family: inherit;
+  outline: none; width: 100%; transition: border-color 0.15s;
+}
+input:focus { border-color: var(--accent); }
 </style>
 </head>
 <body>
 
-<!-- MODERATION TOAST — appears when blocked content is typed -->
+<!-- MODERATION TOAST -->
 <div id="mod-toast">🚫 Please keep it respectful — that language isn't allowed on OurWorld.</div>
 
 <nav>
@@ -344,6 +352,7 @@ section.active { display: block; }
   </div>
 </nav>
 
+<!-- HOME / DASHBOARD -->
 <div id="home" class="hero active">
   <div class="hero-tag">🌍 Ideas In Motion</div>
   <h1>The New<br><span>Democracy</span></h1>
@@ -362,6 +371,7 @@ section.active { display: block; }
   </div>
 </div>
 
+<!-- REFERENDUMS -->
 <section id="referendums">
   <div class="section-title">🗳️ Referendums</div>
   <div class="section-sub">Browse and cast your vote on active referendums.</div>
@@ -391,6 +401,7 @@ section.active { display: block; }
   <div id="ref-detail-area" style="margin-top:28px;display:none;"></div>
 </section>
 
+<!-- PROPOSALS -->
 <section id="proposals">
   <div class="section-title">📋 Citizen Proposals</div>
   <div class="section-sub">Suggest new issues for the community to vote on.</div>
@@ -404,6 +415,7 @@ section.active { display: block; }
   </div>
 </section>
 
+<!-- RESULTS -->
 <section id="results">
   <div class="section-title">📊 Referendum Results</div>
   <div class="section-sub">Transparent outcomes — every vote counted.</div>
@@ -413,6 +425,7 @@ section.active { display: block; }
   </div>
 </section>
 
+<!-- ABOUT -->
 <section id="about">
   <div class="section-title">🛡️ About OurWorld</div>
   <div class="section-sub">A system of citizen control — no politicians, just the will of the people.</div>
@@ -431,6 +444,7 @@ section.active { display: block; }
   <p style="margin-top:28px;color:var(--muted);font-size:13px;">Light Capitalism · Heavy Democracy · Zero Corruption</p>
 </section>
 
+<!-- OPINIONS -->
 <section id="opinions">
   <div class="feed-header">
     <div>
@@ -439,8 +453,6 @@ section.active { display: block; }
     </div>
     <div class="feed-live"><div class="live-dot"></div> Live</div>
   </div>
-
-  <!-- Compose box -->
   <div class="feed-compose">
     <textarea id="feed-input" placeholder="What's your view on the world today?"></textarea>
     <div class="feed-compose-footer">
@@ -448,18 +460,12 @@ section.active { display: block; }
       <button class="feed-post-btn" onclick="postToFeed()">Post ➜</button>
     </div>
   </div>
-
-  <!-- Scrollable feed -->
   <div class="feed-scroll" id="feed-scroll">
-
     <div class="feed-post">
       <div class="feed-tag-pill">🌍 Climate</div>
       <div class="feed-post-top">
         <div class="feed-ava">AM</div>
-        <div class="feed-meta">
-          <div class="feed-name">Amara Diallo</div>
-          <div class="feed-location">🇸🇳 Dakar, Senegal</div>
-        </div>
+        <div class="feed-meta"><div class="feed-name">Amara Diallo</div><div class="feed-location">🇸🇳 Dakar, Senegal</div></div>
         <div class="feed-time">2m ago</div>
       </div>
       <div class="feed-body">Africa bears the heaviest cost of climate change yet contributes the least emissions. Direct democracy must give developing nations equal weight in global environmental decisions. This is the platform for that.</div>
@@ -469,15 +475,11 @@ section.active { display: block; }
         <button class="feed-action">↗ Share</button>
       </div>
     </div>
-
     <div class="feed-post">
       <div class="feed-tag-pill">⚖️ Democracy</div>
       <div class="feed-post-top">
         <div class="feed-ava">LK</div>
-        <div class="feed-meta">
-          <div class="feed-name">Lena Kovář</div>
-          <div class="feed-location">🇨🇿 Prague, Czech Republic</div>
-        </div>
+        <div class="feed-meta"><div class="feed-name">Lena Kovář</div><div class="feed-location">🇨🇿 Prague, Czech Republic</div></div>
         <div class="feed-time">11m ago</div>
       </div>
       <div class="feed-body">Politicians promise change every election cycle and deliver almost none of it. OurWorld's model — citizens voting directly on issues — is the only logical evolution of democracy. We don't need representatives, we need referendums.</div>
@@ -487,15 +489,11 @@ section.active { display: block; }
         <button class="feed-action">↗ Share</button>
       </div>
     </div>
-
     <div class="feed-post">
       <div class="feed-tag-pill">🏥 Healthcare</div>
       <div class="feed-post-top">
         <div class="feed-ava">JO</div>
-        <div class="feed-meta">
-          <div class="feed-name">James Okonkwo</div>
-          <div class="feed-location">🇳🇬 Lagos, Nigeria</div>
-        </div>
+        <div class="feed-meta"><div class="feed-name">James Okonkwo</div><div class="feed-location">🇳🇬 Lagos, Nigeria</div></div>
         <div class="feed-time">28m ago</div>
       </div>
       <div class="feed-body">Universal healthcare is not a luxury — it is a right. No child should die from a preventable illness because their family cannot afford a doctor. I am voting YES on the healthcare referendum and I urge everyone here to do the same.</div>
@@ -505,15 +503,11 @@ section.active { display: block; }
         <button class="feed-action">↗ Share</button>
       </div>
     </div>
-
     <div class="feed-post">
       <div class="feed-tag-pill">💰 Economy</div>
       <div class="feed-post-top">
         <div class="feed-ava">SP</div>
-        <div class="feed-meta">
-          <div class="feed-name">Sofia Papadaki</div>
-          <div class="feed-location">🇬🇷 Athens, Greece</div>
-        </div>
+        <div class="feed-meta"><div class="feed-name">Sofia Papadaki</div><div class="feed-location">🇬🇷 Athens, Greece</div></div>
         <div class="feed-time">45m ago</div>
       </div>
       <div class="feed-body">Greece lived through austerity imposed by institutions nobody voted for. A platform where citizens directly control economic policy isn't radical — it's overdue. Light capitalism and heavy democracy is exactly the balance we need.</div>
@@ -523,15 +517,11 @@ section.active { display: block; }
         <button class="feed-action">↗ Share</button>
       </div>
     </div>
-
     <div class="feed-post">
       <div class="feed-tag-pill">🌱 Environment</div>
       <div class="feed-post-top">
         <div class="feed-ava">HT</div>
-        <div class="feed-meta">
-          <div class="feed-name">Hiroshi Tanaka</div>
-          <div class="feed-location">🇯🇵 Tokyo, Japan</div>
-        </div>
+        <div class="feed-meta"><div class="feed-name">Hiroshi Tanaka</div><div class="feed-location">🇯🇵 Tokyo, Japan</div></div>
         <div class="feed-time">1h ago</div>
       </div>
       <div class="feed-body">Japan's coastline is already changing. We see it every year. Single-use plastics are a small but powerful symbol — if we can't agree to ban a plastic straw, how do we tackle carbon emissions? Vote for the ban. It matters.</div>
@@ -541,15 +531,11 @@ section.active { display: block; }
         <button class="feed-action">↗ Share</button>
       </div>
     </div>
-
     <div class="feed-post">
       <div class="feed-tag-pill">✊ Justice</div>
       <div class="feed-post-top">
         <div class="feed-ava">RB</div>
-        <div class="feed-meta">
-          <div class="feed-name">Rosa Benitez</div>
-          <div class="feed-location">🇲🇽 Mexico City, Mexico</div>
-        </div>
+        <div class="feed-meta"><div class="feed-name">Rosa Benitez</div><div class="feed-location">🇲🇽 Mexico City, Mexico</div></div>
         <div class="feed-time">2h ago</div>
       </div>
       <div class="feed-body">Corruption thrives in the dark. Transparency, citizen oversight, and zero tolerance — these aren't ideals, they are minimum requirements for a functioning society. OurWorld's justice platform gives ordinary people a real weapon against power.</div>
@@ -559,10 +545,10 @@ section.active { display: block; }
         <button class="feed-action">↗ Share</button>
       </div>
     </div>
-
   </div>
 </section>
 
+<!-- CONNECT -->
 <section id="connect">
   <div class="section-title">❤️ Connect</div>
   <div class="section-sub">Find like-minded citizens who share your values.</div>
@@ -570,11 +556,7 @@ section.active { display: block; }
     <h3 style="font-family:'Syne',sans-serif;font-size:18px;margin-bottom:8px;">🎥 Community Video Chat</h3>
     <p style="color:var(--muted);font-size:14px;margin-bottom:16px;">Join the OurWorld community room — connect face to face with citizens worldwide.</p>
     <div class="desktop-video">
-      <iframe
-        src="https://ourworld.daily.co/ourworld-chat"
-        style="width:100%;height:500px;border:none;border-radius:14px;background:var(--bg2);"
-        allow="camera; microphone; fullscreen; speaker; display-capture"
-      ></iframe>
+      <iframe src="https://ourworld.daily.co/ourworld-chat" style="width:100%;height:500px;border:none;border-radius:14px;background:var(--bg2);" allow="camera; microphone; fullscreen; speaker; display-capture"></iframe>
     </div>
     <div class="mobile-video" style="text-align:center;padding:40px 0;">
       <div style="font-size:48px;margin-bottom:16px;">🎥</div>
@@ -584,18 +566,175 @@ section.active { display: block; }
   </div>
 </section>
 
+<!-- SHARE -->
 <section id="share">
   <div class="section-title">📤 Share</div>
-  <div class="section-sub">Share ideas, articles and movements with the world.</div>
-  <p style="color:var(--muted);margin-top:40px;text-align:center;">Coming soon — share content with your network.</p>
+  <div class="section-sub">Spread ideas, campaigns and movements — amplify the voices that matter.</div>
+  <div class="feed-compose" style="margin-bottom:24px;">
+    <textarea id="share-input" placeholder="Share a link, article or movement with the world..."></textarea>
+    <div class="feed-compose-footer">
+      <span id="share-char">280 characters remaining</span>
+      <button class="feed-post-btn" onclick="postShare()">Share ➜</button>
+    </div>
+  </div>
+  <div class="section-title" style="font-size:16px;margin-bottom:16px;">🔥 Trending Shares</div>
+  <div class="feed-scroll" id="share-scroll" style="max-height:520px;">
+    <div class="feed-post">
+      <div class="feed-tag-pill">🌿 Environment</div>
+      <div class="feed-post-top">
+        <div class="feed-ava">NK</div>
+        <div class="feed-meta"><div class="feed-name">Nizhoni Kaya</div><div class="feed-location">🇺🇸 Phoenix, USA</div></div>
+        <div class="feed-time">5m ago</div>
+      </div>
+      <div class="feed-body">📰 New UN report: Global plastic production has doubled since 2000 and 91% is never recycled. Share this everywhere — the public doesn't realise the scale. Vote YES on the plastics ban.</div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:12px;">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">unep.org · Article</div>
+        <div style="font-size:13px;font-weight:600;">Plastic Planet: The facts every citizen needs to know</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">A comprehensive breakdown of the global plastic crisis and what direct citizen action can achieve.</div>
+      </div>
+      <div class="feed-actions">
+        <button class="feed-action" onclick="toggleLike(this)">♥ <span>312</span></button>
+        <button class="feed-action">🔁 <span>89 reshares</span></button>
+        <button class="feed-action">↗ External Link</button>
+      </div>
+    </div>
+    <div class="feed-post">
+      <div class="feed-tag-pill">⚖️ Justice</div>
+      <div class="feed-post-top">
+        <div class="feed-ava">CB</div>
+        <div class="feed-meta"><div class="feed-name">Chidera Bankole</div><div class="feed-location">🇳🇬 Abuja, Nigeria</div></div>
+        <div class="feed-time">22m ago</div>
+      </div>
+      <div class="feed-body">🎬 Must-watch 8-minute documentary on the Niger Delta oil spill. Share it. The world needs to see what communities here are living with every single day. Support the case in Justice.</div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:12px;">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">YouTube · Documentary</div>
+        <div style="font-size:13px;font-weight:600;">Niger Delta: 50 Years of Spills</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Award-winning short documentary. 2.4M views worldwide.</div>
+      </div>
+      <div class="feed-actions">
+        <button class="feed-action" onclick="toggleLike(this)">♥ <span>541</span></button>
+        <button class="feed-action">🔁 <span>204 reshares</span></button>
+        <button class="feed-action">↗ External Link</button>
+      </div>
+    </div>
+    <div class="feed-post">
+      <div class="feed-tag-pill">💰 Economy</div>
+      <div class="feed-post-top">
+        <div class="feed-ava">MH</div>
+        <div class="feed-meta"><div class="feed-name">Mira Hoffmann</div><div class="feed-location">🇩🇪 Berlin, Germany</div></div>
+        <div class="feed-time">1h ago</div>
+      </div>
+      <div class="feed-body">📊 Finland's UBI pilot results are in — participants showed higher wellbeing, more confidence, and NO reduction in work motivation. Share the data, not the myths.</div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:12px;">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">kela.fi · Research Report</div>
+        <div style="font-size:13px;font-weight:600;">Finland Basic Income Experiment: Final Results</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Two-year government study covering 2,000 participants across Finland.</div>
+      </div>
+      <div class="feed-actions">
+        <button class="feed-action" onclick="toggleLike(this)">♥ <span>188</span></button>
+        <button class="feed-action">🔁 <span>67 reshares</span></button>
+        <button class="feed-action">↗ External Link</button>
+      </div>
+    </div>
+    <div class="feed-post">
+      <div class="feed-tag-pill">🏥 Healthcare</div>
+      <div class="feed-post-top">
+        <div class="feed-ava">AP</div>
+        <div class="feed-meta"><div class="feed-name">Ana Pereira</div><div class="feed-location">🇧🇷 São Paulo, Brazil</div></div>
+        <div class="feed-time">3h ago</div>
+      </div>
+      <div class="feed-body">🧵 Thread: I compiled healthcare outcomes from 15 countries with universal systems vs 10 without. The data is unambiguous. Share this before the healthcare referendum closes.</div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:12px;">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">WHO Data · Analysis</div>
+        <div style="font-size:13px;font-weight:600;">Universal Healthcare: A 25-Country Outcome Study</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Life expectancy, infant mortality and cost-per-capita compared across systems.</div>
+      </div>
+      <div class="feed-actions">
+        <button class="feed-action" onclick="toggleLike(this)">♥ <span>421</span></button>
+        <button class="feed-action">🔁 <span>156 reshares</span></button>
+        <button class="feed-action">↗ External Link</button>
+      </div>
+    </div>
+  </div>
 </section>
 
+<!-- SHORTS -->
 <section id="shorts">
   <div class="section-title">🎥 Shorts</div>
-  <div class="section-sub">Quick video updates from citizens around the globe.</div>
-  <p style="color:var(--muted);margin-top:40px;text-align:center;">Coming soon — short-form video feed.</p>
+  <div class="section-sub">Quick video updates from citizens and activists around the globe.</div>
+  <div class="news-tabs" style="margin-bottom:24px;">
+    <div class="news-tab active">🔥 Trending</div>
+    <div class="news-tab">🌍 Climate</div>
+    <div class="news-tab">⚖️ Justice</div>
+    <div class="news-tab">💰 Economy</div>
+    <div class="news-tab">🗳️ Democracy</div>
+  </div>
+  <div class="cards-grid">
+    <div class="card" style="cursor:default;">
+      <div style="background:var(--bg3);border-radius:10px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;margin-bottom:12px;border:1px solid var(--border);position:relative;overflow:hidden;">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a1a3e,#0f0f1a);"></div>
+        <div style="position:relative;text-align:center;"><div style="font-size:36px;margin-bottom:6px;">▶️</div><div style="font-size:11px;color:var(--muted);">1:42</div></div>
+        <div style="position:absolute;top:8px;left:8px;background:rgba(239,68,68,0.9);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;">LIVE</div>
+      </div>
+      <div class="card-tag">🌿 Environment <span class="pill pill-green">48.2k views</span></div>
+      <h3>Amazon deforestation — filmed from the ground, right now</h3>
+      <p>Indigenous activist Tupã films the advancing logging frontier in real time. This is what erasure looks like.</p>
+      <div class="card-meta">📍 Pará, Brazil · <strong style="color:var(--accent2);">Tupã Juruna</strong></div>
+    </div>
+    <div class="card" style="cursor:default;">
+      <div style="background:var(--bg3);border-radius:10px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;margin-bottom:12px;border:1px solid var(--border);position:relative;overflow:hidden;">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1e1a0f,#0f0f1a);"></div>
+        <div style="position:relative;text-align:center;"><div style="font-size:36px;margin-bottom:6px;">▶️</div><div style="font-size:11px;color:var(--muted);">4:07</div></div>
+      </div>
+      <div class="card-tag">⚖️ Justice <span class="pill pill-amber">22.1k views</span></div>
+      <h3>Why I'm suing my government — and how OurWorld helped</h3>
+      <p>A community leader from Accra explains how crowdfunded legal support through the Justice platform made their case possible.</p>
+      <div class="card-meta">📍 Accra, Ghana · <strong style="color:var(--accent2);">Kwame Asante</strong></div>
+    </div>
+    <div class="card" style="cursor:default;">
+      <div style="background:var(--bg3);border-radius:10px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;margin-bottom:12px;border:1px solid var(--border);position:relative;overflow:hidden;">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0f1a1a,#0a0a14);"></div>
+        <div style="position:relative;text-align:center;"><div style="font-size:36px;margin-bottom:6px;">▶️</div><div style="font-size:11px;color:var(--muted);">2:31</div></div>
+      </div>
+      <div class="card-tag">🗳️ Democracy <span class="pill pill-blue">31.5k views</span></div>
+      <h3>The election they tried to bury — a citizen journalist's story</h3>
+      <p>How one woman documented ballot irregularities with only a phone and uploaded the evidence to the world.</p>
+      <div class="card-meta">📍 Tbilisi, Georgia · <strong style="color:var(--accent2);">Nino Kvaratskhelia</strong></div>
+    </div>
+    <div class="card" style="cursor:default;">
+      <div style="background:var(--bg3);border-radius:10px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;margin-bottom:12px;border:1px solid var(--border);position:relative;overflow:hidden;">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a0f1a,#0f0a14);"></div>
+        <div style="position:relative;text-align:center;"><div style="font-size:36px;margin-bottom:6px;">▶️</div><div style="font-size:11px;color:var(--muted);">3:18</div></div>
+      </div>
+      <div class="card-tag">💰 Economy <span class="pill pill-green">17.8k views</span></div>
+      <h3>I started a pottery business for $800 — here's what happened</h3>
+      <p>Adaeze shares how a micro-investment through OurWorld Biz transformed her family's livelihood in six months.</p>
+      <div class="card-meta">📍 Lagos, Nigeria · <strong style="color:var(--accent2);">Adaeze Obi</strong></div>
+    </div>
+    <div class="card" style="cursor:default;">
+      <div style="background:var(--bg3);border-radius:10px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;margin-bottom:12px;border:1px solid var(--border);position:relative;overflow:hidden;">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0f1a0f,#080810);"></div>
+        <div style="position:relative;text-align:center;"><div style="font-size:36px;margin-bottom:6px;">▶️</div><div style="font-size:11px;color:var(--muted);">5:44</div></div>
+      </div>
+      <div class="card-tag">🌿 Climate <span class="pill pill-amber">54.9k views</span></div>
+      <h3>Our village flooded for the 4th year running</h3>
+      <p>A short film by a 19-year-old documenting flood damage to her community in Bangladesh and the government's silence.</p>
+      <div class="card-meta">📍 Sylhet, Bangladesh · <strong style="color:var(--accent2);">Fatema Begum</strong></div>
+    </div>
+    <div class="card" style="cursor:default;">
+      <div style="background:var(--bg3);border-radius:10px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;margin-bottom:12px;border:1px solid var(--border);position:relative;overflow:hidden;">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a1010,#0f0808);"></div>
+        <div style="position:relative;text-align:center;"><div style="font-size:36px;margin-bottom:6px;">▶️</div><div style="font-size:11px;color:var(--muted);">2:55</div></div>
+      </div>
+      <div class="card-tag">✊ People Power <span class="pill pill-blue">28.3k views</span></div>
+      <h3>What direct democracy looks like in practice — Iceland's story</h3>
+      <p>A short explainer on how Iceland used citizen assemblies to rewrite its constitution after the 2008 financial crash.</p>
+      <div class="card-meta">📍 Reykjavík, Iceland · <strong style="color:var(--accent2);">Björn Sigurdsson</strong></div>
+    </div>
+  </div>
 </section>
 
+<!-- BIZ -->
 <section id="biz">
   <div class="section-title">🌱 Biz</div>
   <div class="section-sub">Connecting creators from developing nations with angel investors worldwide.</div>
@@ -606,6 +745,7 @@ section.active { display: block; }
   </div>
 </section>
 
+<!-- STUDIO -->
 <section id="studio">
   <div class="section-title">🎨 The Studio</div>
   <div class="section-sub">Discover community creatives.</div>
@@ -626,6 +766,130 @@ section.active { display: block; }
   </div>
 </section>
 
+<!-- INNOVATORS -->
+<section id="innovators">
+  <div class="section-title">💡 Innovators</div>
+  <div class="section-sub">Citizens building solutions to the world's hardest problems — connect, fund and collaborate.</div>
+  <div class="news-tabs" style="margin-bottom:24px;">
+    <div class="news-tab active">🌍 All</div>
+    <div class="news-tab">🌿 Climate</div>
+    <div class="news-tab">🏥 Health</div>
+    <div class="news-tab">💰 Finance</div>
+    <div class="news-tab">🏫 Education</div>
+    <div class="news-tab">🍽️ Food</div>
+  </div>
+  <div class="biz-grid">
+    <div class="biz-card">
+      <div class="biz-tag">CleanTech · 🇳🇬 Nigeria</div>
+      <h3>BioGas Village</h3>
+      <p>Converting agricultural waste into cooking gas for rural communities. One unit powers 10 households and replaces wood burning, reducing both deforestation and respiratory illness.</p>
+      <div class="biz-seeking">Seeking: $12,000 · 3 co-founders</div>
+      <div style="margin:10px 0;font-size:12px;color:var(--muted);">👥 847 supporters · ⭐ Featured</div>
+      <button class="interest-btn">Express Interest</button>
+    </div>
+    <div class="biz-card">
+      <div class="biz-tag">HealthTech · 🇧🇩 Bangladesh</div>
+      <h3>FloodDoc</h3>
+      <p>AI-assisted offline-capable medical diagnosis app for rural clinics that lose connectivity during monsoon flooding. Built by a 23-year-old medical student using donated hardware.</p>
+      <div class="biz-seeking">Seeking: $5,500 · Development partner</div>
+      <div style="margin:10px 0;font-size:12px;color:var(--muted);">👥 1,240 supporters · 🏆 Top Innovator</div>
+      <button class="interest-btn">Express Interest</button>
+    </div>
+    <div class="biz-card">
+      <div class="biz-tag">FinTech · 🇰🇪 Kenya</div>
+      <h3>FarmCoin</h3>
+      <p>Blockchain micro-credit platform letting smallholder farmers borrow against future harvest data — no bank account required. Bypasses predatory moneylender networks entirely.</p>
+      <div class="biz-seeking">Seeking: $25,000 · Regulatory advisor</div>
+      <div style="margin:10px 0;font-size:12px;color:var(--muted);">👥 2,180 supporters · 🌍 Global Impact</div>
+      <button class="interest-btn">Express Interest</button>
+    </div>
+    <div class="biz-card">
+      <div class="biz-tag">EdTech · 🇸🇾 Syria</div>
+      <h3>RefugeeLearn</h3>
+      <p>Downloadable, data-light curriculum app for displaced children in camps with no reliable internet. Currently used by 4,200 children in 6 countries. Seeking translation volunteers.</p>
+      <div class="biz-seeking">Seeking: Translators · Content partners</div>
+      <div style="margin:10px 0;font-size:12px;color:var(--muted);">👥 5,670 supporters · ❤️ Most Loved</div>
+      <button class="interest-btn">Get Involved</button>
+    </div>
+    <div class="biz-card">
+      <div class="biz-tag">AgriTech · 🇵🇪 Peru</div>
+      <h3>AltiCrop</h3>
+      <p>Drought-resistant crop varieties developed from ancient Andean seed banks, adapted using modern genomics for climate change resilience. Open-source, free for all farmers.</p>
+      <div class="biz-seeking">Seeking: $18,000 · Research partner</div>
+      <div style="margin:10px 0;font-size:12px;color:var(--muted);">👥 920 supporters</div>
+      <button class="interest-btn">Express Interest</button>
+    </div>
+    <div class="biz-card">
+      <div class="biz-tag">WaterTech · 🇮🇳 India</div>
+      <h3>DropSense</h3>
+      <p>Low-cost IoT water quality sensors that communities can build for under $15 and connect to a shared real-time contamination map. Over 300 sensors deployed across Rajasthan.</p>
+      <div class="biz-seeking">Seeking: $8,000 · Hardware sponsor</div>
+      <div style="margin:10px 0;font-size:12px;color:var(--muted);">👥 1,560 supporters</div>
+      <button class="interest-btn">Express Interest</button>
+    </div>
+  </div>
+  <div class="quote-block" style="margin-top:32px;">"The most powerful innovations of the next decade won't come from Silicon Valley — they'll come from people solving the problems they live with every day."</div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;margin-top:24px;">
+    <div class="section-title" style="font-size:16px;margin-bottom:8px;">🚀 Submit Your Innovation</div>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;">Have an idea that could change lives? Tell the OurWorld community what you're building.</p>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <input placeholder="Project name...">
+      <textarea placeholder="What problem does it solve? Who does it help? What do you need?" style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--text);font-size:14px;font-family:inherit;resize:none;outline:none;height:90px;width:100%;"></textarea>
+      <button class="vote-btn">Submit Innovation 💡</button>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO -->
+<section id="video">
+  <div class="section-title">🎬 Video Chat</div>
+  <div class="section-sub">Face-to-face conversations with citizens worldwide — democracy needs dialogue.</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px;">
+    <span class="badge">🌍 Open to all citizens</span>
+    <span class="badge">🔒 No account required</span>
+    <span class="badge">🎙️ HD audio &amp; video</span>
+  </div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:24px;display:flex;align-items:center;gap:16px;">
+    <div style="font-size:32px;">🟢</div>
+    <div>
+      <div style="font-size:15px;font-weight:600;margin-bottom:2px;">OurWorld Community Room</div>
+      <div style="font-size:13px;color:var(--muted);">Open 24/7 · Anyone can join · No login needed</div>
+    </div>
+    <div style="margin-left:auto;font-size:13px;color:var(--green);font-weight:500;">● Live</div>
+  </div>
+  <div class="desktop-video">
+    <iframe src="https://ourworld.daily.co/ourworld-chat" style="width:100%;height:500px;border:none;border-radius:14px;background:var(--bg2);" allow="camera; microphone; fullscreen; speaker; display-capture"></iframe>
+  </div>
+  <div class="mobile-video" style="text-align:center;padding:40px 0;">
+    <div style="font-size:48px;margin-bottom:16px;">🎥</div>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:24px;">Tap below to join the OurWorld community video room in your browser.</p>
+    <a href="https://ourworld.daily.co/ourworld-chat" target="_blank" style="background:var(--accent);color:white;text-decoration:none;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:600;">Join Video Chat</a>
+  </div>
+  <div style="margin-top:28px;">
+    <div class="section-title" style="font-size:18px;margin-bottom:16px;">💡 Room Guidelines</div>
+    <div class="about-grid">
+      <div class="about-card"><div class="icon">🕊️</div><h4>Respect Always</h4><p>Treat every citizen with dignity regardless of where they're from or what they believe.</p></div>
+      <div class="about-card"><div class="icon">🌍</div><h4>All Welcome</h4><p>Every nationality, background and opinion is welcome. Diversity makes democracy stronger.</p></div>
+      <div class="about-card"><div class="icon">🚫</div><h4>Zero Hate</h4><p>Hate speech, discrimination or harassment will result in immediate removal from the room.</p></div>
+      <div class="about-card"><div class="icon">🎙️</div><h4>Mute When Not Speaking</h4><p>Help keep the audio clear for everyone by muting your microphone when listening.</p></div>
+    </div>
+  </div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;margin-top:24px;">
+    <div class="section-title" style="font-size:16px;margin-bottom:16px;">📅 Scheduled Discussions</div>
+    <div class="justice-card" style="margin-bottom:12px;">
+      <div class="j-tag">🗳️ Democracy · This Week</div>
+      <h3>Is direct democracy scalable? Debate — Thursday 7pm UTC</h3>
+      <div class="j-meta" style="margin-top:8px;"><span>👥 <strong>34</strong> signed up</span><span>⏱️ <strong>90 min</strong></span></div>
+    </div>
+    <div class="justice-card" style="margin-bottom:0;">
+      <div class="j-tag">🌿 Climate · Next Week</div>
+      <h3>Citizens vs corporations: who should lead climate action? — Tuesday 6pm UTC</h3>
+      <div class="j-meta" style="margin-top:8px;"><span>👥 <strong>61</strong> signed up</span><span>⏱️ <strong>60 min</strong></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- JUSTICE -->
 <section id="justice">
   <div class="section-title">⚖️ Justice Platform</div>
   <div class="section-sub">Hold the powerful accountable.</div>
@@ -639,24 +903,57 @@ section.active { display: block; }
   <div class="justice-card"><div class="j-tag">⚖️ Govt Overreach · Legal Review</div><h3>Mass Surveillance Database Challenge</h3><div class="vs">vs. Home Office UK</div><div class="j-meta"><span>👥 <strong>6,891</strong> supporters</span><span>💰 <strong>$28,500</strong> raised</span></div><button class="support-btn">Support This Case</button></div>
 </section>
 
+<!-- SOLAR -->
 <section id="solar">
   <div class="section-title">☀️ Solar</div>
-  <div class="section-sub">Harnessing the power of the sun for a cleaner future.</div>
-  <p style="color:var(--muted);margin-top:40px;text-align:center;">Coming soon — solar energy news, data and projects.</p>
+  <div class="section-sub">Harnessing the power of the sun — energy for the people, not corporations.</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px;">
+    <span class="badge">⚡ 1 hour of sun = world's 1-year energy</span>
+    <span class="badge">📉 Solar costs down 90% since 2010</span>
+    <span class="badge">🌍 173,000 TW hits Earth daily</span>
+  </div>
+  <div class="justice-stats" style="margin-bottom:28px;">
+    <div class="j-stat"><div class="n">4.5TW</div><div class="l">Global installed capacity</div></div>
+    <div class="j-stat"><div class="n">$0.04</div><div class="l">Cost per kWh (record low)</div></div>
+    <div class="j-stat"><div class="n">1.3B</div><div class="l">People still without power</div></div>
+  </div>
+  <div class="section-title" style="font-size:18px;margin-bottom:16px;">🌍 Community Solar Projects</div>
+  <div class="cards-grid" style="margin-bottom:32px;">
+    <div class="card" style="cursor:default;">
+      <div class="card-tag">🇰🇪 Kenya <span class="pill pill-green">Funded</span></div>
+      <h3>Maasai Solar Grid — Narok County</h3>
+      <p>48 solar panels installed across 12 households in a remote community, replacing diesel generators and cutting energy costs by 80%.</p>
+      <div class="vote-bar-wrap"><div class="vote-label"><span>Funded</span><span>100%</span></div><div class="vote-bar"><div class="vote-fill" style="width:100%;background:var(--green)"></div></div></div>
+      <div class="card-meta">⚡ 22kW capacity · 🏠 120 beneficiaries</div>
+    </div>
+    <div class="card" style="cursor:default;">
+      <div class="card-tag">🇧🇩 Bangladesh <span class="pill pill-amber">In Progress</span></div>
+      <h3>Sylhet Flood Village Solar Resilience</h3>
+      <p>Solar microgrids for 6 flood-prone villages so communities maintain power during annual monsoon disruptions.</p>
+      <div class="vote-bar-wrap"><div class="vote-label"><span>Progress</span><span>67%</span></div><div class="vote-bar"><div class="vote-fill" style="width:67%;background:var(--amber)"></div></div></div>
+      <div class="card-meta">⚡ 15kW target · 🏠 80 households</div>
+    </div>
+    <div class="card" style="cursor:default;">
+      <div class="card-tag">🇵🇪 Peru <span class="pill pill-blue">Seeking Support</span></div>
+      <h3>Andean Highland Solar Schools</h3>
+      <p>Three rural schools at 3,800m altitude with no grid connection. Solar installation would power lights, heating and computer labs.</p>
+      <div class="vote-bar-wrap"><div class="vote-label"><span>Funded</span><span>31%</span></div><div class="vote-bar"><div class="vote-fill" style="width:31%"></div></div></div>
+      <div class="card-meta">⚡ 9kW target · 🎓 340 students</div>
+    </div>
+  </div>
+  <div class="section-title" style="font-size:18px;margin-bottom:16px;">📰 Solar News</div>
+  <div class="news-feature">
+    <div class="news-badge">BREAKTHROUGH</div>
+    <h2>Perovskite solar cells hit 33.9% efficiency in lab tests</h2>
+    <p>Scientists have achieved a new world record for perovskite-silicon tandem cells, potentially making rooftop solar twice as powerful within a decade.</p>
+    <div class="card-meta" style="margin-top:12px;">nrel.gov · 3 days ago</div>
+  </div>
+  <div class="news-small"><div><h4>India overtakes Germany in solar capacity — now 3rd globally</h4><div class="src">Bloomberg Energy · 1 week ago</div></div><span class="pill pill-green">🌏 Asia</span></div>
+  <div class="news-small"><div><h4>EU rooftop solar mandate takes effect — all new buildings must install panels</h4><div class="src">Euractiv · 2 weeks ago</div></div><span class="pill pill-blue">🇪🇺 EU</span></div>
+  <div class="news-small"><div><h4>Solar panel recycling industry set to reach $2.7B by 2030</h4><div class="src">Wood Mackenzie · 3 weeks ago</div></div><span class="pill pill-amber">♻️ Green</span></div>
 </section>
 
-<section id="corruption">
-  <div class="section-title">🔍 Corruption</div>
-  <div class="section-sub">Exposing and holding corrupt institutions accountable.</div>
-  <p style="color:var(--muted);margin-top:40px;text-align:center;">Coming soon — corruption tracking and reporting.</p>
-</section>
-
-<section id="pollution">
-  <div class="section-title">🌫️ Pollution</div>
-  <div class="section-sub">Tracking and fighting pollution across the globe.</div>
-  <p style="color:var(--muted);margin-top:40px;text-align:center;">Coming soon — pollution data, maps and campaigns.</p>
-</section>
-
+<!-- RARE EARTH -->
 <section id="rare">
   <div class="section-title">💎 Rare Earth Minerals</div>
   <div class="section-sub">The invisible foundation of the clean energy revolution.</div>
@@ -674,6 +971,127 @@ section.active { display: block; }
     <div class="mineral-card"><div class="symbol">La</div><h4>Lanthanum</h4><p>Hybrid batteries</p></div>
     <div class="mineral-card"><div class="symbol">Ce</div><h4>Cerium</h4><p>Solar panels</p></div>
     <div class="mineral-card"><div class="symbol">Eu</div><h4>Europium</h4><p>LED displays</p></div>
+  </div>
+</section>
+
+<!-- CORRUPTION -->
+<section id="corruption">
+  <div class="section-title">🔍 Corruption</div>
+  <div class="section-sub">Exposing abuse of power — because sunlight is the best disinfectant.</div>
+  <div class="justice-stats" style="margin-bottom:28px;">
+    <div class="j-stat"><div class="n">$2.6T</div><div class="l">Lost to corruption yearly</div></div>
+    <div class="j-stat"><div class="n">176</div><div class="l">Countries tracked</div></div>
+    <div class="j-stat"><div class="n">18</div><div class="l">Active cases</div></div>
+  </div>
+  <div class="news-tabs" style="margin-bottom:24px;">
+    <div class="news-tab active">🔥 All</div>
+    <div class="news-tab">🏛️ Government</div>
+    <div class="news-tab">🏢 Corporate</div>
+    <div class="news-tab">⚖️ Judiciary</div>
+    <div class="news-tab">🌍 Aid Fraud</div>
+  </div>
+  <div class="section-title" style="font-size:18px;margin-bottom:16px;">📋 Tracked Cases</div>
+  <div class="justice-card">
+    <div class="j-tag">🏛️ Government · 🇲🇾 Malaysia · High Profile</div>
+    <h3>1MDB State Fund Embezzlement</h3>
+    <div class="vs">vs. Former PM Najib Razak &amp; associates</div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:8px 0 12px;">$4.5 billion allegedly stolen from Malaysia's sovereign wealth fund through a network of shell companies and international banks. First major conviction secured 2020. Recovery efforts ongoing across 10 countries.</p>
+    <div class="j-meta"><span>👥 <strong>14,201</strong> tracking</span><span>📋 <strong>Conviction</strong> secured</span><span>💰 <strong>$1.1B</strong> recovered</span></div>
+  </div>
+  <div class="justice-card">
+    <div class="j-tag">🏢 Corporate · 🌍 Global · Active</div>
+    <h3>Glencore Mining Bribery Network</h3>
+    <div class="vs">vs. Glencore PLC</div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:8px 0 12px;">The mining giant admitted to paying bribes to officials in the DRC, Venezuela, Nigeria and other nations to secure mining rights. $1.5B in fines imposed. Local communities in affected regions received zero compensation.</p>
+    <div class="j-meta"><span>👥 <strong>9,340</strong> tracking</span><span>📋 <strong>Settled</strong> (no jail time)</span><span>💰 <strong>$1.5B</strong> fined</span></div>
+    <button class="support-btn">Demand Community Compensation</button>
+  </div>
+  <div class="justice-card">
+    <div class="j-tag">🏛️ Government · 🇧🇷 Brazil · Ongoing</div>
+    <h3>Operation Car Wash — Lava Jato</h3>
+    <div class="vs">vs. Petrobras &amp; Political Network</div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:8px 0 12px;">Brazil's largest corruption scandal involving state oil company Petrobras, construction firms and politicians across all major parties. Over $2B in bribes traced. Investigation continues with new leads emerging.</p>
+    <div class="j-meta"><span>👥 <strong>22,800</strong> tracking</span><span>📋 <strong>Ongoing</strong></span><span>💰 <strong>$10B+</strong> implicated</span></div>
+  </div>
+  <div class="justice-card">
+    <div class="j-tag">⚖️ Judiciary · 🇿🇦 South Africa · Under Investigation</div>
+    <h3>State Capture — Zuma &amp; Gupta Network</h3>
+    <div class="vs">vs. Jacob Zuma &amp; Gupta Family</div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:8px 0 12px;">Systematic capture of state institutions, SOEs and government ministries by a private family network. The Zondo Commission documented R500B in losses to South Africa. Multiple prosecutions pending.</p>
+    <div class="j-meta"><span>👥 <strong>7,620</strong> tracking</span><span>📋 <strong>Commission complete</strong></span><span>💰 <strong>R500B</strong> lost</span></div>
+    <button class="support-btn">Follow This Case</button>
+  </div>
+  <div class="section-title" style="font-size:18px;margin:28px 0 16px;">🚨 Report Corruption</div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;">
+    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;">Witnessed corruption? Submit a report anonymously. Our community verifies and escalates credible reports to journalists and legal teams.</p>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <textarea placeholder="Describe what you witnessed — include dates, locations, and any evidence links..." style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--text);font-size:14px;font-family:inherit;resize:none;outline:none;height:100px;width:100%;"></textarea>
+      <button class="vote-btn">Submit Anonymously 🔒</button>
+    </div>
+  </div>
+</section>
+
+<!-- POLLUTION -->
+<section id="pollution">
+  <div class="section-title">🌫️ Pollution</div>
+  <div class="section-sub">Tracking and fighting pollution — data is power, transparency is action.</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px;">
+    <span class="badge">💀 7M deaths/year from air pollution</span>
+    <span class="badge">🌊 8M tonnes plastic enter oceans yearly</span>
+    <span class="badge">🚰 2B people lack clean water</span>
+  </div>
+  <div class="justice-stats" style="margin-bottom:28px;">
+    <div class="j-stat"><div class="n">99%</div><div class="l">World breathes unhealthy air (WHO)</div></div>
+    <div class="j-stat"><div class="n">$8.1T</div><div class="l">Annual global pollution cost</div></div>
+    <div class="j-stat"><div class="n">42</div><div class="l">Active community reports</div></div>
+  </div>
+  <div class="news-tabs" style="margin-bottom:24px;">
+    <div class="news-tab active">🌍 All</div>
+    <div class="news-tab">💨 Air</div>
+    <div class="news-tab">🌊 Water</div>
+    <div class="news-tab">🏭 Industrial</div>
+    <div class="news-tab">☢️ Toxic</div>
+  </div>
+  <div class="section-title" style="font-size:18px;margin-bottom:16px;">📍 Live Pollution Reports</div>
+  <div class="justice-card">
+    <div class="j-tag">💨 Air · 🇮🇳 India · Live Report</div>
+    <h3>Delhi AQI Exceeds 400 for 9th Consecutive Day</h3>
+    <div class="vs">Source: IQAir community sensors + citizen monitoring network</div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:8px 0 12px;">Particulate matter 2.5 levels in Delhi have been at hazardous levels for nearly two weeks. Schools closed, hospitals overwhelmed. Citizens are demanding emergency industry shutdowns and vehicle restrictions.</p>
+    <div class="j-meta"><span>👁️ <strong>34,100</strong> monitoring</span><span>🚨 <strong>Hazardous</strong> level</span></div>
+    <button class="support-btn">Add Your Data</button>
+  </div>
+  <div class="justice-card">
+    <div class="j-tag">🌊 Water · 🇬🇭 Ghana · Ongoing</div>
+    <h3>Illegal Gold Mining Poisoning River Pra</h3>
+    <div class="vs">Source: Wateraid Ghana + OurWorld citizen reports</div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:8px 0 12px;">Galamsey (illegal small-scale mining) operations continue to dump mercury and cyanide into the River Pra — the drinking water source for 4 million people. Government enforcement remains sporadic.</p>
+    <div class="j-meta"><span>👁️ <strong>8,420</strong> monitoring</span><span>🚨 <strong>Critical</strong></span></div>
+    <button class="support-btn">Support Cleanup Campaign</button>
+  </div>
+  <div class="justice-card">
+    <div class="j-tag">🏭 Industrial · 🇵🇱 Poland · Tracking</div>
+    <h3>Silesia Coal Plant Emissions Breach EU Limits</h3>
+    <div class="vs">Source: ClientEarth monitoring + local NGOs</div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:8px 0 12px;">Three Polish coal plants have consistently breached EU air quality directives. Legal challenge filed. Citizens in surrounding towns record 40% higher asthma rates than the national average.</p>
+    <div class="j-meta"><span>👁️ <strong>5,710</strong> monitoring</span><span>📋 <strong>Legal action</strong> pending</span></div>
+  </div>
+  <div class="justice-card">
+    <div class="j-tag">☢️ Toxic · 🇺🇸 USA · Historic</div>
+    <h3>East Palestine Train Derailment — 1 Year Later</h3>
+    <div class="vs">Source: EPA reports + independent citizen testing</div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:8px 0 12px;">Twelve months after the toxic chemical spill, independent soil and water testing by residents still shows contamination above safe limits. Norfolk Southern's clean-up declared 'complete' by authorities — residents disagree.</p>
+    <div class="j-meta"><span>👁️ <strong>12,890</strong> monitoring</span><span>📋 <strong>Disputed</strong> clean-up</span></div>
+    <button class="support-btn">Support Residents</button>
+  </div>
+  <div class="section-title" style="font-size:18px;margin:28px 0 16px;">🗺️ Submit a Pollution Report</div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;">
+    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;">Is pollution being hidden or ignored near you? Report it. Our community maps it, shares it, and connects you with legal and NGO support.</p>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <input placeholder="Location (city, region, country)...">
+      <textarea placeholder="Describe the pollution — type, source, visible symptoms, any photos or data links..." style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--text);font-size:14px;font-family:inherit;resize:none;outline:none;height:90px;width:100%;"></textarea>
+      <button class="vote-btn">Submit Report 📍</button>
+    </div>
   </div>
 </section>
 
@@ -706,9 +1124,6 @@ section.active { display: block; }
 <script>
 // ============================================================
 // CONTENT MODERATION — CUSTOM BLOCKLIST
-// To ADD a word: type it in the list below, lowercase,
-// in single quotes, followed by a comma. Example: 'badword',
-// To REMOVE a word: just delete its line.
 // ============================================================
 const BLOCKLIST = [
   'fuck', 'f**k', 'fuk', 'fuuk',
@@ -737,13 +1152,11 @@ const BLOCKLIST = [
   'hitler'
 ];
 
-// Returns true if text contains a blocked word/phrase
 function isBlocked(text) {
   const lower = text.toLowerCase();
   return BLOCKLIST.some(word => lower.includes(word));
 }
 
-// Shows a polite warning toast for 3.5 seconds then hides it
 let toastTimer = null;
 function showModToast() {
   const toast = document.getElementById('mod-toast');
@@ -751,8 +1164,8 @@ function showModToast() {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
 }
-// ============================================================
 
+// NAV DROPDOWNS
 document.querySelectorAll('.drop-toggle').forEach(btn => {
   btn.addEventListener('click', function(e) {
     e.stopPropagation();
@@ -779,6 +1192,7 @@ function show(id, el) {
   return false;
 }
 
+// REFERENDUMS
 const refs = {
   plastics: { title: 'Should single-use plastics be banned nationwide?', desc: 'A proposal to prohibit the manufacture and sale of single-use plastic items including bags, straws, and cutlery to reduce environmental pollution.', options: ['Yes — Full National Ban', 'Partial Ban (cities only)', 'No — Industry Self-Regulation'], pcts: [68,22,10] },
   healthcare: { title: 'Should universal basic healthcare be guaranteed?', desc: 'A proposal to guarantee healthcare access for all citizens regardless of income, employment, or immigration status.', options: ['Yes — Full Universal Access', 'Yes — Means-tested access', 'No — Private market'], pcts: [74,18,8] },
@@ -806,6 +1220,7 @@ function castVote() {
   document.getElementById('ref-detail-area').innerHTML = `<div class="ref-detail" style="text-align:center;padding:40px"><div style="font-size:40px;margin-bottom:12px">&#x2705;</div><h2 style="margin-bottom:8px">Vote Submitted!</h2><p>Your voice has been counted. Thank you for participating in direct democracy.</p></div>`;
 }
 
+// CHATBOT
 function toggleChat() {
   chatOpen = !chatOpen;
   document.getElementById('chat-window').classList.toggle('open', chatOpen);
@@ -841,15 +1256,7 @@ async function sendMessage() {
   const input = document.getElementById('chat-input');
   const text = input.value.trim();
   if (!text) return;
-
-  // ---- MODERATION CHECK — runs before anything is sent ----
-  if (isBlocked(text)) {
-    showModToast();
-    input.value = '';
-    return; // message is blocked, nothing sent to AI
-  }
-  // ---------------------------------------------------------
-
+  if (isBlocked(text)) { showModToast(); input.value = ''; return; }
   input.value = '';
   addMsg('user', text);
   history.push({role:'user', content:text});
@@ -871,7 +1278,7 @@ async function sendMessage() {
   }
 }
 
-// SOCIAL FEED
+// OPINIONS FEED
 const feedInput = document.getElementById('feed-input');
 if (feedInput) {
   feedInput.addEventListener('input', function() {
@@ -889,14 +1296,7 @@ function postToFeed() {
   const input = document.getElementById('feed-input');
   const text = input.value.trim();
   if (!text) return;
-
-  // Moderation check
-  if (isBlocked(text)) {
-    showModToast();
-    input.value = '';
-    return;
-  }
-
+  if (isBlocked(text)) { showModToast(); input.value = ''; return; }
   const scroll = document.getElementById('feed-scroll');
   const post = document.createElement('div');
   post.className = 'feed-post';
@@ -923,6 +1323,51 @@ function postToFeed() {
   setTimeout(() => post.style.borderColor = '', 2000);
 }
 
+// SHARE FEED
+const shareInput = document.getElementById('share-input');
+if (shareInput) {
+  shareInput.addEventListener('input', function() {
+    const remaining = 280 - this.value.length;
+    const counter = document.getElementById('share-char');
+    if (counter) {
+      counter.textContent = remaining + ' characters remaining';
+      counter.style.color = remaining < 30 ? 'var(--amber)' : 'var(--muted)';
+    }
+    if (this.value.length > 280) this.value = this.value.substring(0, 280);
+  });
+}
+
+function postShare() {
+  const input = document.getElementById('share-input');
+  const text = input.value.trim();
+  if (!text) return;
+  if (isBlocked(text)) { showModToast(); input.value = ''; return; }
+  const scroll = document.getElementById('share-scroll');
+  const post = document.createElement('div');
+  post.className = 'feed-post';
+  post.style.borderColor = 'var(--accent)';
+  post.innerHTML = `
+    <div class="feed-tag-pill">📤 Shared</div>
+    <div class="feed-post-top">
+      <div class="feed-ava" style="background:var(--accent);color:white;">You</div>
+      <div class="feed-meta">
+        <div class="feed-name">You</div>
+        <div class="feed-location">🌍 OurWorld Citizen</div>
+      </div>
+      <div class="feed-time">Just now</div>
+    </div>
+    <div class="feed-body">${text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+    <div class="feed-actions">
+      <button class="feed-action" onclick="toggleLike(this)">♥ <span>0</span></button>
+      <button class="feed-action">🔁 <span>0 reshares</span></button>
+      <button class="feed-action">↗ External Link</button>
+    </div>`;
+  scroll.insertBefore(post, scroll.firstChild);
+  input.value = '';
+  document.getElementById('share-char').textContent = '280 characters remaining';
+  setTimeout(() => post.style.borderColor = '', 2000);
+}
+
 function toggleLike(btn) {
   const span = btn.querySelector('span');
   const count = parseInt(span.textContent);
@@ -935,7 +1380,7 @@ function toggleLike(btn) {
   }
 }
 
-
+// TABS
 document.querySelectorAll('.news-tab, .market-tab, .studio-filter').forEach(tab => {
   tab.addEventListener('click', () => {
     tab.closest('.news-tabs, .market-tabs, .studio-filters').querySelectorAll('div').forEach(t => t.classList.remove('active'));
@@ -943,6 +1388,7 @@ document.querySelectorAll('.news-tab, .market-tab, .studio-filter').forEach(tab 
   });
 });
 
+// MIC / VOICE INPUT
 let recognition = null;
 let micActive = false;
 
@@ -951,10 +1397,7 @@ function toggleMic() {
     alert('Sorry, your browser does not support voice input. Try Chrome.');
     return;
   }
-  if (micActive) {
-    recognition.stop();
-    return;
-  }
+  if (micActive) { recognition.stop(); return; }
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   recognition = new SpeechRecognition();
   recognition.lang = 'en-US';
