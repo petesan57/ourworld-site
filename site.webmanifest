@@ -1,0 +1,27 @@
+{
+  "name": "OurWorld — Ideas In Motion",
+  "short_name": "OurWorld",
+  "description": "Direct democracy and citizen engagement platform. Vote on referendums, connect with citizens worldwide.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#080810",
+  "theme_color": "#4f46e5",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["news", "social", "politics"],
+  "screenshots": [],
+  "lang": "en"
+}
