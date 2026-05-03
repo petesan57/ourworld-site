@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>OurWorld — Ideas In Motion</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
-  <link rel="manifest" href="/site.webmanifest">
+<link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#4f46e5">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -32,11 +32,22 @@
   --green: #22c55e;
   --red: #ef4444;
   --amber: #f59e0b;
+  --bottom-nav-height: 64px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; min-height: 100vh; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Space Grotesk', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  padding-bottom: var(--bottom-nav-height);
+}
 
+/* ============================================================
+   TOP NAV — desktop only
+   ============================================================ */
 nav {
   position: sticky; top: 0; z-index: 1000;
   background: rgba(8,8,16,0.95);
@@ -76,31 +87,182 @@ nav::-webkit-scrollbar { display: none; }
 .drop-menu a:hover { color: var(--text); background: var(--bg3); }
 .drop-menu a.active { color: var(--accent2); }
 
-section { display: none; padding: 40px 24px; max-width: 900px; margin: 0 auto; }
+/* ============================================================
+   BOTTOM NAV — mobile only
+   ============================================================ */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: var(--bottom-nav-height);
+  background: rgba(8,8,16,0.97);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
+  z-index: 1000;
+  padding: 0 4px;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.bottom-nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 100%;
+}
+.bnav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 6px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+  flex: 1;
+  transition: all 0.15s;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-family: inherit;
+  min-width: 0;
+}
+.bnav-item.active {
+  color: var(--accent2);
+}
+.bnav-item .bnav-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+.bnav-item .bnav-label {
+  font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* More menu overlay */
+.more-overlay {
+  display: none;
+  position: fixed;
+  bottom: var(--bottom-nav-height);
+  left: 0; right: 0;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-radius: 20px 20px 0 0;
+  z-index: 999;
+  padding: 16px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom));
+}
+.more-overlay.open { display: block; }
+.more-overlay-title {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+  padding: 0 4px;
+}
+.more-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.more-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 6px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: none;
+  font-family: inherit;
+  color: var(--text);
+}
+.more-item:active { background: var(--accent); }
+.more-item .more-icon { font-size: 22px; }
+.more-item .more-label { font-size: 11px; color: var(--muted); text-align: center; }
+
+/* Overlay backdrop */
+.overlay-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 998;
+}
+.overlay-backdrop.open { display: block; }
+
+/* ============================================================
+   MOBILE TOP BAR (replaces desktop nav on mobile)
+   ============================================================ */
+.mobile-header {
+  display: none;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(8,8,16,0.97);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 16px;
+  height: 56px;
+  align-items: center;
+  justify-content: space-between;
+}
+.mobile-header-logo {
+  display: flex; align-items: center; gap: 8px;
+  text-decoration: none;
+}
+.mobile-header-logo svg { width: 28px; height: 28px; }
+.mobile-header-logo-text {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--text);
+}
+.mobile-header-logo-text span { color: var(--accent2); }
+.mobile-header-right {
+  display: flex; align-items: center; gap: 10px;
+}
+.mobile-page-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent3);
+}
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+section { display: none; padding: 20px 16px; max-width: 900px; margin: 0 auto; width: 100%; }
 section.active { display: block; }
-.hero { text-align: center; padding: 80px 24px 60px; max-width: 900px; margin: 0 auto; display: none; }
+.hero { text-align: center; padding: 40px 16px 40px; max-width: 900px; margin: 0 auto; display: none; width: 100%; }
 .hero.active { display: block; }
 .hero-tag { display: inline-block; background: var(--bg3); border: 1px solid var(--border); border-radius: 20px; font-size: 12px; color: var(--accent2); padding: 4px 14px; margin-bottom: 24px; }
-.hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(36px,7vw,72px); font-weight: 800; line-height: 1.05; margin-bottom: 16px; }
+.hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(32px,7vw,72px); font-weight: 800; line-height: 1.05; margin-bottom: 16px; }
 .hero h1 span { color: var(--accent2); }
-.hero h2 { font-size: clamp(18px,3vw,26px); font-weight: 400; color: var(--muted); margin-bottom: 32px; }
+.hero h2 { font-size: clamp(16px,3vw,26px); font-weight: 400; color: var(--muted); margin-bottom: 32px; }
 .hero-desc { font-size: 15px; color: var(--muted); max-width: 500px; margin: 0 auto 40px; line-height: 1.7; }
-.hero-badges { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 48px; }
-.badge { background: var(--bg3); border: 1px solid var(--border); border-radius: 20px; padding: 6px 16px; font-size: 13px; color: var(--accent3); }
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(140px,1fr)); gap: 16px; margin-top: 48px; }
-.stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
-.stat-card .num { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; color: var(--accent2); }
+.hero-badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px; }
+.badge { background: var(--bg3); border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: 12px; color: var(--accent3); }
+.stats-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin-top: 32px; }
+.stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
+.stat-card .num { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--accent2); }
 .stat-card .label { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
-.section-title { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 8px; }
-.section-sub { color: var(--muted); font-size: 14px; margin-bottom: 28px; }
-.cards-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); gap: 16px; }
-.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px; cursor: pointer; transition: border-color 0.2s, transform 0.15s; }
+.section-title { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+.section-sub { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+.cards-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 16px; cursor: pointer; transition: border-color 0.2s, transform 0.15s; }
 .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.card:active { transform: scale(0.98); }
 .card-tag { font-size: 11px; color: var(--accent2); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-.card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; line-height: 1.4; }
+.card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; line-height: 1.4; }
 .card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
-.card-meta { display: flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 12px; color: var(--muted); }
+.card-meta { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 12px; color: var(--muted); }
 .vote-bar-wrap { margin-top: 12px; }
 .vote-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; }
 .vote-bar { height: 5px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
@@ -110,145 +272,119 @@ section.active { display: block; }
 .pill-amber { background: rgba(245,158,11,0.15); color: var(--amber); }
 .pill-blue { background: rgba(79,70,229,0.15); color: var(--accent2); }
 
-.ref-detail { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
-.ref-detail h2 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; margin-bottom: 10px; }
-.ref-detail p { color: var(--muted); font-size: 14px; line-height: 1.7; margin-bottom: 24px; }
-.vote-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
-.vote-opt { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; cursor: pointer; transition: all 0.15s; display: flex; justify-content: space-between; align-items: center; }
+.ref-detail { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
+.ref-detail h2 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+.ref-detail p { color: var(--muted); font-size: 14px; line-height: 1.7; margin-bottom: 20px; }
+.vote-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.vote-opt { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: all 0.15s; display: flex; justify-content: space-between; align-items: center; }
 .vote-opt:hover { border-color: var(--accent); color: var(--accent2); }
 .vote-opt.selected { border-color: var(--accent); background: rgba(79,70,229,0.1); color: var(--accent2); }
-.vote-btn { background: var(--accent); color: white; border: none; border-radius: 10px; padding: 12px 24px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+.vote-btn { background: var(--accent); color: white; border: none; border-radius: 10px; padding: 14px 24px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.15s; width: 100%; }
 .vote-btn:hover { background: #4338ca; }
+.vote-btn:active { transform: scale(0.98); }
 
-.about-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(180px,1fr)); gap: 14px; }
-.about-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 18px; text-align: center; }
-.about-card .icon { font-size: 24px; margin-bottom: 10px; }
-.about-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.about-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+.about-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
+.about-card .icon { font-size: 22px; margin-bottom: 8px; }
+.about-card h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
 .about-card p { font-size: 12px; color: var(--muted); line-height: 1.5; }
-.quote-block { background: var(--bg2); border-left: 3px solid var(--accent); border-radius: 0 12px 12px 0; padding: 20px 24px; margin: 32px 0; font-size: 15px; color: var(--accent3); font-style: italic; line-height: 1.7; }
+.quote-block { background: var(--bg2); border-left: 3px solid var(--accent); border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 24px 0; font-size: 14px; color: var(--accent3); font-style: italic; line-height: 1.7; }
 
-.people-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap: 14px; }
-.person-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+.people-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.person-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
 .person-card .ava { width: 40px; height: 40px; border-radius: 50%; background: var(--bg3); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; color: var(--accent2); margin-bottom: 10px; }
 .person-card h4 { font-size: 14px; font-weight: 600; }
 .person-card .loc { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
 .person-card .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
 .person-card .tag { background: var(--bg3); border: 1px solid var(--border); border-radius: 20px; font-size: 10px; padding: 2px 8px; color: var(--accent3); }
-.msg-btn { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 6px 14px; font-size: 12px; color: var(--accent2); cursor: pointer; font-family: inherit; transition: all 0.15s; }
+.msg-btn { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; font-size: 13px; color: var(--accent2); cursor: pointer; font-family: inherit; transition: all 0.15s; width: 100%; }
 .msg-btn:hover { border-color: var(--accent); background: rgba(79,70,229,0.1); }
-.chat-feed { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-top: 24px; }
-.chat-feed h4 { font-size: 13px; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
-.chat-msg { display: flex; gap: 8px; margin-bottom: 12px; align-items: flex-start; }
-.chat-msg .ava { width: 26px; height: 26px; border-radius: 50%; background: var(--bg3); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: var(--accent2); flex-shrink: 0; }
-.chat-msg .body { font-size: 13px; color: var(--muted); line-height: 1.5; }
-.chat-msg .body strong { color: var(--accent3); font-weight: 500; }
 
-.biz-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); gap: 14px; }
-.biz-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+.biz-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.biz-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
 .biz-card .biz-tag { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 6px; }
 .biz-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
-.biz-card p { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
-.biz-seeking { font-size: 13px; font-weight: 600; color: var(--accent2); margin-bottom: 10px; }
-.interest-btn { background: none; border: 1px solid var(--accent); border-radius: 8px; padding: 7px 16px; font-size: 12px; color: var(--accent2); cursor: pointer; font-family: inherit; transition: all 0.15s; }
+.biz-card p { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+.biz-seeking { font-size: 14px; font-weight: 600; color: var(--accent2); margin-bottom: 10px; }
+.interest-btn { background: none; border: 1px solid var(--accent); border-radius: 8px; padding: 10px 16px; font-size: 13px; color: var(--accent2); cursor: pointer; font-family: inherit; transition: all 0.15s; width: 100%; }
 .interest-btn:hover { background: rgba(79,70,229,0.15); }
 
-.news-tabs, .market-tabs, .studio-filters { display: flex; gap: 6px; margin-bottom: 24px; flex-wrap: wrap; }
-.news-tab, .market-tab, .studio-filter { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 5px 14px; font-size: 12px; cursor: pointer; transition: all 0.15s; }
+.news-tabs, .market-tabs, .studio-filters { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.news-tabs::-webkit-scrollbar, .market-tabs::-webkit-scrollbar, .studio-filters::-webkit-scrollbar { display: none; }
+.news-tab, .market-tab, .studio-filter { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: 12px; cursor: pointer; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; }
 .news-tab:hover, .news-tab.active, .market-tab:hover, .market-tab.active, .studio-filter:hover, .studio-filter.active { background: var(--accent); border-color: var(--accent); color: white; }
-.news-feature { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 16px; }
+
+.news-feature { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 12px; }
 .news-feature .news-badge { display: inline-block; background: rgba(239,68,68,0.15); color: var(--red); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; padding: 3px 10px; border-radius: 20px; margin-bottom: 10px; }
-.news-feature h2 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
-.news-feature p { font-size: 14px; color: var(--muted); line-height: 1.6; }
-.news-small { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
-.news-small h4 { font-size: 14px; font-weight: 500; line-height: 1.4; margin-bottom: 4px; }
+.news-feature h2 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
+.news-feature p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.news-small { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 14px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 8px; }
+.news-small h4 { font-size: 13px; font-weight: 500; line-height: 1.4; margin-bottom: 4px; }
 .news-small .src { font-size: 11px; color: var(--muted); }
 
-.studio-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); gap: 14px; }
-.studio-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+.studio-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+.studio-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
 .studio-type { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent2); margin-bottom: 6px; }
-.studio-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-.studio-card .by { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+.studio-card h3 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.studio-card .by { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
 .studio-meta { display: flex; justify-content: space-between; align-items: center; }
 .likes { font-size: 12px; color: var(--muted); }
 .price { font-size: 13px; font-weight: 600; color: var(--accent2); }
 
-.market-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); gap: 12px; }
-.market-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
-.market-card .sym { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
-.market-card .name { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
-.market-card .price { font-size: 18px; font-weight: 700; font-family: 'Syne', sans-serif; }
-.market-card .change { font-size: 12px; margin-top: 4px; }
-.up { color: var(--green); }
-.down { color: var(--red); }
-
-.justice-stats, .portfolio-summary { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 28px; }
-.j-stat, .p-stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
-.j-stat .n { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--accent2); }
-.j-stat .l { font-size: 11px; color: var(--muted); margin-top: 2px; }
-.p-stat { text-align: left; }
-.p-stat .pl { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
-.p-stat .pv { font-size: 20px; font-weight: 700; font-family: 'Syne', sans-serif; }
-.justice-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 14px; }
+.justice-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 24px; }
+.j-stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 10px; text-align: center; }
+.j-stat .n { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--accent2); }
+.j-stat .l { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.justice-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 12px; }
 .justice-card .j-tag { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent2); margin-bottom: 6px; }
-.justice-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
-.justice-card .vs { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
-.justice-card .j-meta { display: flex; gap: 16px; font-size: 13px; color: var(--muted); }
+.justice-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.justice-card .vs { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+.justice-card .j-meta { display: flex; gap: 12px; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
 .justice-card .j-meta strong { color: var(--accent3); }
-.support-btn { background: none; border: 1px solid var(--accent); border-radius: 8px; padding: 7px 16px; font-size: 12px; color: var(--accent2); cursor: pointer; font-family: inherit; transition: all 0.15s; margin-top: 14px; display: inline-block; }
+.support-btn { background: none; border: 1px solid var(--accent); border-radius: 8px; padding: 10px 16px; font-size: 13px; color: var(--accent2); cursor: pointer; font-family: inherit; transition: all 0.15s; margin-top: 12px; display: inline-block; width: 100%; text-align: center; }
 .support-btn:hover { background: rgba(79,70,229,0.15); }
 
-.minerals-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); gap: 12px; }
-.mineral-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 18px; text-align: center; }
-.mineral-card .symbol { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--accent2); }
-.mineral-card h4 { font-size: 14px; font-weight: 600; margin: 6px 0 4px; }
-.mineral-card p { font-size: 12px; color: var(--muted); }
-
-.holdings-table { width: 100%; border-collapse: collapse; }
-.holdings-table th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
-.holdings-table td { padding: 14px 12px; font-size: 14px; border-bottom: 1px solid var(--bg3); }
-.holdings-table tr:last-child td { border-bottom: none; }
+.minerals-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+.mineral-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 14px; text-align: center; }
+.mineral-card .symbol { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--accent2); }
+.mineral-card h4 { font-size: 13px; font-weight: 600; margin: 4px 0; }
+.mineral-card p { font-size: 11px; color: var(--muted); }
 
 /* VIDEO CHAT */
 .mobile-video { display: none; }
 .desktop-video { display: block; }
-@media (max-width: 768px) {
-  .mobile-video { display: block; }
-  .desktop-video { display: none; }
-}
 
 /* SOCIAL FEED */
-.feed-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.feed-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .feed-live { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--green); font-weight: 500; }
 .feed-live .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 1.5s infinite; }
-.feed-compose { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 20px; }
+.feed-compose { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 16px; }
 .feed-compose textarea { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px; color: var(--text); font-size: 14px; font-family: inherit; resize: none; outline: none; height: 80px; transition: border-color 0.15s; }
 .feed-compose textarea::placeholder { color: var(--muted); }
 .feed-compose textarea:focus { border-color: var(--accent); }
 .feed-compose-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
 .feed-compose-footer span { font-size: 12px; color: var(--muted); }
-.feed-post-btn { background: var(--accent); color: white; border: none; border-radius: 8px; padding: 8px 20px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+.feed-post-btn { background: var(--accent); color: white; border: none; border-radius: 8px; padding: 9px 20px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.15s; }
 .feed-post-btn:hover { background: #4338ca; }
-.feed-scroll { max-height: 580px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 4px; }
-.feed-scroll::-webkit-scrollbar { width: 4px; }
-.feed-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-.feed-post { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 16px; transition: border-color 0.2s; }
+.feed-scroll { display: flex; flex-direction: column; gap: 10px; }
+.feed-post { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 14px; transition: border-color 0.2s; }
 .feed-post:hover { border-color: var(--accent); }
-.feed-post-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
-.feed-ava { width: 38px; height: 38px; border-radius: 50%; background: var(--bg3); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--accent2); flex-shrink: 0; }
+.feed-post-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+.feed-ava { width: 36px; height: 36px; border-radius: 50%; background: var(--bg3); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--accent2); flex-shrink: 0; }
 .feed-meta { flex: 1; }
-.feed-name { font-size: 14px; font-weight: 600; color: var(--text); }
-.feed-location { font-size: 12px; color: var(--muted); }
+.feed-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.feed-location { font-size: 11px; color: var(--muted); }
 .feed-time { font-size: 11px; color: var(--muted); white-space: nowrap; }
-.feed-body { font-size: 14px; color: var(--accent3); line-height: 1.6; margin-bottom: 12px; }
-.feed-actions { display: flex; gap: 20px; }
-.feed-action { background: none; border: none; color: var(--muted); font-size: 12px; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 5px; transition: color 0.15s; padding: 0; }
+.feed-body { font-size: 13px; color: var(--accent3); line-height: 1.6; margin-bottom: 10px; }
+.feed-actions { display: flex; gap: 16px; }
+.feed-action { background: none; border: none; color: var(--muted); font-size: 12px; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 5px; transition: color 0.15s; padding: 4px 0; }
 .feed-action:hover { color: var(--accent2); }
 .feed-action.liked { color: #f43f5e; }
 .feed-tag-pill { display: inline-block; background: rgba(79,70,229,0.15); color: var(--accent2); border-radius: 20px; font-size: 11px; padding: 2px 10px; margin-bottom: 8px; }
 
 /* MODERATION TOAST */
 #mod-toast {
-  position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+  position: fixed; bottom: calc(var(--bottom-nav-height) + 16px); left: 50%; transform: translateX(-50%);
   background: #3b1a1a; border: 1px solid var(--red); color: #fca5a5;
   border-radius: 10px; padding: 12px 20px; font-size: 13px; font-weight: 500;
   z-index: 99999; display: none; text-align: center; max-width: 320px;
@@ -257,19 +393,19 @@ section.active { display: block; }
 #mod-toast.show { display: block; }
 
 /* CHATBOT */
-#chat-bubble { position: fixed; bottom: 24px; right: 24px; width: 54px; height: 54px; border-radius: 50%; background: var(--bg3); border: 2px solid var(--accent); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 9999; transition: transform 0.2s; }
+#chat-bubble { position: fixed; bottom: calc(var(--bottom-nav-height) + 16px); right: 16px; width: 50px; height: 50px; border-radius: 50%; background: var(--bg3); border: 2px solid var(--accent); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 9999; transition: transform 0.2s; }
 #chat-bubble:hover { transform: scale(1.08); }
-#chat-bubble svg { width: 22px; height: 22px; fill: var(--accent2); }
-#chat-window { position: fixed; bottom: 90px; right: 24px; width: 340px; max-height: 520px; background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; display: none; flex-direction: column; z-index: 9998; overflow: hidden; }
+#chat-bubble svg { width: 20px; height: 20px; fill: var(--accent2); }
+#chat-window { position: fixed; bottom: calc(var(--bottom-nav-height) + 76px); right: 16px; width: calc(100vw - 32px); max-width: 340px; max-height: 480px; background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; display: none; flex-direction: column; z-index: 9998; overflow: hidden; }
 #chat-window.open { display: flex; }
-#chat-header { background: var(--bg3); padding: 14px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); }
-#chat-header .c-ava { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; }
+#chat-header { background: var(--bg3); padding: 12px 14px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); }
+#chat-header .c-ava { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: white; }
 #chat-header .c-info { flex: 1; }
 #chat-header .c-name { font-size: 14px; font-weight: 600; color: var(--text); }
 #chat-header .c-status { font-size: 11px; color: var(--green); }
 #chat-close { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 18px; padding: 2px 6px; transition: color 0.15s; }
 #chat-close:hover { color: var(--text); }
-#chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; max-height: 340px; }
+#chat-messages { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; max-height: 300px; }
 #chat-messages::-webkit-scrollbar { width: 4px; }
 #chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 .c-msg { display: flex; flex-direction: column; }
@@ -283,7 +419,7 @@ section.active { display: block; }
 .dot:nth-child(2) { animation-delay: 0.2s; }
 .dot:nth-child(3) { animation-delay: 0.4s; }
 @keyframes bounce { 0%,80%,100%{transform:scale(0.7);opacity:0.5}40%{transform:scale(1);opacity:1} }
-#chat-input-area { padding: 12px; border-top: 1px solid var(--border); display: flex; gap: 8px; background: var(--bg2); }
+#chat-input-area { padding: 10px; border-top: 1px solid var(--border); display: flex; gap: 8px; background: var(--bg2); }
 #chat-input { flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; color: var(--text); font-size: 13px; outline: none; font-family: inherit; height: 36px; resize: none; transition: border-color 0.15s; }
 #chat-input::placeholder { color: var(--muted); }
 #chat-input:focus { border-color: var(--accent); }
@@ -296,13 +432,48 @@ section.active { display: block; }
 #chat-send svg { width: 15px; height: 15px; fill: white; }
 #chat-footer { text-align: center; padding: 6px; font-size: 10px; color: #374151; border-top: 1px solid var(--bg3); background: var(--bg2); }
 
-/* INPUT RESET for forms inside sections */
 input[type="text"], input:not([type]) {
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 12px; color: var(--text); font-size: 14px; font-family: inherit;
   outline: none; width: 100%; transition: border-color 0.15s;
 }
 input:focus { border-color: var(--accent); }
+
+/* ============================================================
+   RESPONSIVE — MOBILE
+   ============================================================ */
+@media (max-width: 768px) {
+  nav { display: none; }
+  .mobile-header { display: flex; }
+  .bottom-nav { display: block; }
+  .mobile-video { display: block; }
+  .desktop-video { display: none; }
+
+  body { padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom)); }
+
+  section { padding: 16px 12px; }
+  .hero { padding: 24px 12px 32px; }
+
+  .stats-grid { grid-template-columns: repeat(2,1fr); gap: 10px; }
+  .cards-grid { grid-template-columns: 1fr; }
+  .about-grid { grid-template-columns: repeat(2,1fr); }
+  .studio-grid { grid-template-columns: repeat(2,1fr); }
+  .minerals-grid { grid-template-columns: repeat(2,1fr); }
+  .justice-stats { grid-template-columns: repeat(3,1fr); }
+
+  #chat-bubble { bottom: calc(var(--bottom-nav-height) + 12px); right: 12px; width: 46px; height: 46px; }
+  #chat-window { right: 12px; bottom: calc(var(--bottom-nav-height) + 68px); width: calc(100vw - 24px); max-width: none; }
+}
+
+@media (min-width: 769px) {
+  .cards-grid { grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); }
+  .about-grid { grid-template-columns: repeat(auto-fill,minmax(180px,1fr)); }
+  .biz-grid { grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); }
+  .studio-grid { grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); }
+  .minerals-grid { grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); }
+  .people-grid { grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); }
+  .stats-grid { grid-template-columns: repeat(auto-fit,minmax(140px,1fr)); }
+}
 </style>
 </head>
 <body>
@@ -310,6 +481,21 @@ input:focus { border-color: var(--accent); }
 <!-- MODERATION TOAST -->
 <div id="mod-toast">🚫 Please keep it respectful — that language isn't allowed on OurWorld.</div>
 
+<!-- MOBILE HEADER -->
+<header class="mobile-header">
+  <a class="mobile-header-logo" href="#" onclick="show('home'); return false;">
+    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="18" cy="18" r="16" stroke="#818cf8" stroke-width="2.2"/>
+      <line x1="2" y1="18" x2="34" y2="18" stroke="#818cf8" stroke-width="1.4" opacity="0.6"/>
+      <ellipse cx="18" cy="18" rx="6.5" ry="16" stroke="#818cf8" stroke-width="1.4" opacity="0.6"/>
+      <ellipse cx="18" cy="18" rx="13" ry="16" stroke="#818cf8" stroke-width="1" opacity="0.3"/>
+    </svg>
+    <span class="mobile-header-logo-text">Our<span>World</span></span>
+  </a>
+  <span class="mobile-page-title" id="mobile-page-title">Dashboard</span>
+</header>
+
+<!-- DESKTOP NAV -->
 <nav>
   <a class="nav-logo" href="#" onclick="show('home', document.querySelector('.nav-links a')); return false;">
     <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -322,7 +508,6 @@ input:focus { border-color: var(--accent); }
     </svg>
     <span class="nav-logo-text">Our<span>World</span></span>
   </a>
-
   <div class="nav-links">
     <a href="#" class="active" onclick="show('home',this)">⚡ Dashboard</a>
     <div class="nav-dropdown">
@@ -364,6 +549,54 @@ input:focus { border-color: var(--accent); }
     </div>
   </div>
 </nav>
+
+<!-- BOTTOM NAV (mobile) -->
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <button class="bnav-item active" onclick="show('home'); setBottomNav(this,'Dashboard')">
+      <span class="bnav-icon">⚡</span>
+      <span class="bnav-label">Home</span>
+    </button>
+    <button class="bnav-item" onclick="show('referendums'); setBottomNav(this,'Referendums')">
+      <span class="bnav-icon">🗳️</span>
+      <span class="bnav-label">Vote</span>
+    </button>
+    <button class="bnav-item" onclick="show('opinions'); setBottomNav(this,'Opinions')">
+      <span class="bnav-icon">💬</span>
+      <span class="bnav-label">Social</span>
+    </button>
+    <button class="bnav-item" onclick="show('justice'); setBottomNav(this,'Justice')">
+      <span class="bnav-icon">⚖️</span>
+      <span class="bnav-label">Justice</span>
+    </button>
+    <button class="bnav-item" onclick="toggleMore(this)">
+      <span class="bnav-icon">☰</span>
+      <span class="bnav-label">More</span>
+    </button>
+  </div>
+</nav>
+
+<!-- MORE OVERLAY -->
+<div class="overlay-backdrop" id="overlay-backdrop" onclick="closeMore()"></div>
+<div class="more-overlay" id="more-overlay">
+  <div class="more-overlay-title">All Sections</div>
+  <div class="more-grid">
+    <button class="more-item" onclick="show('about'); closeMore(); setBottomNav(null,'About')"><span class="more-icon">🛡️</span><span class="more-label">About</span></button>
+    <button class="more-item" onclick="show('proposals'); closeMore(); setBottomNav(null,'Proposals')"><span class="more-icon">📋</span><span class="more-label">Proposals</span></button>
+    <button class="more-item" onclick="show('results'); closeMore(); setBottomNav(null,'Results')"><span class="more-icon">📊</span><span class="more-label">Results</span></button>
+    <button class="more-item" onclick="show('connect'); closeMore(); setBottomNav(null,'Connect')"><span class="more-icon">❤️</span><span class="more-label">Connect</span></button>
+    <button class="more-item" onclick="show('share'); closeMore(); setBottomNav(null,'Share')"><span class="more-icon">📤</span><span class="more-label">Share</span></button>
+    <button class="more-item" onclick="show('shorts'); closeMore(); setBottomNav(null,'Shorts')"><span class="more-icon">🎥</span><span class="more-label">Shorts</span></button>
+    <button class="more-item" onclick="show('studio'); closeMore(); setBottomNav(null,'Studio')"><span class="more-icon">🎨</span><span class="more-label">Studio</span></button>
+    <button class="more-item" onclick="show('innovators'); closeMore(); setBottomNav(null,'Innovators')"><span class="more-icon">💡</span><span class="more-label">Innovators</span></button>
+    <button class="more-item" onclick="show('biz'); closeMore(); setBottomNav(null,'Biz')"><span class="more-icon">🌱</span><span class="more-label">Biz</span></button>
+    <button class="more-item" onclick="show('video'); closeMore(); setBottomNav(null,'Video')"><span class="more-icon">🎬</span><span class="more-label">Video</span></button>
+    <button class="more-item" onclick="show('solar'); closeMore(); setBottomNav(null,'Solar')"><span class="more-icon">☀️</span><span class="more-label">Solar</span></button>
+    <button class="more-item" onclick="show('rare'); closeMore(); setBottomNav(null,'Rare Earth')"><span class="more-icon">💎</span><span class="more-label">Rare Earth</span></button>
+    <button class="more-item" onclick="show('corruption'); closeMore(); setBottomNav(null,'Corruption')"><span class="more-icon">🔍</span><span class="more-label">Corruption</span></button>
+    <button class="more-item" onclick="show('pollution'); closeMore(); setBottomNav(null,'Pollution')"><span class="more-icon">🌫️</span><span class="more-label">Pollution</span></button>
+  </div>
+</div>
 
 <!-- HOME / DASHBOARD -->
 <div id="home" class="hero active">
@@ -411,7 +644,7 @@ input:focus { border-color: var(--accent); }
       <div class="card-meta">🗳 5,890 votes</div>
     </div>
   </div>
-  <div id="ref-detail-area" style="margin-top:28px;display:none;"></div>
+  <div id="ref-detail-area" style="margin-top:24px;display:none;"></div>
 </section>
 
 <!-- PROPOSALS -->
@@ -446,15 +679,15 @@ input:focus { border-color: var(--accent); }
   <h3 style="margin-bottom:16px;font-size:18px;">Our Principles</h3>
   <div class="about-grid">
     <div class="about-card"><div class="icon">🗳️</div><h4>Direct Democracy</h4><p>Citizens vote directly on every issue that matters.</p></div>
-    <div class="about-card"><div class="icon">👥</div><h4>Administrators</h4><p>No politicians — only neutral administrators who enable citizen will.</p></div>
-    <div class="about-card"><div class="icon">👁️</div><h4>Transparency</h4><p>Every vote, every outcome — fully auditable by the public.</p></div>
-    <div class="about-card"><div class="icon">🛡️</div><h4>Zero Corruption</h4><p>Structural safeguards prevent any single actor from gaming the system.</p></div>
+    <div class="about-card"><div class="icon">👥</div><h4>Administrators</h4><p>No politicians — only neutral administrators.</p></div>
+    <div class="about-card"><div class="icon">👁️</div><h4>Transparency</h4><p>Every vote, every outcome — fully auditable.</p></div>
+    <div class="about-card"><div class="icon">🛡️</div><h4>Zero Corruption</h4><p>Structural safeguards prevent any actor gaming the system.</p></div>
     <div class="about-card"><div class="icon">⚖️</div><h4>Fairness</h4><p>One person, one vote — regardless of wealth or status.</p></div>
-    <div class="about-card"><div class="icon">💡</div><h4>Citizen Proposals</h4><p>Any citizen can propose a new referendum for community review.</p></div>
-    <div class="about-card"><div class="icon">❤️</div><h4>Community</h4><p>Connect, discuss, and organise with like-minded citizens worldwide.</p></div>
-    <div class="about-card"><div class="icon">🌍</div><h4>Environment</h4><p>The planet gets a vote too — ecological impact is always considered.</p></div>
+    <div class="about-card"><div class="icon">💡</div><h4>Citizen Proposals</h4><p>Any citizen can propose a new referendum.</p></div>
+    <div class="about-card"><div class="icon">❤️</div><h4>Community</h4><p>Connect with like-minded citizens worldwide.</p></div>
+    <div class="about-card"><div class="icon">🌍</div><h4>Environment</h4><p>The planet gets a vote too.</p></div>
   </div>
-  <p style="margin-top:28px;color:var(--muted);font-size:13px;">Light Capitalism · Heavy Democracy · Zero Corruption</p>
+  <p style="margin-top:24px;color:var(--muted);font-size:13px;">Light Capitalism · Heavy Democracy · Zero Corruption</p>
 </section>
 
 <!-- OPINIONS -->
@@ -462,7 +695,7 @@ input:focus { border-color: var(--accent); }
   <div class="feed-header">
     <div>
       <div class="section-title">💬 Opinions</div>
-      <div class="section-sub">Share your views and debate with citizens worldwide.</div>
+      <div class="section-sub">Share your views with citizens worldwide.</div>
     </div>
     <div class="feed-live"><div class="live-dot"></div> Live</div>
   </div>
@@ -481,7 +714,7 @@ input:focus { border-color: var(--accent); }
         <div class="feed-meta"><div class="feed-name">Amara Diallo</div><div class="feed-location">🇸🇳 Dakar, Senegal</div></div>
         <div class="feed-time">2m ago</div>
       </div>
-      <div class="feed-body">Africa bears the heaviest cost of climate change yet contributes the least emissions. Direct democracy must give developing nations equal weight in global environmental decisions. This is the platform for that.</div>
+      <div class="feed-body">Africa bears the heaviest cost of climate change yet contributes the least emissions. Direct democracy must give developing nations equal weight in global environmental decisions.</div>
       <div class="feed-actions">
         <button class="feed-action" onclick="toggleLike(this)">♥ <span>47</span></button>
         <button class="feed-action">💬 <span>12 replies</span></button>
@@ -495,7 +728,7 @@ input:focus { border-color: var(--accent); }
         <div class="feed-meta"><div class="feed-name">Lena Kovář</div><div class="feed-location">🇨🇿 Prague, Czech Republic</div></div>
         <div class="feed-time">11m ago</div>
       </div>
-      <div class="feed-body">Politicians promise change every election cycle and deliver almost none of it. OurWorld's model — citizens voting directly on issues — is the only logical evolution of democracy. We don't need representatives, we need referendums.</div>
+      <div class="feed-body">Politicians promise change every election cycle and deliver almost none of it. OurWorld's model — citizens voting directly on issues — is the only logical evolution of democracy.</div>
       <div class="feed-actions">
         <button class="feed-action" onclick="toggleLike(this)">♥ <span>89</span></button>
         <button class="feed-action">💬 <span>34 replies</span></button>
@@ -509,7 +742,7 @@ input:focus { border-color: var(--accent); }
         <div class="feed-meta"><div class="feed-name">James Okonkwo</div><div class="feed-location">🇳🇬 Lagos, Nigeria</div></div>
         <div class="feed-time">28m ago</div>
       </div>
-      <div class="feed-body">Universal healthcare is not a luxury — it is a right. No child should die from a preventable illness because their family cannot afford a doctor. I am voting YES on the healthcare referendum and I urge everyone here to do the same.</div>
+      <div class="feed-body">Universal healthcare is not a luxury — it is a right. No child should die from a preventable illness because their family cannot afford a doctor.</div>
       <div class="feed-actions">
         <button class="feed-action" onclick="toggleLike(this)">♥ <span>134</span></button>
         <button class="feed-action">💬 <span>56 replies</span></button>
@@ -523,24 +756,10 @@ input:focus { border-color: var(--accent); }
         <div class="feed-meta"><div class="feed-name">Sofia Papadaki</div><div class="feed-location">🇬🇷 Athens, Greece</div></div>
         <div class="feed-time">45m ago</div>
       </div>
-      <div class="feed-body">Greece lived through austerity imposed by institutions nobody voted for. A platform where citizens directly control economic policy isn't radical — it's overdue. Light capitalism and heavy democracy is exactly the balance we need.</div>
+      <div class="feed-body">Greece lived through austerity imposed by institutions nobody voted for. Light capitalism and heavy democracy is exactly the balance we need.</div>
       <div class="feed-actions">
         <button class="feed-action" onclick="toggleLike(this)">♥ <span>62</span></button>
         <button class="feed-action">💬 <span>19 replies</span></button>
-        <button class="feed-action">↗ Share</button>
-      </div>
-    </div>
-    <div class="feed-post">
-      <div class="feed-tag-pill">🌱 Environment</div>
-      <div class="feed-post-top">
-        <div class="feed-ava">HT</div>
-        <div class="feed-meta"><div class="feed-name">Hiroshi Tanaka</div><div class="feed-location">🇯🇵 Tokyo, Japan</div></div>
-        <div class="feed-time">1h ago</div>
-      </div>
-      <div class="feed-body">Japan's coastline is already changing. We see it every year. Single-use plastics are a small but powerful symbol — if we can't agree to ban a plastic straw, how do we tackle carbon emissions? Vote for the ban. It matters.</div>
-      <div class="feed-actions">
-        <button class="feed-action" onclick="toggleLike(this)">♥ <span>78</span></button>
-        <button class="feed-action">💬 <span>23 replies</span></button>
         <button class="feed-action">↗ Share</button>
       </div>
     </div>
@@ -551,7 +770,7 @@ input:focus { border-color: var(--accent); }
         <div class="feed-meta"><div class="feed-name">Rosa Benitez</div><div class="feed-location">🇲🇽 Mexico City, Mexico</div></div>
         <div class="feed-time">2h ago</div>
       </div>
-      <div class="feed-body">Corruption thrives in the dark. Transparency, citizen oversight, and zero tolerance — these aren't ideals, they are minimum requirements for a functioning society. OurWorld's justice platform gives ordinary people a real weapon against power.</div>
+      <div class="feed-body">Corruption thrives in the dark. Transparency, citizen oversight, and zero tolerance — these aren't ideals, they are minimum requirements for a functioning society.</div>
       <div class="feed-actions">
         <button class="feed-action" onclick="toggleLike(this)">♥ <span>201</span></button>
         <button class="feed-action">💬 <span>88 replies</span></button>
@@ -565,7 +784,7 @@ input:focus { border-color: var(--accent); }
 <section id="connect">
   <div class="section-title">❤️ Connect</div>
   <div class="section-sub">Find like-minded citizens who share your values.</div>
-  <div style="margin-top:24px;">
+  <div style="margin-top:16px;">
     <h3 style="font-family:'Syne',sans-serif;font-size:18px;margin-bottom:8px;">🎥 Community Video Chat</h3>
     <p style="color:var(--muted);font-size:14px;margin-bottom:16px;">Join the OurWorld community room — connect face to face with citizens worldwide.</p>
     <div class="desktop-video">
@@ -574,7 +793,7 @@ input:focus { border-color: var(--accent); }
     <div class="mobile-video" style="text-align:center;padding:40px 0;">
       <div style="font-size:48px;margin-bottom:16px;">🎥</div>
       <p style="color:var(--muted);font-size:14px;margin-bottom:24px;">Tap below to join the OurWorld community video room.</p>
-      <a href="https://ourworld.daily.co/ourworld-chat" target="_blank" style="background:var(--accent);color:white;text-decoration:none;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:600;">Join Video Chat</a>
+      <a href="https://ourworld.daily.co/ourworld-chat" target="_blank" style="background:var(--accent);color:white;text-decoration:none;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:600;display:inline-block;">Join Video Chat</a>
     </div>
   </div>
 </section>
@@ -582,16 +801,16 @@ input:focus { border-color: var(--accent); }
 <!-- SHARE -->
 <section id="share">
   <div class="section-title">📤 Share</div>
-  <div class="section-sub">Spread ideas, campaigns and movements — amplify the voices that matter.</div>
-  <div class="feed-compose" style="margin-bottom:24px;">
+  <div class="section-sub">Spread ideas, campaigns and movements worldwide.</div>
+  <div class="feed-compose" style="margin-bottom:20px;">
     <textarea id="share-input" placeholder="Share a link, article or movement with the world..."></textarea>
     <div class="feed-compose-footer">
       <span id="share-char">280 characters remaining</span>
       <button class="feed-post-btn" onclick="postShare()">Share ➜</button>
     </div>
   </div>
-  <div class="section-title" style="font-size:16px;margin-bottom:16px;">🔥 Trending Shares</div>
-  <div class="feed-scroll" id="share-scroll" style="max-height:520px;">
+  <div class="section-title" style="font-size:16px;margin-bottom:14px;">🔥 Trending Shares</div>
+  <div class="feed-scroll" id="share-scroll">
     <div class="feed-post">
       <div class="feed-tag-pill">🌿 Environment</div>
       <div class="feed-post-top">
@@ -599,35 +818,15 @@ input:focus { border-color: var(--accent); }
         <div class="feed-meta"><div class="feed-name">Nizhoni Kaya</div><div class="feed-location">🇺🇸 Phoenix, USA</div></div>
         <div class="feed-time">5m ago</div>
       </div>
-      <div class="feed-body">📰 New UN report: Global plastic production has doubled since 2000 and 91% is never recycled. Share this everywhere — the public doesn't realise the scale. Vote YES on the plastics ban.</div>
+      <div class="feed-body">📰 New UN report: Global plastic production has doubled since 2000 and 91% is never recycled.</div>
       <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:12px;">
         <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">unep.org · Article</div>
         <div style="font-size:13px;font-weight:600;">Plastic Planet: The facts every citizen needs to know</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px;">A comprehensive breakdown of the global plastic crisis and what direct citizen action can achieve.</div>
       </div>
       <div class="feed-actions">
         <button class="feed-action" onclick="toggleLike(this)">♥ <span>312</span></button>
         <button class="feed-action">🔁 <span>89 reshares</span></button>
-        <button class="feed-action">↗ External Link</button>
-      </div>
-    </div>
-    <div class="feed-post">
-      <div class="feed-tag-pill">⚖️ Justice</div>
-      <div class="feed-post-top">
-        <div class="feed-ava">CB</div>
-        <div class="feed-meta"><div class="feed-name">Chidera Bankole</div><div class="feed-location">🇳🇬 Abuja, Nigeria</div></div>
-        <div class="feed-time">22m ago</div>
-      </div>
-      <div class="feed-body">🎬 Must-watch 8-minute documentary on the Niger Delta oil spill. Share it. The world needs to see what communities here are living with every single day. Support the case in Justice.</div>
-      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:12px;">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">YouTube · Documentary</div>
-        <div style="font-size:13px;font-weight:600;">Niger Delta: 50 Years of Spills</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Award-winning short documentary. 2.4M views worldwide.</div>
-      </div>
-      <div class="feed-actions">
-        <button class="feed-action" onclick="toggleLike(this)">♥ <span>541</span></button>
-        <button class="feed-action">🔁 <span>204 reshares</span></button>
-        <button class="feed-action">↗ External Link</button>
+        <button class="feed-action">↗ Link</button>
       </div>
     </div>
     <div class="feed-post">
@@ -637,35 +836,15 @@ input:focus { border-color: var(--accent); }
         <div class="feed-meta"><div class="feed-name">Mira Hoffmann</div><div class="feed-location">🇩🇪 Berlin, Germany</div></div>
         <div class="feed-time">1h ago</div>
       </div>
-      <div class="feed-body">📊 Finland's UBI pilot results are in — participants showed higher wellbeing, more confidence, and NO reduction in work motivation. Share the data, not the myths.</div>
+      <div class="feed-body">📊 Finland's UBI pilot results are in — participants showed higher wellbeing and NO reduction in work motivation.</div>
       <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:12px;">
         <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">kela.fi · Research Report</div>
         <div style="font-size:13px;font-weight:600;">Finland Basic Income Experiment: Final Results</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Two-year government study covering 2,000 participants across Finland.</div>
       </div>
       <div class="feed-actions">
         <button class="feed-action" onclick="toggleLike(this)">♥ <span>188</span></button>
         <button class="feed-action">🔁 <span>67 reshares</span></button>
-        <button class="feed-action">↗ External Link</button>
-      </div>
-    </div>
-    <div class="feed-post">
-      <div class="feed-tag-pill">🏥 Healthcare</div>
-      <div class="feed-post-top">
-        <div class="feed-ava">AP</div>
-        <div class="feed-meta"><div class="feed-name">Ana Pereira</div><div class="feed-location">🇧🇷 São Paulo, Brazil</div></div>
-        <div class="feed-time">3h ago</div>
-      </div>
-      <div class="feed-body">🧵 Thread: I compiled healthcare outcomes from 15 countries with universal systems vs 10 without. The data is unambiguous. Share this before the healthcare referendum closes.</div>
-      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:12px;">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">WHO Data · Analysis</div>
-        <div style="font-size:13px;font-weight:600;">Universal Healthcare: A 25-Country Outcome Study</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Life expectancy, infant mortality and cost-per-capita compared across systems.</div>
-      </div>
-      <div class="feed-actions">
-        <button class="feed-action" onclick="toggleLike(this)">♥ <span>421</span></button>
-        <button class="feed-action">🔁 <span>156 reshares</span></button>
-        <button class="feed-action">↗ External Link</button>
+        <button class="feed-action">↗ Link</button>
       </div>
     </div>
   </div>
@@ -675,7 +854,7 @@ input:focus { border-color: var(--accent); }
 <section id="shorts">
   <div class="section-title">🎥 Shorts</div>
   <div class="section-sub">Quick video updates from citizens and activists around the globe.</div>
-  <div class="news-tabs" style="margin-bottom:24px;">
+  <div class="news-tabs">
     <div class="news-tab active">🔥 Trending</div>
     <div class="news-tab">🌍 Climate</div>
     <div class="news-tab">⚖️ Justice</div>
@@ -691,7 +870,6 @@ input:focus { border-color: var(--accent); }
       </div>
       <div class="card-tag">🌿 Environment <span class="pill pill-green">48.2k views</span></div>
       <h3>Amazon deforestation — filmed from the ground, right now</h3>
-      <p>Indigenous activist Tupã films the advancing logging frontier in real time. This is what erasure looks like.</p>
       <div class="card-meta">📍 Pará, Brazil · <strong style="color:var(--accent2);">Tupã Juruna</strong></div>
     </div>
     <div class="card" style="cursor:default;">
@@ -701,28 +879,7 @@ input:focus { border-color: var(--accent); }
       </div>
       <div class="card-tag">⚖️ Justice <span class="pill pill-amber">22.1k views</span></div>
       <h3>Why I'm suing my government — and how OurWorld helped</h3>
-      <p>A community leader from Accra explains how crowdfunded legal support through the Justice platform made their case possible.</p>
       <div class="card-meta">📍 Accra, Ghana · <strong style="color:var(--accent2);">Kwame Asante</strong></div>
-    </div>
-    <div class="card" style="cursor:default;">
-      <div style="background:var(--bg3);border-radius:10px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;margin-bottom:12px;border:1px solid var(--border);position:relative;overflow:hidden;">
-        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0f1a1a,#0a0a14);"></div>
-        <div style="position:relative;text-align:center;"><div style="font-size:36px;margin-bottom:6px;">▶️</div><div style="font-size:11px;color:var(--muted);">2:31</div></div>
-      </div>
-      <div class="card-tag">🗳️ Democracy <span class="pill pill-blue">31.5k views</span></div>
-      <h3>The election they tried to bury — a citizen journalist's story</h3>
-      <p>How one woman documented ballot irregularities with only a phone and uploaded the evidence to the world.</p>
-      <div class="card-meta">📍 Tbilisi, Georgia · <strong style="color:var(--accent2);">Nino Kvaratskhelia</strong></div>
-    </div>
-    <div class="card" style="cursor:default;">
-      <div style="background:var(--bg3);border-radius:10px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;margin-bottom:12px;border:1px solid var(--border);position:relative;overflow:hidden;">
-        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a0f1a,#0f0a14);"></div>
-        <div style="position:relative;text-align:center;"><div style="font-size:36px;margin-bottom:6px;">▶️</div><div style="font-size:11px;color:var(--muted);">3:18</div></div>
-      </div>
-      <div class="card-tag">💰 Economy <span class="pill pill-green">17.8k views</span></div>
-      <h3>I started a pottery business for $800 — here's what happened</h3>
-      <p>Adaeze shares how a micro-investment through OurWorld Biz transformed her family's livelihood in six months.</p>
-      <div class="card-meta">📍 Lagos, Nigeria · <strong style="color:var(--accent2);">Adaeze Obi</strong></div>
     </div>
     <div class="card" style="cursor:default;">
       <div style="background:var(--bg3);border-radius:10px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;margin-bottom:12px;border:1px solid var(--border);position:relative;overflow:hidden;">
@@ -731,18 +888,7 @@ input:focus { border-color: var(--accent); }
       </div>
       <div class="card-tag">🌿 Climate <span class="pill pill-amber">54.9k views</span></div>
       <h3>Our village flooded for the 4th year running</h3>
-      <p>A short film by a 19-year-old documenting flood damage to her community in Bangladesh and the government's silence.</p>
       <div class="card-meta">📍 Sylhet, Bangladesh · <strong style="color:var(--accent2);">Fatema Begum</strong></div>
-    </div>
-    <div class="card" style="cursor:default;">
-      <div style="background:var(--bg3);border-radius:10px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;margin-bottom:12px;border:1px solid var(--border);position:relative;overflow:hidden;">
-        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a1010,#0f0808);"></div>
-        <div style="position:relative;text-align:center;"><div style="font-size:36px;margin-bottom:6px;">▶️</div><div style="font-size:11px;color:var(--muted);">2:55</div></div>
-      </div>
-      <div class="card-tag">✊ People Power <span class="pill pill-blue">28.3k views</span></div>
-      <h3>What direct democracy looks like in practice — Iceland's story</h3>
-      <p>A short explainer on how Iceland used citizen assemblies to rewrite its constitution after the 2008 financial crash.</p>
-      <div class="card-meta">📍 Reykjavík, Iceland · <strong style="color:var(--accent2);">Björn Sigurdsson</strong></div>
     </div>
   </div>
 </section>
@@ -782,8 +928,8 @@ input:focus { border-color: var(--accent); }
 <!-- INNOVATORS -->
 <section id="innovators">
   <div class="section-title">💡 Innovators</div>
-  <div class="section-sub">Citizens building solutions to the world's hardest problems — connect, fund and collaborate.</div>
-  <div class="news-tabs" style="margin-bottom:24px;">
+  <div class="section-sub">Citizens building solutions to the world's hardest problems.</div>
+  <div class="news-tabs">
     <div class="news-tab active">🌍 All</div>
     <div class="news-tab">🌿 Climate</div>
     <div class="news-tab">🏥 Health</div>
@@ -792,83 +938,24 @@ input:focus { border-color: var(--accent); }
     <div class="news-tab">🍽️ Food</div>
   </div>
   <div class="biz-grid">
-    <div class="biz-card">
-      <div class="biz-tag">CleanTech · 🇳🇬 Nigeria</div>
-      <h3>BioGas Village</h3>
-      <p>Converting agricultural waste into cooking gas for rural communities. One unit powers 10 households and replaces wood burning, reducing both deforestation and respiratory illness.</p>
-      <div class="biz-seeking">Seeking: $12,000 · 3 co-founders</div>
-      <div style="margin:10px 0;font-size:12px;color:var(--muted);">👥 847 supporters · ⭐ Featured</div>
-      <button class="interest-btn">Express Interest</button>
-    </div>
-    <div class="biz-card">
-      <div class="biz-tag">HealthTech · 🇧🇩 Bangladesh</div>
-      <h3>FloodDoc</h3>
-      <p>AI-assisted offline-capable medical diagnosis app for rural clinics that lose connectivity during monsoon flooding. Built by a 23-year-old medical student using donated hardware.</p>
-      <div class="biz-seeking">Seeking: $5,500 · Development partner</div>
-      <div style="margin:10px 0;font-size:12px;color:var(--muted);">👥 1,240 supporters · 🏆 Top Innovator</div>
-      <button class="interest-btn">Express Interest</button>
-    </div>
-    <div class="biz-card">
-      <div class="biz-tag">FinTech · 🇰🇪 Kenya</div>
-      <h3>FarmCoin</h3>
-      <p>Blockchain micro-credit platform letting smallholder farmers borrow against future harvest data — no bank account required. Bypasses predatory moneylender networks entirely.</p>
-      <div class="biz-seeking">Seeking: $25,000 · Regulatory advisor</div>
-      <div style="margin:10px 0;font-size:12px;color:var(--muted);">👥 2,180 supporters · 🌍 Global Impact</div>
-      <button class="interest-btn">Express Interest</button>
-    </div>
-    <div class="biz-card">
-      <div class="biz-tag">EdTech · 🇸🇾 Syria</div>
-      <h3>RefugeeLearn</h3>
-      <p>Downloadable, data-light curriculum app for displaced children in camps with no reliable internet. Currently used by 4,200 children in 6 countries. Seeking translation volunteers.</p>
-      <div class="biz-seeking">Seeking: Translators · Content partners</div>
-      <div style="margin:10px 0;font-size:12px;color:var(--muted);">👥 5,670 supporters · ❤️ Most Loved</div>
-      <button class="interest-btn">Get Involved</button>
-    </div>
-    <div class="biz-card">
-      <div class="biz-tag">AgriTech · 🇵🇪 Peru</div>
-      <h3>AltiCrop</h3>
-      <p>Drought-resistant crop varieties developed from ancient Andean seed banks, adapted using modern genomics for climate change resilience. Open-source, free for all farmers.</p>
-      <div class="biz-seeking">Seeking: $18,000 · Research partner</div>
-      <div style="margin:10px 0;font-size:12px;color:var(--muted);">👥 920 supporters</div>
-      <button class="interest-btn">Express Interest</button>
-    </div>
-    <div class="biz-card">
-      <div class="biz-tag">WaterTech · 🇮🇳 India</div>
-      <h3>DropSense</h3>
-      <p>Low-cost IoT water quality sensors that communities can build for under $15 and connect to a shared real-time contamination map. Over 300 sensors deployed across Rajasthan.</p>
-      <div class="biz-seeking">Seeking: $8,000 · Hardware sponsor</div>
-      <div style="margin:10px 0;font-size:12px;color:var(--muted);">👥 1,560 supporters</div>
-      <button class="interest-btn">Express Interest</button>
-    </div>
-  </div>
-  <div class="quote-block" style="margin-top:32px;">"The most powerful innovations of the next decade won't come from Silicon Valley — they'll come from people solving the problems they live with every day."</div>
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;margin-top:24px;">
-    <div class="section-title" style="font-size:16px;margin-bottom:8px;">🚀 Submit Your Innovation</div>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;">Have an idea that could change lives? Tell the OurWorld community what you're building.</p>
-    <div style="display:flex;flex-direction:column;gap:10px;">
-      <input placeholder="Project name...">
-      <textarea placeholder="What problem does it solve? Who does it help? What do you need?" style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--text);font-size:14px;font-family:inherit;resize:none;outline:none;height:90px;width:100%;"></textarea>
-      <button class="vote-btn">Submit Innovation 💡</button>
-    </div>
+    <div class="biz-card"><div class="biz-tag">CleanTech · 🇳🇬 Nigeria</div><h3>BioGas Village</h3><p>Converting agricultural waste into cooking gas for rural communities. One unit powers 10 households.</p><div class="biz-seeking">Seeking: $12,000 · 3 co-founders</div><button class="interest-btn">Express Interest</button></div>
+    <div class="biz-card"><div class="biz-tag">HealthTech · 🇧🇩 Bangladesh</div><h3>FloodDoc</h3><p>AI-assisted offline-capable medical diagnosis app for rural clinics during monsoon flooding.</p><div class="biz-seeking">Seeking: $5,500 · Development partner</div><button class="interest-btn">Express Interest</button></div>
+    <div class="biz-card"><div class="biz-tag">FinTech · 🇰🇪 Kenya</div><h3>FarmCoin</h3><p>Blockchain micro-credit platform letting smallholder farmers borrow against future harvest data.</p><div class="biz-seeking">Seeking: $25,000 · Regulatory advisor</div><button class="interest-btn">Express Interest</button></div>
+    <div class="biz-card"><div class="biz-tag">EdTech · 🇸🇾 Syria</div><h3>RefugeeLearn</h3><p>Downloadable, data-light curriculum app for displaced children in camps. Used by 4,200 children.</p><div class="biz-seeking">Seeking: Translators · Content partners</div><button class="interest-btn">Get Involved</button></div>
   </div>
 </section>
 
 <!-- VIDEO -->
 <section id="video">
   <div class="section-title">🎬 Video Chat</div>
-  <div class="section-sub">Face-to-face conversations with citizens worldwide — democracy needs dialogue.</div>
-  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px;">
-    <span class="badge">🌍 Open to all citizens</span>
-    <span class="badge">🔒 No account required</span>
-    <span class="badge">🎙️ HD audio &amp; video</span>
-  </div>
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:24px;display:flex;align-items:center;gap:16px;">
-    <div style="font-size:32px;">🟢</div>
+  <div class="section-sub">Face-to-face conversations with citizens worldwide.</div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:20px;display:flex;align-items:center;gap:14px;">
+    <div style="font-size:28px;">🟢</div>
     <div>
       <div style="font-size:15px;font-weight:600;margin-bottom:2px;">OurWorld Community Room</div>
-      <div style="font-size:13px;color:var(--muted);">Open 24/7 · Anyone can join · No login needed</div>
+      <div style="font-size:13px;color:var(--muted);">Open 24/7 · No login needed</div>
     </div>
-    <div style="margin-left:auto;font-size:13px;color:var(--green);font-weight:500;">● Live</div>
+    <div style="margin-left:auto;font-size:12px;color:var(--green);font-weight:500;">● Live</div>
   </div>
   <div class="desktop-video">
     <iframe src="https://ourworld.daily.co/ourworld-chat" style="width:100%;height:500px;border:none;border-radius:14px;background:var(--bg2);" allow="camera; microphone; fullscreen; speaker; display-capture"></iframe>
@@ -876,29 +963,7 @@ input:focus { border-color: var(--accent); }
   <div class="mobile-video" style="text-align:center;padding:40px 0;">
     <div style="font-size:48px;margin-bottom:16px;">🎥</div>
     <p style="color:var(--muted);font-size:14px;margin-bottom:24px;">Tap below to join the OurWorld community video room in your browser.</p>
-    <a href="https://ourworld.daily.co/ourworld-chat" target="_blank" style="background:var(--accent);color:white;text-decoration:none;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:600;">Join Video Chat</a>
-  </div>
-  <div style="margin-top:28px;">
-    <div class="section-title" style="font-size:18px;margin-bottom:16px;">💡 Room Guidelines</div>
-    <div class="about-grid">
-      <div class="about-card"><div class="icon">🕊️</div><h4>Respect Always</h4><p>Treat every citizen with dignity regardless of where they're from or what they believe.</p></div>
-      <div class="about-card"><div class="icon">🌍</div><h4>All Welcome</h4><p>Every nationality, background and opinion is welcome. Diversity makes democracy stronger.</p></div>
-      <div class="about-card"><div class="icon">🚫</div><h4>Zero Hate</h4><p>Hate speech, discrimination or harassment will result in immediate removal from the room.</p></div>
-      <div class="about-card"><div class="icon">🎙️</div><h4>Mute When Not Speaking</h4><p>Help keep the audio clear for everyone by muting your microphone when listening.</p></div>
-    </div>
-  </div>
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;margin-top:24px;">
-    <div class="section-title" style="font-size:16px;margin-bottom:16px;">📅 Scheduled Discussions</div>
-    <div class="justice-card" style="margin-bottom:12px;">
-      <div class="j-tag">🗳️ Democracy · This Week</div>
-      <h3>Is direct democracy scalable? Debate — Thursday 7pm UTC</h3>
-      <div class="j-meta" style="margin-top:8px;"><span>👥 <strong>34</strong> signed up</span><span>⏱️ <strong>90 min</strong></span></div>
-    </div>
-    <div class="justice-card" style="margin-bottom:0;">
-      <div class="j-tag">🌿 Climate · Next Week</div>
-      <h3>Citizens vs corporations: who should lead climate action? — Tuesday 6pm UTC</h3>
-      <div class="j-meta" style="margin-top:8px;"><span>👥 <strong>61</strong> signed up</span><span>⏱️ <strong>60 min</strong></span></div>
-    </div>
+    <a href="https://ourworld.daily.co/ourworld-chat" target="_blank" style="background:var(--accent);color:white;text-decoration:none;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:600;display:inline-block;">Join Video Chat</a>
   </div>
 </section>
 
@@ -919,62 +984,27 @@ input:focus { border-color: var(--accent); }
 <!-- SOLAR -->
 <section id="solar">
   <div class="section-title">☀️ Solar</div>
-  <div class="section-sub">Harnessing the power of the sun — energy for the people, not corporations.</div>
-  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px;">
-    <span class="badge">⚡ 1 hour of sun = world's 1-year energy</span>
-    <span class="badge">📉 Solar costs down 90% since 2010</span>
-    <span class="badge">🌍 173,000 TW hits Earth daily</span>
+  <div class="section-sub">Energy for the people, not corporations.</div>
+  <div class="justice-stats" style="margin-bottom:24px;">
+    <div class="j-stat"><div class="n">4.5TW</div><div class="l">Global capacity</div></div>
+    <div class="j-stat"><div class="n">$0.04</div><div class="l">Cost per kWh</div></div>
+    <div class="j-stat"><div class="n">1.3B</div><div class="l">Without power</div></div>
   </div>
-  <div class="justice-stats" style="margin-bottom:28px;">
-    <div class="j-stat"><div class="n">4.5TW</div><div class="l">Global installed capacity</div></div>
-    <div class="j-stat"><div class="n">$0.04</div><div class="l">Cost per kWh (record low)</div></div>
-    <div class="j-stat"><div class="n">1.3B</div><div class="l">People still without power</div></div>
+  <div class="cards-grid" style="margin-bottom:24px;">
+    <div class="card" style="cursor:default;"><div class="card-tag">🇰🇪 Kenya <span class="pill pill-green">Funded</span></div><h3>Maasai Solar Grid — Narok County</h3><p>48 solar panels installed across 12 households, cutting energy costs by 80%.</p><div class="vote-bar-wrap"><div class="vote-label"><span>Funded</span><span>100%</span></div><div class="vote-bar"><div class="vote-fill" style="width:100%;background:var(--green)"></div></div></div></div>
+    <div class="card" style="cursor:default;"><div class="card-tag">🇧🇩 Bangladesh <span class="pill pill-amber">In Progress</span></div><h3>Sylhet Flood Village Solar Resilience</h3><p>Solar microgrids for 6 flood-prone villages to maintain power during monsoon disruptions.</p><div class="vote-bar-wrap"><div class="vote-label"><span>Progress</span><span>67%</span></div><div class="vote-bar"><div class="vote-fill" style="width:67%;background:var(--amber)"></div></div></div></div>
   </div>
-  <div class="section-title" style="font-size:18px;margin-bottom:16px;">🌍 Community Solar Projects</div>
-  <div class="cards-grid" style="margin-bottom:32px;">
-    <div class="card" style="cursor:default;">
-      <div class="card-tag">🇰🇪 Kenya <span class="pill pill-green">Funded</span></div>
-      <h3>Maasai Solar Grid — Narok County</h3>
-      <p>48 solar panels installed across 12 households in a remote community, replacing diesel generators and cutting energy costs by 80%.</p>
-      <div class="vote-bar-wrap"><div class="vote-label"><span>Funded</span><span>100%</span></div><div class="vote-bar"><div class="vote-fill" style="width:100%;background:var(--green)"></div></div></div>
-      <div class="card-meta">⚡ 22kW capacity · 🏠 120 beneficiaries</div>
-    </div>
-    <div class="card" style="cursor:default;">
-      <div class="card-tag">🇧🇩 Bangladesh <span class="pill pill-amber">In Progress</span></div>
-      <h3>Sylhet Flood Village Solar Resilience</h3>
-      <p>Solar microgrids for 6 flood-prone villages so communities maintain power during annual monsoon disruptions.</p>
-      <div class="vote-bar-wrap"><div class="vote-label"><span>Progress</span><span>67%</span></div><div class="vote-bar"><div class="vote-fill" style="width:67%;background:var(--amber)"></div></div></div>
-      <div class="card-meta">⚡ 15kW target · 🏠 80 households</div>
-    </div>
-    <div class="card" style="cursor:default;">
-      <div class="card-tag">🇵🇪 Peru <span class="pill pill-blue">Seeking Support</span></div>
-      <h3>Andean Highland Solar Schools</h3>
-      <p>Three rural schools at 3,800m altitude with no grid connection. Solar installation would power lights, heating and computer labs.</p>
-      <div class="vote-bar-wrap"><div class="vote-label"><span>Funded</span><span>31%</span></div><div class="vote-bar"><div class="vote-fill" style="width:31%"></div></div></div>
-      <div class="card-meta">⚡ 9kW target · 🎓 340 students</div>
-    </div>
-  </div>
-  <div class="section-title" style="font-size:18px;margin-bottom:16px;">📰 Solar News</div>
   <div class="news-feature">
     <div class="news-badge">BREAKTHROUGH</div>
     <h2>Perovskite solar cells hit 33.9% efficiency in lab tests</h2>
-    <p>Scientists have achieved a new world record for perovskite-silicon tandem cells, potentially making rooftop solar twice as powerful within a decade.</p>
-    <div class="card-meta" style="margin-top:12px;">nrel.gov · 3 days ago</div>
+    <p>Scientists achieved a new world record, potentially making rooftop solar twice as powerful within a decade.</p>
   </div>
-  <div class="news-small"><div><h4>India overtakes Germany in solar capacity — now 3rd globally</h4><div class="src">Bloomberg Energy · 1 week ago</div></div><span class="pill pill-green">🌏 Asia</span></div>
-  <div class="news-small"><div><h4>EU rooftop solar mandate takes effect — all new buildings must install panels</h4><div class="src">Euractiv · 2 weeks ago</div></div><span class="pill pill-blue">🇪🇺 EU</span></div>
-  <div class="news-small"><div><h4>Solar panel recycling industry set to reach $2.7B by 2030</h4><div class="src">Wood Mackenzie · 3 weeks ago</div></div><span class="pill pill-amber">♻️ Green</span></div>
 </section>
 
 <!-- RARE EARTH -->
 <section id="rare">
   <div class="section-title">💎 Rare Earth Minerals</div>
   <div class="section-sub">The invisible foundation of the clean energy revolution.</div>
-  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px;">
-    <span class="badge">☀️ Solar needs 11+ minerals</span>
-    <span class="badge">🔋 EVs use 6x more than ICE</span>
-    <span class="badge">💨 Wind uses rare earth magnets</span>
-  </div>
   <div class="minerals-grid">
     <div class="mineral-card"><div class="symbol">Nd</div><h4>Neodymium</h4><p>EV motors and wind turbines</p></div>
     <div class="mineral-card"><div class="symbol">Li</div><h4>Lithium</h4><p>EV and solar batteries</p></div>
@@ -990,55 +1020,19 @@ input:focus { border-color: var(--accent); }
 <!-- CORRUPTION -->
 <section id="corruption">
   <div class="section-title">🔍 Corruption</div>
-  <div class="section-sub">Exposing abuse of power — because sunlight is the best disinfectant.</div>
-  <div class="justice-stats" style="margin-bottom:28px;">
-    <div class="j-stat"><div class="n">$2.6T</div><div class="l">Lost to corruption yearly</div></div>
+  <div class="section-sub">Exposing abuse of power — sunlight is the best disinfectant.</div>
+  <div class="justice-stats" style="margin-bottom:24px;">
+    <div class="j-stat"><div class="n">$2.6T</div><div class="l">Lost yearly</div></div>
     <div class="j-stat"><div class="n">176</div><div class="l">Countries tracked</div></div>
     <div class="j-stat"><div class="n">18</div><div class="l">Active cases</div></div>
   </div>
-  <div class="news-tabs" style="margin-bottom:24px;">
-    <div class="news-tab active">🔥 All</div>
-    <div class="news-tab">🏛️ Government</div>
-    <div class="news-tab">🏢 Corporate</div>
-    <div class="news-tab">⚖️ Judiciary</div>
-    <div class="news-tab">🌍 Aid Fraud</div>
-  </div>
-  <div class="section-title" style="font-size:18px;margin-bottom:16px;">📋 Tracked Cases</div>
-  <div class="justice-card">
-    <div class="j-tag">🏛️ Government · 🇲🇾 Malaysia · High Profile</div>
-    <h3>1MDB State Fund Embezzlement</h3>
-    <div class="vs">vs. Former PM Najib Razak &amp; associates</div>
-    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:8px 0 12px;">$4.5 billion allegedly stolen from Malaysia's sovereign wealth fund through a network of shell companies and international banks. First major conviction secured 2020. Recovery efforts ongoing across 10 countries.</p>
-    <div class="j-meta"><span>👥 <strong>14,201</strong> tracking</span><span>📋 <strong>Conviction</strong> secured</span><span>💰 <strong>$1.1B</strong> recovered</span></div>
-  </div>
-  <div class="justice-card">
-    <div class="j-tag">🏢 Corporate · 🌍 Global · Active</div>
-    <h3>Glencore Mining Bribery Network</h3>
-    <div class="vs">vs. Glencore PLC</div>
-    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:8px 0 12px;">The mining giant admitted to paying bribes to officials in the DRC, Venezuela, Nigeria and other nations to secure mining rights. $1.5B in fines imposed. Local communities in affected regions received zero compensation.</p>
-    <div class="j-meta"><span>👥 <strong>9,340</strong> tracking</span><span>📋 <strong>Settled</strong> (no jail time)</span><span>💰 <strong>$1.5B</strong> fined</span></div>
-    <button class="support-btn">Demand Community Compensation</button>
-  </div>
-  <div class="justice-card">
-    <div class="j-tag">🏛️ Government · 🇧🇷 Brazil · Ongoing</div>
-    <h3>Operation Car Wash — Lava Jato</h3>
-    <div class="vs">vs. Petrobras &amp; Political Network</div>
-    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:8px 0 12px;">Brazil's largest corruption scandal involving state oil company Petrobras, construction firms and politicians across all major parties. Over $2B in bribes traced. Investigation continues with new leads emerging.</p>
-    <div class="j-meta"><span>👥 <strong>22,800</strong> tracking</span><span>📋 <strong>Ongoing</strong></span><span>💰 <strong>$10B+</strong> implicated</span></div>
-  </div>
-  <div class="justice-card">
-    <div class="j-tag">⚖️ Judiciary · 🇿🇦 South Africa · Under Investigation</div>
-    <h3>State Capture — Zuma &amp; Gupta Network</h3>
-    <div class="vs">vs. Jacob Zuma &amp; Gupta Family</div>
-    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:8px 0 12px;">Systematic capture of state institutions, SOEs and government ministries by a private family network. The Zondo Commission documented R500B in losses to South Africa. Multiple prosecutions pending.</p>
-    <div class="j-meta"><span>👥 <strong>7,620</strong> tracking</span><span>📋 <strong>Commission complete</strong></span><span>💰 <strong>R500B</strong> lost</span></div>
-    <button class="support-btn">Follow This Case</button>
-  </div>
-  <div class="section-title" style="font-size:18px;margin:28px 0 16px;">🚨 Report Corruption</div>
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;">
-    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;">Witnessed corruption? Submit a report anonymously. Our community verifies and escalates credible reports to journalists and legal teams.</p>
+  <div class="justice-card"><div class="j-tag">🏛️ Government · 🇲🇾 Malaysia</div><h3>1MDB State Fund Embezzlement</h3><div class="vs">vs. Former PM Najib Razak</div><p style="font-size:13px;color:var(--muted);margin:8px 0 10px;line-height:1.6;">$4.5 billion allegedly stolen from Malaysia's sovereign wealth fund. First conviction secured 2020.</p><div class="j-meta"><span>👥 <strong>14,201</strong> tracking</span><span>💰 <strong>$1.1B</strong> recovered</span></div></div>
+  <div class="justice-card"><div class="j-tag">🏢 Corporate · 🌍 Global</div><h3>Glencore Mining Bribery Network</h3><div class="vs">vs. Glencore PLC</div><p style="font-size:13px;color:var(--muted);margin:8px 0 10px;line-height:1.6;">Admitted to paying bribes in DRC, Venezuela, Nigeria. $1.5B in fines. Local communities received zero compensation.</p><div class="j-meta"><span>👥 <strong>9,340</strong> tracking</span></div><button class="support-btn">Demand Community Compensation</button></div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-top:20px;">
+    <div class="section-title" style="font-size:16px;margin-bottom:8px;">🚨 Report Corruption</div>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:14px;">Witnessed corruption? Submit anonymously.</p>
     <div style="display:flex;flex-direction:column;gap:10px;">
-      <textarea placeholder="Describe what you witnessed — include dates, locations, and any evidence links..." style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--text);font-size:14px;font-family:inherit;resize:none;outline:none;height:100px;width:100%;"></textarea>
+      <textarea placeholder="Describe what you witnessed..." style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--text);font-size:14px;font-family:inherit;resize:none;outline:none;height:90px;width:100%;"></textarea>
       <button class="vote-btn">Submit Anonymously 🔒</button>
     </div>
   </div>
@@ -1047,62 +1041,20 @@ input:focus { border-color: var(--accent); }
 <!-- POLLUTION -->
 <section id="pollution">
   <div class="section-title">🌫️ Pollution</div>
-  <div class="section-sub">Tracking and fighting pollution — data is power, transparency is action.</div>
-  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px;">
-    <span class="badge">💀 7M deaths/year from air pollution</span>
-    <span class="badge">🌊 8M tonnes plastic enter oceans yearly</span>
-    <span class="badge">🚰 2B people lack clean water</span>
+  <div class="section-sub">Tracking and fighting pollution worldwide.</div>
+  <div class="justice-stats" style="margin-bottom:24px;">
+    <div class="j-stat"><div class="n">99%</div><div class="l">Breathe unhealthy air</div></div>
+    <div class="j-stat"><div class="n">$8.1T</div><div class="l">Annual cost</div></div>
+    <div class="j-stat"><div class="n">42</div><div class="l">Active reports</div></div>
   </div>
-  <div class="justice-stats" style="margin-bottom:28px;">
-    <div class="j-stat"><div class="n">99%</div><div class="l">World breathes unhealthy air (WHO)</div></div>
-    <div class="j-stat"><div class="n">$8.1T</div><div class="l">Annual global pollution cost</div></div>
-    <div class="j-stat"><div class="n">42</div><div class="l">Active community reports</div></div>
-  </div>
-  <div class="news-tabs" style="margin-bottom:24px;">
-    <div class="news-tab active">🌍 All</div>
-    <div class="news-tab">💨 Air</div>
-    <div class="news-tab">🌊 Water</div>
-    <div class="news-tab">🏭 Industrial</div>
-    <div class="news-tab">☢️ Toxic</div>
-  </div>
-  <div class="section-title" style="font-size:18px;margin-bottom:16px;">📍 Live Pollution Reports</div>
-  <div class="justice-card">
-    <div class="j-tag">💨 Air · 🇮🇳 India · Live Report</div>
-    <h3>Delhi AQI Exceeds 400 for 9th Consecutive Day</h3>
-    <div class="vs">Source: IQAir community sensors + citizen monitoring network</div>
-    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:8px 0 12px;">Particulate matter 2.5 levels in Delhi have been at hazardous levels for nearly two weeks. Schools closed, hospitals overwhelmed. Citizens are demanding emergency industry shutdowns and vehicle restrictions.</p>
-    <div class="j-meta"><span>👁️ <strong>34,100</strong> monitoring</span><span>🚨 <strong>Hazardous</strong> level</span></div>
-    <button class="support-btn">Add Your Data</button>
-  </div>
-  <div class="justice-card">
-    <div class="j-tag">🌊 Water · 🇬🇭 Ghana · Ongoing</div>
-    <h3>Illegal Gold Mining Poisoning River Pra</h3>
-    <div class="vs">Source: Wateraid Ghana + OurWorld citizen reports</div>
-    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:8px 0 12px;">Galamsey (illegal small-scale mining) operations continue to dump mercury and cyanide into the River Pra — the drinking water source for 4 million people. Government enforcement remains sporadic.</p>
-    <div class="j-meta"><span>👁️ <strong>8,420</strong> monitoring</span><span>🚨 <strong>Critical</strong></span></div>
-    <button class="support-btn">Support Cleanup Campaign</button>
-  </div>
-  <div class="justice-card">
-    <div class="j-tag">🏭 Industrial · 🇵🇱 Poland · Tracking</div>
-    <h3>Silesia Coal Plant Emissions Breach EU Limits</h3>
-    <div class="vs">Source: ClientEarth monitoring + local NGOs</div>
-    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:8px 0 12px;">Three Polish coal plants have consistently breached EU air quality directives. Legal challenge filed. Citizens in surrounding towns record 40% higher asthma rates than the national average.</p>
-    <div class="j-meta"><span>👁️ <strong>5,710</strong> monitoring</span><span>📋 <strong>Legal action</strong> pending</span></div>
-  </div>
-  <div class="justice-card">
-    <div class="j-tag">☢️ Toxic · 🇺🇸 USA · Historic</div>
-    <h3>East Palestine Train Derailment — 1 Year Later</h3>
-    <div class="vs">Source: EPA reports + independent citizen testing</div>
-    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin:8px 0 12px;">Twelve months after the toxic chemical spill, independent soil and water testing by residents still shows contamination above safe limits. Norfolk Southern's clean-up declared 'complete' by authorities — residents disagree.</p>
-    <div class="j-meta"><span>👁️ <strong>12,890</strong> monitoring</span><span>📋 <strong>Disputed</strong> clean-up</span></div>
-    <button class="support-btn">Support Residents</button>
-  </div>
-  <div class="section-title" style="font-size:18px;margin:28px 0 16px;">🗺️ Submit a Pollution Report</div>
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;">
-    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;">Is pollution being hidden or ignored near you? Report it. Our community maps it, shares it, and connects you with legal and NGO support.</p>
+  <div class="justice-card"><div class="j-tag">💨 Air · 🇮🇳 India · Live</div><h3>Delhi AQI Exceeds 400 for 9th Consecutive Day</h3><div class="vs">Source: IQAir + citizen monitoring</div><p style="font-size:13px;color:var(--muted);margin:8px 0 10px;line-height:1.6;">Hazardous particulate levels for nearly two weeks. Schools closed, hospitals overwhelmed.</p><div class="j-meta"><span>👁️ <strong>34,100</strong> monitoring</span></div><button class="support-btn">Add Your Data</button></div>
+  <div class="justice-card"><div class="j-tag">🌊 Water · 🇬🇭 Ghana</div><h3>Illegal Gold Mining Poisoning River Pra</h3><div class="vs">Source: Wateraid Ghana</div><p style="font-size:13px;color:var(--muted);margin:8px 0 10px;line-height:1.6;">Mercury and cyanide dumped into the drinking water source for 4 million people.</p><div class="j-meta"><span>👁️ <strong>8,420</strong> monitoring</span></div><button class="support-btn">Support Cleanup</button></div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-top:20px;">
+    <div class="section-title" style="font-size:16px;margin-bottom:8px;">🗺️ Submit a Pollution Report</div>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:14px;">Is pollution being hidden near you? Report it.</p>
     <div style="display:flex;flex-direction:column;gap:10px;">
       <input placeholder="Location (city, region, country)...">
-      <textarea placeholder="Describe the pollution — type, source, visible symptoms, any photos or data links..." style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--text);font-size:14px;font-family:inherit;resize:none;outline:none;height:90px;width:100%;"></textarea>
+      <textarea placeholder="Describe the pollution..." style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--text);font-size:14px;font-family:inherit;resize:none;outline:none;height:80px;width:100%;"></textarea>
       <button class="vote-btn">Submit Report 📍</button>
     </div>
   </div>
@@ -1135,50 +1087,51 @@ input:focus { border-color: var(--accent); }
 </div>
 
 <script>
-// ============================================================
-// CONTENT MODERATION — CUSTOM BLOCKLIST
-// ============================================================
-const BLOCKLIST = [
-  'fuck', 'f**k', 'fuk', 'fuuk',
-  'shit', 'sh1t', 'sht',
-  'cunt', 'c**t',
-  'bitch', 'b1tch',
-  'bastard',
-  'asshole', 'arsehole', 'a**hole',
-  'dick', 'd1ck',
-  'cock', 'c0ck',
-  'pussy',
-  'nigger', 'nigga', 'n1gger',
-  'faggot', 'fag', 'f4ggot',
-  'retard', 'ret4rd',
-  'whore', 'wh0re',
-  'slut', 'sl*t',
-  'twat',
-  'prick',
-  'wanker', 'w4nker',
-  'bollocks',
-  'motherfucker', 'mofo',
-  'kill yourself', 'kys',
-  'go die',
-  'rape', 'r4pe',
-  'nazi', 'n4zi',
-  'hitler'
-];
-
-function isBlocked(text) {
-  const lower = text.toLowerCase();
-  return BLOCKLIST.some(word => lower.includes(word));
-}
-
+// MODERATION
+const BLOCKLIST = ['fuck','f**k','fuk','fuuk','shit','sh1t','sht','cunt','c**t','bitch','b1tch','bastard','asshole','arsehole','a**hole','dick','d1ck','cock','c0ck','pussy','nigger','nigga','n1gger','faggot','fag','f4ggot','retard','ret4rd','whore','wh0re','slut','sl*t','twat','prick','wanker','w4nker','bollocks','motherfucker','mofo','kill yourself','kys','go die','rape','r4pe','nazi','n4zi','hitler'];
+function isBlocked(text) { const l = text.toLowerCase(); return BLOCKLIST.some(w => l.includes(w)); }
 let toastTimer = null;
 function showModToast() {
-  const toast = document.getElementById('mod-toast');
-  toast.classList.add('show');
+  const t = document.getElementById('mod-toast');
+  t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
 }
 
-// NAV DROPDOWNS
+// BOTTOM NAV
+function setBottomNav(el, title) {
+  document.querySelectorAll('.bnav-item').forEach(b => b.classList.remove('active'));
+  if (el) el.classList.add('active');
+  const pt = document.getElementById('mobile-page-title');
+  if (pt) pt.textContent = title;
+}
+
+function toggleMore(btn) {
+  const overlay = document.getElementById('more-overlay');
+  const backdrop = document.getElementById('overlay-backdrop');
+  const isOpen = overlay.classList.contains('open');
+  if (isOpen) {
+    overlay.classList.remove('open');
+    backdrop.classList.remove('open');
+    btn.classList.remove('active');
+  } else {
+    overlay.classList.add('open');
+    backdrop.classList.add('open');
+    btn.classList.add('active');
+  }
+}
+
+function closeMore() {
+  document.getElementById('more-overlay').classList.remove('open');
+  document.getElementById('overlay-backdrop').classList.remove('open');
+  document.querySelectorAll('.bnav-item').forEach(b => {
+    if (b.querySelector('.bnav-label') && b.querySelector('.bnav-label').textContent === 'More') {
+      b.classList.remove('active');
+    }
+  });
+}
+
+// DESKTOP NAV DROPDOWNS
 document.querySelectorAll('.drop-toggle').forEach(btn => {
   btn.addEventListener('click', function(e) {
     e.stopPropagation();
@@ -1192,7 +1145,7 @@ document.addEventListener('click', () => {
   document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
 });
 
-let history = [];
+let chatHistory = [];
 let chatOpen = false;
 
 function show(id, el) {
@@ -1202,14 +1155,15 @@ function show(id, el) {
   if (el) el.classList.add('active');
   const rda = document.getElementById('ref-detail-area');
   if (rda) rda.style.display = 'none';
+  window.scrollTo(0, 0);
   return false;
 }
 
 // REFERENDUMS
 const refs = {
-  plastics: { title: 'Should single-use plastics be banned nationwide?', desc: 'A proposal to prohibit the manufacture and sale of single-use plastic items including bags, straws, and cutlery to reduce environmental pollution.', options: ['Yes — Full National Ban', 'Partial Ban (cities only)', 'No — Industry Self-Regulation'], pcts: [68,22,10] },
+  plastics: { title: 'Should single-use plastics be banned nationwide?', desc: 'A proposal to prohibit the manufacture and sale of single-use plastic items including bags, straws, and cutlery.', options: ['Yes — Full National Ban', 'Partial Ban (cities only)', 'No — Industry Self-Regulation'], pcts: [68,22,10] },
   healthcare: { title: 'Should universal basic healthcare be guaranteed?', desc: 'A proposal to guarantee healthcare access for all citizens regardless of income, employment, or immigration status.', options: ['Yes — Full Universal Access', 'Yes — Means-tested access', 'No — Private market'], pcts: [74,18,8] },
-  wage: { title: 'Should the minimum wage increase to $20/hr?', desc: 'A proposal to raise the national minimum wage to $20 per hour, with options for immediate or phased implementation.', options: ['Yes, immediately', 'Yes, phased over 3 years', 'No increase'], pcts: [52,31,17] }
+  wage: { title: 'Should the minimum wage increase to $20/hr?', desc: 'A proposal to raise the national minimum wage to $20 per hour.', options: ['Yes, immediately', 'Yes, phased over 3 years', 'No increase'], pcts: [52,31,17] }
 };
 let selectedOpt = null;
 
@@ -1218,7 +1172,7 @@ function showRef(key) {
   const area = document.getElementById('ref-detail-area');
   selectedOpt = null;
   area.style.display = 'block';
-  area.innerHTML = `<div class="ref-detail"><h2>${r.title}</h2><p>${r.desc}</p><div class="vote-options">${r.options.map((o,i)=>`<div class="vote-opt" onclick="selectOpt(this,${i})">${o}<span style="font-size:12px;color:var(--muted)">${r.pcts[i]}%</span></div>`).join('')}</div><button class="vote-btn" onclick="castVote()">Submit Vote &#x2192;</button></div>`;
+  area.innerHTML = `<div class="ref-detail"><h2>${r.title}</h2><p>${r.desc}</p><div class="vote-options">${r.options.map((o,i)=>`<div class="vote-opt" onclick="selectOpt(this,${i})">${o}<span style="font-size:12px;color:var(--muted)">${r.pcts[i]}%</span></div>`).join('')}</div><button class="vote-btn" onclick="castVote()">Submit Vote ➜</button></div>`;
   area.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
@@ -1230,7 +1184,7 @@ function selectOpt(el, i) {
 
 function castVote() {
   if (selectedOpt === null) { alert('Please select an option first.'); return; }
-  document.getElementById('ref-detail-area').innerHTML = `<div class="ref-detail" style="text-align:center;padding:40px"><div style="font-size:40px;margin-bottom:12px">&#x2705;</div><h2 style="margin-bottom:8px">Vote Submitted!</h2><p>Your voice has been counted. Thank you for participating in direct democracy.</p></div>`;
+  document.getElementById('ref-detail-area').innerHTML = `<div class="ref-detail" style="text-align:center;padding:40px"><div style="font-size:40px;margin-bottom:12px">✅</div><h2 style="margin-bottom:8px">Vote Submitted!</h2><p>Your voice has been counted. Thank you for participating in direct democracy.</p></div>`;
 }
 
 // CHATBOT
@@ -1272,19 +1226,19 @@ async function sendMessage() {
   if (isBlocked(text)) { showModToast(); input.value = ''; return; }
   input.value = '';
   addMsg('user', text);
-  history.push({role:'user', content:text});
+  chatHistory.push({role:'user', content:text});
   addTyping();
   try {
     const res = await fetch('/.netlify/functions/chat', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({messages:history})
+      body: JSON.stringify({messages:chatHistory})
     });
     const data = await res.json();
     const reply = data.content?.map(b=>b.text||'').join('') || 'Sorry, something went wrong.';
     document.getElementById('typing')?.remove();
     addMsg('bot', reply);
-    history.push({role:'assistant', content:reply});
+    chatHistory.push({role:'assistant', content:reply});
   } catch(e) {
     document.getElementById('typing')?.remove();
     addMsg('bot', 'Connection error. Please try again.');
@@ -1297,10 +1251,7 @@ if (feedInput) {
   feedInput.addEventListener('input', function() {
     const remaining = 280 - this.value.length;
     const counter = document.getElementById('feed-char');
-    if (counter) {
-      counter.textContent = remaining + ' characters remaining';
-      counter.style.color = remaining < 30 ? 'var(--amber)' : 'var(--muted)';
-    }
+    if (counter) { counter.textContent = remaining + ' characters remaining'; counter.style.color = remaining < 30 ? 'var(--amber)' : 'var(--muted)'; }
     if (this.value.length > 280) this.value = this.value.substring(0, 280);
   });
 }
@@ -1314,22 +1265,7 @@ function postToFeed() {
   const post = document.createElement('div');
   post.className = 'feed-post';
   post.style.borderColor = 'var(--accent)';
-  post.innerHTML = `
-    <div class="feed-tag-pill">💬 Opinion</div>
-    <div class="feed-post-top">
-      <div class="feed-ava" style="background:var(--accent);color:white;">You</div>
-      <div class="feed-meta">
-        <div class="feed-name">You</div>
-        <div class="feed-location">🌍 OurWorld Citizen</div>
-      </div>
-      <div class="feed-time">Just now</div>
-    </div>
-    <div class="feed-body">${text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
-    <div class="feed-actions">
-      <button class="feed-action" onclick="toggleLike(this)">♥ <span>0</span></button>
-      <button class="feed-action">💬 <span>0 replies</span></button>
-      <button class="feed-action">↗ Share</button>
-    </div>`;
+  post.innerHTML = `<div class="feed-tag-pill">💬 Opinion</div><div class="feed-post-top"><div class="feed-ava" style="background:var(--accent);color:white;">You</div><div class="feed-meta"><div class="feed-name">You</div><div class="feed-location">🌍 OurWorld Citizen</div></div><div class="feed-time">Just now</div></div><div class="feed-body">${text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div><div class="feed-actions"><button class="feed-action" onclick="toggleLike(this)">♥ <span>0</span></button><button class="feed-action">💬 <span>0 replies</span></button><button class="feed-action">↗ Share</button></div>`;
   scroll.insertBefore(post, scroll.firstChild);
   input.value = '';
   document.getElementById('feed-char').textContent = '280 characters remaining';
@@ -1342,10 +1278,7 @@ if (shareInput) {
   shareInput.addEventListener('input', function() {
     const remaining = 280 - this.value.length;
     const counter = document.getElementById('share-char');
-    if (counter) {
-      counter.textContent = remaining + ' characters remaining';
-      counter.style.color = remaining < 30 ? 'var(--amber)' : 'var(--muted)';
-    }
+    if (counter) { counter.textContent = remaining + ' characters remaining'; counter.style.color = remaining < 30 ? 'var(--amber)' : 'var(--muted)'; }
     if (this.value.length > 280) this.value = this.value.substring(0, 280);
   });
 }
@@ -1359,22 +1292,7 @@ function postShare() {
   const post = document.createElement('div');
   post.className = 'feed-post';
   post.style.borderColor = 'var(--accent)';
-  post.innerHTML = `
-    <div class="feed-tag-pill">📤 Shared</div>
-    <div class="feed-post-top">
-      <div class="feed-ava" style="background:var(--accent);color:white;">You</div>
-      <div class="feed-meta">
-        <div class="feed-name">You</div>
-        <div class="feed-location">🌍 OurWorld Citizen</div>
-      </div>
-      <div class="feed-time">Just now</div>
-    </div>
-    <div class="feed-body">${text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
-    <div class="feed-actions">
-      <button class="feed-action" onclick="toggleLike(this)">♥ <span>0</span></button>
-      <button class="feed-action">🔁 <span>0 reshares</span></button>
-      <button class="feed-action">↗ External Link</button>
-    </div>`;
+  post.innerHTML = `<div class="feed-tag-pill">📤 Shared</div><div class="feed-post-top"><div class="feed-ava" style="background:var(--accent);color:white;">You</div><div class="feed-meta"><div class="feed-name">You</div><div class="feed-location">🌍 OurWorld Citizen</div></div><div class="feed-time">Just now</div></div><div class="feed-body">${text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div><div class="feed-actions"><button class="feed-action" onclick="toggleLike(this)">♥ <span>0</span></button><button class="feed-action">🔁 <span>0 reshares</span></button><button class="feed-action">↗ Link</button></div>`;
   scroll.insertBefore(post, scroll.firstChild);
   input.value = '';
   document.getElementById('share-char').textContent = '280 characters remaining';
@@ -1384,13 +1302,8 @@ function postShare() {
 function toggleLike(btn) {
   const span = btn.querySelector('span');
   const count = parseInt(span.textContent);
-  if (btn.classList.contains('liked')) {
-    btn.classList.remove('liked');
-    span.textContent = count - 1;
-  } else {
-    btn.classList.add('liked');
-    span.textContent = count + 1;
-  }
+  if (btn.classList.contains('liked')) { btn.classList.remove('liked'); span.textContent = count - 1; }
+  else { btn.classList.add('liked'); span.textContent = count + 1; }
 }
 
 // TABS
@@ -1401,18 +1314,14 @@ document.querySelectorAll('.news-tab, .market-tab, .studio-filter').forEach(tab 
   });
 });
 
-// MIC / VOICE INPUT
+// MIC
 let recognition = null;
 let micActive = false;
-
 function toggleMic() {
-  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-    alert('Sorry, your browser does not support voice input. Try Chrome.');
-    return;
-  }
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) { alert('Sorry, your browser does not support voice input. Try Chrome.'); return; }
   if (micActive) { recognition.stop(); return; }
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  recognition = new SpeechRecognition();
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SR();
   recognition.lang = 'en-US';
   recognition.interimResults = false;
   recognition.onstart = () => { micActive = true; document.getElementById('chat-mic').classList.add('listening'); };
