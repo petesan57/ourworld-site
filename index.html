@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>OurWorld — Ideas In Motion</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<title>OurWorld — Democracy 2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#4f46e5">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -125,23 +125,10 @@ nav::-webkit-scrollbar { display: none; }
   font-family: inherit;
   min-width: 0;
 }
-.bnav-item.active {
-  color: var(--accent2);
-}
-.bnav-item .bnav-icon {
-  font-size: 20px;
-  line-height: 1;
-}
-.bnav-item .bnav-label {
-  font-size: 10px;
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-}
+.bnav-item.active { color: var(--accent2); }
+.bnav-item .bnav-icon { font-size: 20px; line-height: 1; }
+.bnav-item .bnav-label { font-size: 10px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 
-/* More menu overlay */
 .more-overlay {
   display: none;
   position: fixed;
@@ -155,104 +142,300 @@ nav::-webkit-scrollbar { display: none; }
   padding-bottom: calc(16px + env(safe-area-inset-bottom));
 }
 .more-overlay.open { display: block; }
-.more-overlay-title {
-  font-size: 12px;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 12px;
-  padding: 0 4px;
-}
-.more-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-}
+.more-overlay-title { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; padding: 0 4px; }
+.more-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 .more-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 12px 6px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.15s;
-  border: none;
-  font-family: inherit;
-  color: var(--text);
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 12px 6px; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 12px; cursor: pointer; transition: all 0.15s; border: none;
+  font-family: inherit; color: var(--text);
 }
 .more-item:active { background: var(--accent); }
 .more-item .more-icon { font-size: 22px; }
 .more-item .more-label { font-size: 11px; color: var(--muted); text-align: center; }
 
-/* Overlay backdrop */
-.overlay-backdrop {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 998;
-}
+.overlay-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 998; }
 .overlay-backdrop.open { display: block; }
 
 /* ============================================================
-   MOBILE TOP BAR (replaces desktop nav on mobile)
+   MOBILE TOP BAR
    ============================================================ */
 .mobile-header {
   display: none;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  position: sticky; top: 0; z-index: 1000;
   background: rgba(8,8,16,0.97);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
-  padding: 0 16px;
-  height: 56px;
-  align-items: center;
-  justify-content: space-between;
+  padding: 0 16px; height: 56px;
+  align-items: center; justify-content: space-between;
 }
-.mobile-header-logo {
-  display: flex; align-items: center; gap: 8px;
-  text-decoration: none;
-}
+.mobile-header-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
 .mobile-header-logo svg { width: 28px; height: 28px; }
-.mobile-header-logo-text {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 18px;
-  color: var(--text);
-}
+.mobile-header-logo-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; color: var(--text); }
 .mobile-header-logo-text span { color: var(--accent2); }
-.mobile-header-right {
-  display: flex; align-items: center; gap: 10px;
-}
-.mobile-page-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--accent3);
-}
+.mobile-header-right { display: flex; align-items: center; gap: 10px; }
+.mobile-page-title { font-size: 15px; font-weight: 600; color: var(--accent3); }
 
 /* ============================================================
-   SECTIONS
+   SECTIONS (non-home)
    ============================================================ */
 section { display: none; padding: 20px 16px; max-width: 900px; margin: 0 auto; width: 100%; }
 section.active { display: block; }
-.hero { text-align: center; padding: 40px 16px 40px; max-width: 900px; margin: 0 auto; display: none; width: 100%; }
-.hero.active { display: block; }
-.hero-tag { display: inline-block; background: var(--bg3); border: 1px solid var(--border); border-radius: 20px; font-size: 12px; color: var(--accent2); padding: 4px 14px; margin-bottom: 24px; }
-.hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(32px,7vw,72px); font-weight: 800; line-height: 1.05; margin-bottom: 16px; }
-.hero h1 span { color: var(--accent2); }
-.hero h2 { font-size: clamp(16px,3vw,26px); font-weight: 400; color: var(--muted); margin-bottom: 32px; }
-.hero-desc { font-size: 15px; color: var(--muted); max-width: 500px; margin: 0 auto 40px; line-height: 1.7; }
-.hero-badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px; }
-.badge { background: var(--bg3); border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: 12px; color: var(--accent3); }
-.stats-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin-top: 32px; }
-.stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
-.stat-card .num { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--accent2); }
-.stat-card .label { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
+/* ============================================================
+   NEW LANDING PAGE — HOME
+   ============================================================ */
+.hero { display: none; width: 100%; }
+.hero.active { display: block; }
+
+/* --- Hero Banner --- */
+.lp-hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 6rem 1.5rem 4rem;
+  position: relative; overflow: hidden;
+}
+.lp-hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(79,70,229,0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 80% 20%, rgba(124,58,237,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 30% at 20% 80%, rgba(245,158,11,0.06) 0%, transparent 60%);
+}
+.lp-grid {
+  position: absolute; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.lp-badge {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: rgba(79,70,229,0.15); border: 1px solid rgba(79,70,229,0.3);
+  color: #818CF8; font-size: 0.75rem; font-weight: 500;
+  padding: 0.35rem 0.9rem; border-radius: 999px; margin-bottom: 1.5rem;
+  position: relative; z-index: 1;
+  animation: lpFadeUp 0.6s ease both;
+}
+.lp-badge-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #818CF8; display: inline-block;
+  animation: lpPulse 2s infinite;
+}
+@keyframes lpPulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+.lp-h1 {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: clamp(3rem, 9vw, 6.5rem);
+  line-height: 1.04; letter-spacing: -0.02em;
+  color: #e0e7ff;
+  position: relative; z-index: 1;
+  animation: lpFadeUp 0.7s 0.1s ease both;
+}
+.lp-h1 .lp-accent {
+  background: linear-gradient(135deg, #818CF8, #7C3AED, #F59E0B);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.lp-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  color: rgba(224,231,255,0.6);
+  max-width: 520px; line-height: 1.7;
+  margin: 1.5rem auto 0;
+  position: relative; z-index: 1;
+  animation: lpFadeUp 0.7s 0.2s ease both;
+}
+.lp-cta {
+  display: flex; gap: 1rem; justify-content: center;
+  flex-wrap: wrap; margin: 2rem 0 3rem;
+  position: relative; z-index: 1;
+  animation: lpFadeUp 0.7s 0.3s ease both;
+}
+.lp-btn-primary {
+  background: var(--accent); color: #fff; border: none;
+  padding: 0.9rem 2rem; border-radius: 8px;
+  font-size: 1rem; font-weight: 600; cursor: pointer;
+  font-family: 'Space Grotesk', sans-serif;
+  transition: all 0.2s;
+  box-shadow: 0 0 30px rgba(79,70,229,0.4);
+}
+.lp-btn-primary:hover { background: #4338ca; transform: translateY(-2px); box-shadow: 0 0 40px rgba(79,70,229,0.55); }
+.lp-btn-ghost {
+  background: transparent; color: #e0e7ff;
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 0.9rem 2rem; border-radius: 8px;
+  font-size: 1rem; font-weight: 500; cursor: pointer;
+  font-family: 'Space Grotesk', sans-serif;
+  transition: all 0.2s;
+}
+.lp-btn-ghost:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.05); }
+
+/* Stats bar */
+.lp-stats {
+  display: flex; gap: 2.5rem; justify-content: center;
+  flex-wrap: wrap; position: relative; z-index: 1;
+  animation: lpFadeUp 0.7s 0.4s ease both;
+}
+.lp-stat { text-align: center; }
+.lp-stat-num {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: 1.7rem; color: #e0e7ff;
+}
+.lp-stat-label { font-size: 0.72rem; color: rgba(224,231,255,0.45); margin-top: 3px; }
+.lp-stat-sep { width: 1px; background: rgba(255,255,255,0.08); align-self: stretch; }
+
+/* Scroll hint */
+.lp-scroll {
+  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  color: rgba(224,231,255,0.3); font-size: 0.72rem;
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  z-index: 1; animation: lpFadeIn 1s 1.2s ease both;
+}
+.lp-arrow {
+  width: 18px; height: 18px;
+  border-right: 1.5px solid rgba(224,231,255,0.3);
+  border-bottom: 1.5px solid rgba(224,231,255,0.3);
+  transform: rotate(45deg);
+  animation: lpBounce 1.5s infinite;
+}
+@keyframes lpBounce { 0%,100%{transform:rotate(45deg) translateY(0)} 50%{transform:rotate(45deg) translateY(5px)} }
+
+/* --- Features section --- */
+.lp-section {
+  max-width: 1000px; margin: 0 auto;
+  padding: 4.5rem 1.5rem;
+}
+.lp-section-border { border-top: 1px solid var(--border); }
+.lp-label {
+  font-size: 0.7rem; font-weight: 600; color: #818CF8;
+  letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.6rem;
+}
+.lp-title {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  line-height: 1.15; margin-bottom: 0.75rem; color: #e0e7ff;
+}
+.lp-desc { color: rgba(224,231,255,0.5); font-size: 0.95rem; line-height: 1.7; max-width: 500px; }
+
+.lp-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 1.25rem; margin-top: 2.5rem;
+}
+.lp-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 16px; padding: 1.6rem;
+  transition: all 0.25s;
+}
+.lp-card:hover {
+  border-color: rgba(79,70,229,0.45);
+  background: rgba(79,70,229,0.06);
+  transform: translateY(-3px);
+}
+.lp-card-icon {
+  width: 42px; height: 42px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.25rem; margin-bottom: 1rem;
+}
+.lp-card h3 {
+  font-family: 'Syne', sans-serif; font-weight: 700;
+  font-size: 1rem; margin-bottom: 0.45rem; color: #e0e7ff;
+}
+.lp-card p { color: rgba(224,231,255,0.5); font-size: 0.85rem; line-height: 1.65; }
+.lp-members-badge {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2);
+  color: #FCD34D; font-size: 0.68rem; font-weight: 500;
+  padding: 0.2rem 0.6rem; border-radius: 999px; margin-top: 0.75rem;
+}
+
+/* --- How it works --- */
+.lp-steps {
+  display: flex; gap: 2rem; margin-top: 2.5rem; flex-wrap: wrap;
+}
+.lp-step { flex: 1; min-width: 190px; display: flex; gap: 1.1rem; align-items: flex-start; }
+.lp-step-num {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: 2.4rem; color: rgba(79,70,229,0.22);
+  min-width: 44px; line-height: 1;
+}
+.lp-step h4 {
+  font-family: 'Syne', sans-serif; font-size: 0.95rem;
+  font-weight: 700; margin-bottom: 0.35rem; color: #e0e7ff;
+}
+.lp-step p { color: rgba(224,231,255,0.5); font-size: 0.84rem; line-height: 1.65; }
+
+/* --- Activity section --- */
+.lp-activity-wrap {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.lp-activity-inner {
+  max-width: 1000px; margin: 0 auto;
+  padding: 4rem 1.5rem;
+  display: grid; grid-template-columns: 1fr 1.5fr;
+  gap: 3.5rem; align-items: center;
+}
+.lp-feed { display: flex; flex-direction: column; gap: 0.7rem; }
+.lp-feed-item {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 0.8rem 1rem; display: flex; align-items: center; gap: 0.7rem;
+}
+.lp-feed-ava {
+  width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 700; flex-shrink: 0;
+}
+.lp-feed-text { font-size: 0.8rem; color: rgba(224,231,255,0.5); line-height: 1.4; }
+.lp-feed-text strong { color: #e0e7ff; font-weight: 500; }
+.lp-feed-time { font-size: 0.68rem; color: rgba(255,255,255,0.2); margin-left: auto; flex-shrink: 0; }
+
+/* --- CTA / Signup --- */
+.lp-cta-section {
+  text-align: center; padding: 5.5rem 1.5rem;
+  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(79,70,229,0.1) 0%, transparent 70%);
+}
+.lp-cta-section h2 {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: clamp(2rem, 5vw, 3.2rem); color: #e0e7ff; margin-bottom: 0.9rem;
+}
+.lp-cta-section p { color: rgba(224,231,255,0.5); max-width: 440px; margin: 0 auto 1.8rem; line-height: 1.7; font-size: 0.95rem; }
+.lp-signup-form {
+  display: flex; gap: 0.75rem; justify-content: center;
+  flex-wrap: wrap; max-width: 460px; margin: 0 auto;
+}
+.lp-email-input {
+  flex: 1; min-width: 210px;
+  padding: 0.85rem 1.2rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 8px; color: #e0e7ff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.95rem; outline: none;
+  transition: border-color 0.2s;
+}
+.lp-email-input::placeholder { color: rgba(255,255,255,0.2); }
+.lp-email-input:focus { border-color: rgba(79,70,229,0.5); }
+.lp-cta-note { font-size: 0.72rem; color: rgba(255,255,255,0.2); margin-top: 0.75rem; }
+
+/* Landing page footer tagline */
+.lp-footer-line {
+  text-align: center; padding: 1.5rem;
+  border-top: 1px solid var(--border);
+  color: rgba(255,255,255,0.15); font-size: 0.75rem;
+}
+
+@keyframes lpFadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes lpFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ============================================================
+   ALL EXISTING SECTION STYLES (unchanged)
+   ============================================================ */
 .section-title { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; margin-bottom: 8px; }
 .section-sub { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
 .cards-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
@@ -350,7 +533,6 @@ section.active { display: block; }
 .mineral-card h4 { font-size: 13px; font-weight: 600; margin: 4px 0; }
 .mineral-card p { font-size: 11px; color: var(--muted); }
 
-/* VIDEO CHAT */
 .mobile-video { display: none; }
 .desktop-video { display: block; }
 
@@ -440,7 +622,7 @@ input[type="text"], input:not([type]) {
 input:focus { border-color: var(--accent); }
 
 /* ============================================================
-   RESPONSIVE — MOBILE
+   RESPONSIVE
    ============================================================ */
 @media (max-width: 768px) {
   nav { display: none; }
@@ -448,11 +630,14 @@ input:focus { border-color: var(--accent); }
   .bottom-nav { display: block; }
   .mobile-video { display: block; }
   .desktop-video { display: none; }
-
   body { padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom)); }
-
   section { padding: 16px 12px; }
-  .hero { padding: 24px 12px 32px; }
+
+  .lp-hero { padding: 5rem 1.2rem 3.5rem; min-height: auto; padding-top: 4rem; }
+  .lp-stats { gap: 1.25rem; }
+  .lp-stat-sep { display: none; }
+  .lp-activity-inner { grid-template-columns: 1fr; gap: 2rem; }
+  .lp-section { padding: 3rem 1.2rem; }
 
   .stats-grid { grid-template-columns: repeat(2,1fr); gap: 10px; }
   .cards-grid { grid-template-columns: 1fr; }
@@ -472,7 +657,6 @@ input:focus { border-color: var(--accent); }
   .studio-grid { grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); }
   .minerals-grid { grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); }
   .people-grid { grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); }
-  .stats-grid { grid-template-columns: repeat(auto-fit,minmax(140px,1fr)); }
 }
 </style>
 </head>
@@ -492,7 +676,7 @@ input:focus { border-color: var(--accent); }
     </svg>
     <span class="mobile-header-logo-text">Our<span>World</span></span>
   </a>
-  <span class="mobile-page-title" id="mobile-page-title">Dashboard</span>
+  <span class="mobile-page-title" id="mobile-page-title">Home</span>
 </header>
 
 <!-- DESKTOP NAV -->
@@ -509,7 +693,7 @@ input:focus { border-color: var(--accent); }
     <span class="nav-logo-text">Our<span>World</span></span>
   </a>
   <div class="nav-links">
-    <a href="#" class="active" onclick="show('home',this)">⚡ Dashboard</a>
+    <a href="#" class="active" onclick="show('home',this)">⚡ Home</a>
     <div class="nav-dropdown">
       <button class="drop-toggle" id="peoplepower-toggle">✊ People Power</button>
       <div class="drop-menu">
@@ -553,7 +737,7 @@ input:focus { border-color: var(--accent); }
 <!-- BOTTOM NAV (mobile) -->
 <nav class="bottom-nav">
   <div class="bottom-nav-inner">
-    <button class="bnav-item active" onclick="show('home'); setBottomNav(this,'Dashboard')">
+    <button class="bnav-item active" onclick="show('home'); setBottomNav(this,'Home')">
       <span class="bnav-icon">⚡</span>
       <span class="bnav-label">Home</span>
     </button>
@@ -598,24 +782,184 @@ input:focus { border-color: var(--accent); }
   </div>
 </div>
 
-<!-- HOME / DASHBOARD -->
+<!-- ============================================================
+     HOME — NEW LANDING PAGE
+     ============================================================ -->
 <div id="home" class="hero active">
-  <div class="hero-tag">🌍 Ideas In Motion</div>
-  <h1>The New<br><span>Democracy</span></h1>
-  <h2>&amp; The Power of Citizens</h2>
-  <p class="hero-desc">Vote directly on the issues that matter — no politicians, just the will of the people shaping the future.</p>
-  <div class="hero-badges">
-    <span class="badge">🗳️ Direct democracy</span>
-    <span class="badge">🌍 Global proposals</span>
-    <span class="badge">🛡️ Tamper-proof</span>
+
+  <!-- HERO BANNER -->
+  <div class="lp-hero">
+    <div class="lp-hero-bg"></div>
+    <div class="lp-grid"></div>
+
+    <div class="lp-badge">
+      <span class="lp-badge-dot"></span>
+      Now live · Join thousands shaping the future
+    </div>
+
+    <h1 class="lp-h1">Democracy <span class="lp-accent">2.0</span></h1>
+    <p class="lp-sub">The upgrade the world has been waiting for. Real votes, real voices, real change — powered by people like you.</p>
+
+    <div class="lp-cta">
+      <button class="lp-btn-primary" onclick="document.getElementById('lp-signup').scrollIntoView({behavior:'smooth'})">Join the Movement — It's Free</button>
+      <button class="lp-btn-ghost" onclick="document.getElementById('lp-features').scrollIntoView({behavior:'smooth'})">See How It Works</button>
+    </div>
+
+    <div class="lp-stats">
+      <div class="lp-stat">
+        <div class="lp-stat-num">12,400+</div>
+        <div class="lp-stat-label">Members worldwide</div>
+      </div>
+      <div class="lp-stat-sep"></div>
+      <div class="lp-stat">
+        <div class="lp-stat-num">48,291</div>
+        <div class="lp-stat-label">Votes cast</div>
+      </div>
+      <div class="lp-stat-sep"></div>
+      <div class="lp-stat">
+        <div class="lp-stat-num">240+</div>
+        <div class="lp-stat-label">Active proposals</div>
+      </div>
+      <div class="lp-stat-sep"></div>
+      <div class="lp-stat">
+        <div class="lp-stat-num">60+</div>
+        <div class="lp-stat-label">Countries</div>
+      </div>
+    </div>
+
+    <div class="lp-scroll">
+      <span>Explore</span>
+      <div class="lp-arrow"></div>
+    </div>
   </div>
-  <div class="stats-grid">
-    <div class="stat-card"><div class="num">12</div><div class="label">Active Referendums</div></div>
-    <div class="stat-card"><div class="num">48,291</div><div class="label">Total Votes Cast</div></div>
-    <div class="stat-card"><div class="num">34</div><div class="label">Proposals Submitted</div></div>
-    <div class="stat-card"><div class="num">7</div><div class="label">Decisions Made</div></div>
+
+  <!-- FEATURES -->
+  <div id="lp-features">
+    <div class="lp-section">
+      <div class="lp-label">What you can do</div>
+      <div class="lp-title">Your platform. Your power.</div>
+      <div class="lp-desc">Everything you need to participate, propose, and actually make a difference. Some features are members-only — join free to unlock them all.</div>
+
+      <div class="lp-features">
+        <div class="lp-card">
+          <div class="lp-card-icon" style="background:rgba(79,70,229,0.15)">🗳️</div>
+          <h3>Vote on Real Referendums</h3>
+          <p>Cast your vote on issues that matter — from local policy to global challenges. Every vote is counted, tracked, and published transparently.</p>
+          <div class="lp-members-badge">🔒 Members only</div>
+        </div>
+        <div class="lp-card">
+          <div class="lp-card-icon" style="background:rgba(124,58,237,0.15)">📢</div>
+          <h3>Propose &amp; Debate</h3>
+          <p>Submit proposals, join live debates, and help shape what gets put to a vote. Your idea could become a real referendum.</p>
+          <div class="lp-members-badge">🔒 Members only</div>
+        </div>
+        <div class="lp-card">
+          <div class="lp-card-icon" style="background:rgba(16,185,129,0.15)">🌍</div>
+          <h3>Live Social Feed</h3>
+          <p>Follow breaking civic news, citizen reports, and community discussions in real time. See what the world is talking about right now.</p>
+        </div>
+        <div class="lp-card">
+          <div class="lp-card-icon" style="background:rgba(245,158,11,0.15)">📹</div>
+          <h3>Citizen Journalism Shorts</h3>
+          <p>Watch and share short-form video from citizen journalists on the ground. Real news, unfiltered.</p>
+        </div>
+        <div class="lp-card">
+          <div class="lp-card-icon" style="background:rgba(239,68,68,0.15)">🤝</div>
+          <h3>Connect &amp; Collaborate</h3>
+          <p>Video chat with activists, organisers, and changemakers around the world. Build the movement together.</p>
+          <div class="lp-members-badge">🔒 Members only</div>
+        </div>
+        <div class="lp-card">
+          <div class="lp-card-icon" style="background:rgba(79,70,229,0.15)">🤖</div>
+          <h3>OurWorld AI</h3>
+          <p>Your civic co-pilot. Get instant analysis, fact-checks, and explanations on any proposal, referendum, or policy — powered by AI.</p>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+
+  <!-- HOW IT WORKS -->
+  <div style="border-top:1px solid var(--border)">
+    <div class="lp-section">
+      <div class="lp-label">Simple as 1–2–3</div>
+      <div class="lp-title">How OurWorld works</div>
+      <div class="lp-steps">
+        <div class="lp-step">
+          <div class="lp-step-num">01</div>
+          <div>
+            <h4>Join free in 30 seconds</h4>
+            <p>No credit card, no commitment. Sign up and start exploring — browse referendums, read the feed, and get a feel for the platform.</p>
+          </div>
+        </div>
+        <div class="lp-step">
+          <div class="lp-step-num">02</div>
+          <div>
+            <h4>Find what moves you</h4>
+            <p>Browse issues across politics, environment, justice, and more. Find something you care about — then have your say.</p>
+          </div>
+        </div>
+        <div class="lp-step">
+          <div class="lp-step-num">03</div>
+          <div>
+            <h4>Vote. Post. Change things.</h4>
+            <p>Cast your vote, share your perspective, propose new ideas. Watch results in real time and see democracy actually work.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIVE ACTIVITY -->
+  <div class="lp-activity-wrap">
+    <div class="lp-activity-inner">
+      <div>
+        <div class="lp-label">Right now</div>
+        <div class="lp-title" style="font-size:clamp(1.5rem,3vw,2.1rem)">It's alive.<br>And growing.</div>
+        <p style="color:rgba(224,231,255,0.5);font-size:0.9rem;line-height:1.7;margin-top:1rem;">People are joining, voting, and posting every minute. OurWorld is a living, breathing civic movement — and there's a seat at the table for you.</p>
+      </div>
+      <div class="lp-feed">
+        <div class="lp-feed-item">
+          <div class="lp-feed-ava" style="background:rgba(79,70,229,0.2);color:#818CF8">SJ</div>
+          <div class="lp-feed-text"><strong>Sarah J.</strong> voted on <strong>Universal Basic Income Referendum</strong></div>
+          <div class="lp-feed-time">2m ago</div>
+        </div>
+        <div class="lp-feed-item">
+          <div class="lp-feed-ava" style="background:rgba(16,185,129,0.2);color:#34D399">MK</div>
+          <div class="lp-feed-text"><strong>Marcus K.</strong> proposed <strong>"Ban single-use plastics globally by 2027"</strong></div>
+          <div class="lp-feed-time">5m ago</div>
+        </div>
+        <div class="lp-feed-item">
+          <div class="lp-feed-ava" style="background:rgba(245,158,11,0.2);color:#FCD34D">AP</div>
+          <div class="lp-feed-text"><strong>Amara P.</strong> joined from <strong>Nigeria 🇳🇬</strong></div>
+          <div class="lp-feed-time">7m ago</div>
+        </div>
+        <div class="lp-feed-item">
+          <div class="lp-feed-ava" style="background:rgba(239,68,68,0.2);color:#F87171">LW</div>
+          <div class="lp-feed-text"><strong>Lena W.</strong> started a video chat on <strong>Climate Policy</strong></div>
+          <div class="lp-feed-time">11m ago</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIGNUP CTA -->
+  <div class="lp-cta-section" id="lp-signup">
+    <h2>Ready to have<br>your say?</h2>
+    <p>Join for free. No strings attached. Start exploring immediately — and when you're ready, unlock the full platform with a free membership.</p>
+    <div class="lp-signup-form">
+      <input type="email" class="lp-email-input" placeholder="Enter your email address" />
+      <button class="lp-btn-primary">Join Free →</button>
+    </div>
+    <div class="lp-cta-note">Free forever · No spam · Unsubscribe anytime</div>
+  </div>
+
+  <div class="lp-footer-line">© 2025 OurWorld · Light Capitalism. Heavy Democracy. Zero Corruption.</div>
+
+</div><!-- end #home -->
+
+<!-- ============================================================
+     ALL EXISTING SECTIONS (completely unchanged)
+     ============================================================ -->
 
 <!-- REFERENDUMS -->
 <section id="referendums">
