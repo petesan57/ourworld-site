@@ -1675,6 +1675,39 @@ function toggleMic() {
   recognition.onerror = () => { micActive = false; document.getElementById('chat-mic').classList.remove('listening'); };
   recognition.start();
 }
+// MIC
+let recognition = null;
+let micActive = false;
+function toggleMic() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) { alert('Sorry, your browser does not support voice input. Try Chrome.'); return; }
+  if (micActive) { recognition.stop(); return; }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SR();
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.onstart = () => { micActive = true; document.getElementById('chat-mic').classList.add('listening'); };
+  recognition.onresult = (e) => { document.getElementById('chat-input').value = e.results[0][0].transcript; };
+  recognition.onend = () => { micActive = false; document.getElementById('chat-mic').classList.remove('listening'); };
+  recognition.onerror = () => { micActive = false; document.getElementById('chat-mic').classList.remove('listening'); };
+  recognition.start();
+}
 </script>
+
+<!-- WELCOME AUDIO — plays once per user, never again -->
+<audio id="welcome-audio" src="/worldneedslove.mp3" preload="auto"></audio>
+<script>
+  if (!localStorage.getItem('owAudioPlayed')) {
+    const audio = document.getElementById('welcome-audio');
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        localStorage.setItem('owAudioPlayed', 'true');
+      }).catch(() => {
+        // Browser blocked autoplay — silently do nothing
+      });
+    }
+  }
+</script>
+
 </body>
 </html>
