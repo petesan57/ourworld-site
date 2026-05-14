@@ -595,9 +595,9 @@ section.active { display: block; }
 #mod-toast.show { display: block; }
 
 /* CHATBOT */
-#chat-bubble { position: fixed; bottom: calc(var(--bottom-nav-height) + 16px); right: 16px; width: 64px; height: 64px; border-radius: 50%; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 9999; transition: transform 0.2s; padding: 0; }
+#chat-bubble { position: fixed; bottom: calc(var(--bottom-nav-height) + 16px); right: 16px; width: 90px; height: 90px; border-radius: 50%; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 9999; transition: transform 0.2s; padding: 0; }
 #chat-bubble:hover { transform: scale(1.08); }
-#chat-bubble img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; }
+#chat-bubble img { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; }
 #chat-window { position: fixed; bottom: calc(var(--bottom-nav-height) + 90px); right: 16px; width: calc(100vw - 32px); max-width: 340px; max-height: 480px; background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; display: none; flex-direction: column; z-index: 9998; overflow: hidden; }
 #chat-window.open { display: flex; }
 #chat-header { background: var(--bg3); padding: 12px 14px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); }
@@ -1454,7 +1454,7 @@ input:focus { border-color: var(--accent); }
 
 <!-- CHATBOT — robot mascot widget -->
 <div id="chat-bubble" onclick="toggleChat()">
-  <img src="/Copilot_20260514_134018.png" style="width:64px;height:64px;border-radius:50%;object-fit:cover;" alt="OurWorld AI">
+  <img src="/Copilot_20260514_134018.png" style="width:90px;height:90px;border-radius:50%;object-fit:cover;" alt="OurWorld AI">
 </div>
 <div id="chat-window">
   <div id="chat-header">
