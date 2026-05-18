@@ -1234,48 +1234,76 @@ function renderLivePosts(posts, type) {
   const replyLabel = (type === 'opinions') ? 'replies' : 'reshares';
   const replyIcon = (type === 'opinions') ? '💬' : '🔁';
   const shareLabel = (type === 'opinions') ? '↗ Share' : '↗ Link';
+  const isOpinion = (type === 'opinions');
 
-  container.innerHTML = posts.map(p => {
-    const name = escapeHtml(p.authorName || 'OurWorld Citizen');
-    const initials = getInitials(p.authorName || 'OW');
-    const ava = p.authorPhoto ? `<img src="${escapeHtml(p.authorPhoto)}" alt="">` : initials;
-    const body = escapeHtml(p.text || '');
-    const time = timeAgo(p.createdAt);
-    const isOpinion = (type === 'opinions');
-    const repliesBlockHtml = isOpinion ? `
-      <div class="replies-wrap">
-        <div class="replies-list" id="replies-list-${p.id}"></div>
-        <div class="reply-compose" id="reply-compose-${p.id}">
-          <textarea placeholder="Write a reply..." maxlength="280" data-postid="${p.id}"></textarea>
-          <button class="reply-submit-btn" onclick="postReply('${p.id}', this)">Reply</button>
+  // Track which post IDs are now in the feed
+  const incomingIds = new Set(posts.map(p => p.id));
+
+  // Remove any DOM nodes for posts that are no longer in the feed
+  Array.from(container.children).forEach(node => {
+    if (!incomingIds.has(node.dataset.postid)) {
+      node.remove();
+    }
+  });
+
+  // Build/update posts in order (newest first — posts already arrive desc-sorted)
+  posts.forEach((p, index) => {
+    let postEl = container.querySelector(`[data-postid="${p.id}"]`);
+    if (postEl) {
+      // Post already in DOM — just update the timestamp (everything else is static)
+      const timeEl = postEl.querySelector('.feed-time');
+      if (timeEl) timeEl.textContent = timeAgo(p.createdAt);
+    } else {
+      // Build new post element
+      const name = escapeHtml(p.authorName || 'OurWorld Citizen');
+      const initials = getInitials(p.authorName || 'OW');
+      const ava = p.authorPhoto ? `<img src="${escapeHtml(p.authorPhoto)}" alt="">` : initials;
+      const body = escapeHtml(p.text || '');
+      const time = timeAgo(p.createdAt);
+      const repliesBlockHtml = isOpinion ? `
+        <div class="replies-wrap">
+          <div class="replies-list" id="replies-list-${p.id}"></div>
+          <div class="reply-compose" id="reply-compose-${p.id}">
+            <textarea placeholder="Write a reply..." maxlength="280" data-postid="${p.id}"></textarea>
+            <button class="reply-submit-btn" onclick="postReply('${p.id}', this)">Reply</button>
+          </div>
+        </div>` : '';
+      const replyBtnAction = isOpinion ? `onclick="toggleReplyBox('${p.id}')"` : '';
+      const replyCount = replyCounts[p.id] || 0;
+      postEl = document.createElement('div');
+      postEl.className = 'feed-post';
+      postEl.dataset.live = '1';
+      postEl.dataset.postid = p.id;
+      postEl.innerHTML = `
+        <div class="feed-tag-pill">${tagPill} <span style="background:rgba(34,197,94,0.15);color:#22c55e;padding:1px 7px;border-radius:10px;font-size:9px;margin-left:4px;">● LIVE</span></div>
+        <div class="feed-post-top">
+          <div class="feed-ava" style="background:var(--accent);color:white;">${ava}</div>
+          <div class="feed-meta">
+            <div class="feed-name">${name}</div>
+            <div class="feed-location">🌍 OurWorld Citizen</div>
+          </div>
+          <div class="feed-time">${time}</div>
         </div>
-      </div>` : '';
-    const replyBtnAction = isOpinion
-      ? `onclick="toggleReplyBox('${p.id}')"`
-      : '';
-    const replyCount = replyCounts[p.id] || 0;
-    return `<div class="feed-post" data-live="1" data-postid="${p.id}">
-      <div class="feed-tag-pill">${tagPill} <span style="background:rgba(34,197,94,0.15);color:#22c55e;padding:1px 7px;border-radius:10px;font-size:9px;margin-left:4px;">● LIVE</span></div>
-      <div class="feed-post-top">
-        <div class="feed-ava" style="background:var(--accent);color:white;">${ava}</div>
-        <div class="feed-meta">
-          <div class="feed-name">${name}</div>
-          <div class="feed-location">🌍 OurWorld Citizen</div>
+        <div class="feed-body">${body}</div>
+        <div class="feed-actions">
+          <button class="feed-action" onclick="toggleLike(this)">♥ <span>0</span></button>
+          <button class="feed-action reply-toggle" ${replyBtnAction} id="reply-btn-${p.id}">${replyIcon} <span>${replyCount} ${replyLabel}</span></button>
+          <button class="feed-action">${shareLabel}</button>
         </div>
-        <div class="feed-time">${time}</div>
-      </div>
-      <div class="feed-body">${body}</div>
-      <div class="feed-actions">
-        <button class="feed-action" onclick="toggleLike(this)">♥ <span>0</span></button>
-        <button class="feed-action reply-toggle" ${replyBtnAction} id="reply-btn-${p.id}">${replyIcon} <span>${replyCount} ${replyLabel}</span></button>
-        <button class="feed-action">${shareLabel}</button>
-      </div>
-      ${repliesBlockHtml}
-    </div>`;
-  }).join('');
+        ${repliesBlockHtml}
+      `;
+      // Insert at the correct index position so order matches the posts array (newest first)
+      const expectedNext = container.children[index];
+      if (expectedNext) {
+        container.insertBefore(postEl, expectedNext);
+      } else {
+        container.appendChild(postEl);
+      }
+    }
+  });
 
   // Start a live reply listener for each opinion post (only once per post)
-  if (type === 'opinions') {
+  if (isOpinion) {
     posts.forEach(p => {
       if (!replyListeners[p.id]) {
         startReplyListener(p.id);
