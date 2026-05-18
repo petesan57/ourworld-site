@@ -855,6 +855,10 @@ input:focus { border-color: var(--accent); }
     createUserWithEmailAndPassword, signInWithEmailAndPassword,
     GoogleAuthProvider, signInWithPopup, signOut, updateProfile
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+  import {
+    getFirestore, collection, addDoc, query, orderBy, limit,
+    onSnapshot, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyB7ZVC-PoyEENKp0CqRuqBbL5o7-VAPj7M",
@@ -867,21 +871,35 @@ input:focus { border-color: var(--accent); }
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+  const db = getFirestore(app);
   const googleProvider = new GoogleAuthProvider();
 
   // Expose to window so non-module code can call them
   window.fbAuth = auth;
+  window.fbDb = db;
   window.fbGoogleProvider = googleProvider;
   window.fbSignInWithPopup = signInWithPopup;
   window.fbCreateUser = createUserWithEmailAndPassword;
   window.fbSignIn = signInWithEmailAndPassword;
   window.fbSignOut = signOut;
   window.fbUpdateProfile = updateProfile;
+  window.fbCollection = collection;
+  window.fbAddDoc = addDoc;
+  window.fbQuery = query;
+  window.fbOrderBy = orderBy;
+  window.fbLimit = limit;
+  window.fbOnSnapshot = onSnapshot;
+  window.fbServerTimestamp = serverTimestamp;
 
   // Listen for auth state changes
   onAuthStateChanged(auth, (user) => {
     window.currentUser = user;
     updateAuthUI(user);
+  });
+
+  // Start real-time listeners as soon as Firebase is ready
+  window.addEventListener('DOMContentLoaded', () => {
+    startFeedListeners();
   });
 </script>
 
@@ -1109,7 +1127,134 @@ function requireAuth(action, message) {
   return false;
 }
 
-// ============ EXISTING APP LOGIC ============
+// ============ FIRESTORE: REAL-TIME FEEDS ============
+// Posts save to the database and appear instantly on every device watching.
+
+let opinionsUnsub = null;
+let sharesUnsub = null;
+
+function startFeedListeners() {
+  if (!window.fbDb) {
+    // Firebase not loaded yet, retry shortly
+    setTimeout(startFeedListeners, 200);
+    return;
+  }
+  // OPINIONS listener
+  try {
+    const q = window.fbQuery(
+      window.fbCollection(window.fbDb, 'opinions'),
+      window.fbOrderBy('createdAt', 'desc'),
+      window.fbLimit(50)
+    );
+    opinionsUnsub = window.fbOnSnapshot(q, snapshot => {
+      renderLivePosts(snapshot.docs.map(d => ({ id: d.id, ...d.data() })), 'opinions');
+    }, err => console.error('Opinions listener error:', err));
+  } catch (e) { console.error('Could not start opinions listener:', e); }
+
+  // SHARES listener
+  try {
+    const q = window.fbQuery(
+      window.fbCollection(window.fbDb, 'shares'),
+      window.fbOrderBy('createdAt', 'desc'),
+      window.fbLimit(50)
+    );
+    sharesUnsub = window.fbOnSnapshot(q, snapshot => {
+      renderLivePosts(snapshot.docs.map(d => ({ id: d.id, ...d.data() })), 'shares');
+    }, err => console.error('Shares listener error:', err));
+  } catch (e) { console.error('Could not start shares listener:', e); }
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function timeAgo(ts) {
+  if (!ts) return 'Just now';
+  const date = ts.toDate ? ts.toDate() : new Date(ts);
+  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (seconds < 5) return 'Just now';
+  if (seconds < 60) return seconds + 's ago';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return minutes + 'm ago';
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return hours + 'h ago';
+  const days = Math.floor(hours / 24);
+  if (days < 7) return days + 'd ago';
+  return date.toLocaleDateString();
+}
+
+function renderLivePosts(posts, type) {
+  // type: 'opinions' or 'shares'
+  const containerId = (type === 'opinions') ? 'live-opinions' : 'live-shares';
+  let container = document.getElementById(containerId);
+  if (!container) {
+    // Insert live container at top of scroll area, before the seeded demo posts
+    const scrollId = (type === 'opinions') ? 'feed-scroll' : 'share-scroll';
+    const scroll = document.getElementById(scrollId);
+    if (!scroll) return;
+    container = document.createElement('div');
+    container.id = containerId;
+    container.style.display = 'flex';
+    container.style.flexDirection = 'column';
+    container.style.gap = '10px';
+    container.style.marginBottom = '10px';
+    scroll.insertBefore(container, scroll.firstChild);
+  }
+  if (!posts.length) {
+    container.innerHTML = '';
+    return;
+  }
+  const tagPill = (type === 'opinions') ? '💬 Opinion' : '📤 Shared';
+  const replyLabel = (type === 'opinions') ? 'replies' : 'reshares';
+  const replyIcon = (type === 'opinions') ? '💬' : '🔁';
+  const shareLabel = (type === 'opinions') ? '↗ Share' : '↗ Link';
+  container.innerHTML = posts.map(p => {
+    const name = escapeHtml(p.authorName || 'OurWorld Citizen');
+    const initials = getInitials(p.authorName || 'OW');
+    const ava = p.authorPhoto ? `<img src="${escapeHtml(p.authorPhoto)}" alt="">` : initials;
+    const body = escapeHtml(p.text || '');
+    const time = timeAgo(p.createdAt);
+    return `<div class="feed-post" data-live="1">
+      <div class="feed-tag-pill">${tagPill} <span style="background:rgba(34,197,94,0.15);color:#22c55e;padding:1px 7px;border-radius:10px;font-size:9px;margin-left:4px;">● LIVE</span></div>
+      <div class="feed-post-top">
+        <div class="feed-ava" style="background:var(--accent);color:white;">${ava}</div>
+        <div class="feed-meta">
+          <div class="feed-name">${name}</div>
+          <div class="feed-location">🌍 OurWorld Citizen</div>
+        </div>
+        <div class="feed-time">${time}</div>
+      </div>
+      <div class="feed-body">${body}</div>
+      <div class="feed-actions">
+        <button class="feed-action" onclick="toggleLike(this)">♥ <span>0</span></button>
+        <button class="feed-action">${replyIcon} <span>0 ${replyLabel}</span></button>
+        <button class="feed-action">${shareLabel}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function saveOpinion(text) {
+  const user = window.currentUser;
+  return window.fbAddDoc(window.fbCollection(window.fbDb, 'opinions'), {
+    text: text,
+    authorId: user.uid,
+    authorName: user.displayName || (user.email ? user.email.split('@')[0] : 'Citizen'),
+    authorPhoto: user.photoURL || null,
+    createdAt: window.fbServerTimestamp()
+  });
+}
+
+async function saveShare(text) {
+  const user = window.currentUser;
+  return window.fbAddDoc(window.fbCollection(window.fbDb, 'shares'), {
+    text: text,
+    authorId: user.uid,
+    authorName: user.displayName || (user.email ? user.email.split('@')[0] : 'Citizen'),
+    authorPhoto: user.photoURL || null,
+    createdAt: window.fbServerTimestamp()
+  });
+}
 const BLOCKLIST = ['fuck','f**k','fuk','fuuk','shit','sh1t','sht','cunt','c**t','bitch','b1tch','bastard','asshole','arsehole','a**hole','dick','d1ck','cock','c0ck','pussy','nigger','nigga','n1gger','faggot','fag','f4ggot','retard','ret4rd','whore','wh0re','slut','sl*t','twat','prick','wanker','w4nker','bollocks','motherfucker','mofo','kill yourself','kys','go die','rape','r4pe','nazi','n4zi','hitler'];
 function isBlocked(t){const l=t.toLowerCase();return BLOCKLIST.some(w=>l.includes(w));}
 let toastTimer=null;
@@ -1155,15 +1300,24 @@ function postToFeed(){
   const input=document.getElementById('feed-input'),text=input.value.trim();
   if(!text)return;
   if(isBlocked(text)){showModToast();input.value='';return;}
-  const user = window.currentUser;
-  const displayName = user.displayName || user.email.split('@')[0];
-  const initials = getInitials(displayName);
-  const avaHtml = user.photoURL ? `<img src="${user.photoURL}" alt="">` : initials;
-  const scroll=document.getElementById('feed-scroll'),post=document.createElement('div');
-  post.className='feed-post';post.style.borderColor='var(--accent)';
-  post.innerHTML='<div class="feed-tag-pill">💬 Opinion</div><div class="feed-post-top"><div class="feed-ava" style="background:var(--accent);color:white;">'+avaHtml+'</div><div class="feed-meta"><div class="feed-name">'+displayName+'</div><div class="feed-location">🌍 OurWorld Citizen</div></div><div class="feed-time">Just now</div></div><div class="feed-body">'+text.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div><div class="feed-actions"><button class="feed-action" onclick="toggleLike(this)">♥ <span>0</span></button><button class="feed-action">💬 <span>0 replies</span></button><button class="feed-action">↗ Share</button></div>';
-  scroll.insertBefore(post,scroll.firstChild);input.value='';document.getElementById('feed-char').textContent='280 characters remaining';
-  setTimeout(()=>post.style.borderColor='',2000);
+  const btn = document.querySelector('#feed-compose-area .feed-post-btn');
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Posting...';
+  saveOpinion(text)
+    .then(() => {
+      input.value='';
+      document.getElementById('feed-char').textContent='280 characters remaining';
+      // The live listener will render the new post automatically
+    })
+    .catch(err => {
+      console.error('Failed to save opinion:', err);
+      alert('Could not post right now. Please try again.');
+    })
+    .finally(() => {
+      btn.disabled = false;
+      btn.textContent = originalText;
+    });
 }
 
 const shareInput=document.getElementById('share-input');
@@ -1173,15 +1327,23 @@ function postShare(){
   const input=document.getElementById('share-input'),text=input.value.trim();
   if(!text)return;
   if(isBlocked(text)){showModToast();input.value='';return;}
-  const user = window.currentUser;
-  const displayName = user.displayName || user.email.split('@')[0];
-  const initials = getInitials(displayName);
-  const avaHtml = user.photoURL ? `<img src="${user.photoURL}" alt="">` : initials;
-  const scroll=document.getElementById('share-scroll'),post=document.createElement('div');
-  post.className='feed-post';post.style.borderColor='var(--accent)';
-  post.innerHTML='<div class="feed-tag-pill">📤 Shared</div><div class="feed-post-top"><div class="feed-ava" style="background:var(--accent);color:white;">'+avaHtml+'</div><div class="feed-meta"><div class="feed-name">'+displayName+'</div><div class="feed-location">🌍 OurWorld Citizen</div></div><div class="feed-time">Just now</div></div><div class="feed-body">'+text.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div><div class="feed-actions"><button class="feed-action" onclick="toggleLike(this)">♥ <span>0</span></button><button class="feed-action">🔁 <span>0 reshares</span></button><button class="feed-action">↗ Link</button></div>';
-  scroll.insertBefore(post,scroll.firstChild);input.value='';document.getElementById('share-char').textContent='280 characters remaining';
-  setTimeout(()=>post.style.borderColor='',2000);
+  const btn = document.querySelector('#share-compose-area .feed-post-btn');
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Sharing...';
+  saveShare(text)
+    .then(() => {
+      input.value='';
+      document.getElementById('share-char').textContent='280 characters remaining';
+    })
+    .catch(err => {
+      console.error('Failed to save share:', err);
+      alert('Could not share right now. Please try again.');
+    })
+    .finally(() => {
+      btn.disabled = false;
+      btn.textContent = originalText;
+    });
 }
 
 function toggleLike(btn){const span=btn.querySelector('span'),count=parseInt(span.textContent);if(btn.classList.contains('liked')){btn.classList.remove('liked');span.textContent=count-1;}else{btn.classList.add('liked');span.textContent=count+1;}}
