@@ -300,6 +300,26 @@ section.active { display: block; }
 .feed-action.liked { color: #f43f5e; }
 .feed-tag-pill { display: inline-block; background: rgba(79,70,229,0.15); color: var(--accent2); border-radius: 20px; font-size: 11px; padding: 2px 10px; margin-bottom: 8px; }
 
+/* REPLIES */
+.replies-wrap { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); }
+.replies-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+.reply-item { display: flex; gap: 10px; padding: 8px 10px; background: var(--bg3); border-radius: 10px; align-items: flex-start; }
+.reply-ava { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: white; flex-shrink: 0; overflow: hidden; }
+.reply-ava img { width: 100%; height: 100%; object-fit: cover; }
+.reply-body { flex: 1; min-width: 0; }
+.reply-header { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
+.reply-name { font-size: 12px; font-weight: 600; color: var(--text); }
+.reply-time { font-size: 10px; color: var(--muted); }
+.reply-text { font-size: 13px; color: var(--accent3); line-height: 1.5; word-wrap: break-word; }
+.reply-compose { display: none; gap: 8px; align-items: flex-start; padding: 8px 0 0; }
+.reply-compose.open { display: flex; }
+.reply-compose textarea { flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; color: var(--text); font-size: 13px; font-family: inherit; resize: none; outline: none; min-height: 36px; max-height: 80px; transition: border-color 0.15s; }
+.reply-compose textarea:focus { border-color: var(--accent); }
+.reply-submit-btn { background: var(--accent); color: white; border: none; border-radius: 8px; padding: 8px 14px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.15s; align-self: flex-start; }
+.reply-submit-btn:hover { background: #4338ca; }
+.reply-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.feed-action.reply-toggle { color: var(--accent2); }
+
 /* SIGN-IN PROMPT (when guest tries to do something gated) */
 .signin-prompt { background: var(--bg3); border: 1px dashed var(--accent); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .signin-prompt-text { flex: 1; min-width: 180px; font-size: 13px; color: var(--accent3); line-height: 1.5; }
@@ -857,7 +877,7 @@ input:focus { border-color: var(--accent); }
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
   import {
     getFirestore, collection, addDoc, query, orderBy, limit,
-    onSnapshot, serverTimestamp
+    onSnapshot, serverTimestamp, doc
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -890,6 +910,7 @@ input:focus { border-color: var(--accent); }
   window.fbLimit = limit;
   window.fbOnSnapshot = onSnapshot;
   window.fbServerTimestamp = serverTimestamp;
+  window.fbDoc = doc;
 
   // Listen for auth state changes
   onAuthStateChanged(auth, (user) => {
@@ -1183,6 +1204,11 @@ function timeAgo(ts) {
   return date.toLocaleDateString();
 }
 
+// Track which posts already have active reply listeners (avoid duplicates)
+const replyListeners = {};
+// Cache reply counts so the button label is up to date
+const replyCounts = {};
+
 function renderLivePosts(posts, type) {
   // type: 'opinions' or 'shares'
   const containerId = (type === 'opinions') ? 'live-opinions' : 'live-shares';
@@ -1208,13 +1234,27 @@ function renderLivePosts(posts, type) {
   const replyLabel = (type === 'opinions') ? 'replies' : 'reshares';
   const replyIcon = (type === 'opinions') ? '💬' : '🔁';
   const shareLabel = (type === 'opinions') ? '↗ Share' : '↗ Link';
+
   container.innerHTML = posts.map(p => {
     const name = escapeHtml(p.authorName || 'OurWorld Citizen');
     const initials = getInitials(p.authorName || 'OW');
     const ava = p.authorPhoto ? `<img src="${escapeHtml(p.authorPhoto)}" alt="">` : initials;
     const body = escapeHtml(p.text || '');
     const time = timeAgo(p.createdAt);
-    return `<div class="feed-post" data-live="1">
+    const isOpinion = (type === 'opinions');
+    const repliesBlockHtml = isOpinion ? `
+      <div class="replies-wrap">
+        <div class="replies-list" id="replies-list-${p.id}"></div>
+        <div class="reply-compose" id="reply-compose-${p.id}">
+          <textarea placeholder="Write a reply..." maxlength="280" data-postid="${p.id}"></textarea>
+          <button class="reply-submit-btn" onclick="postReply('${p.id}', this)">Reply</button>
+        </div>
+      </div>` : '';
+    const replyBtnAction = isOpinion
+      ? `onclick="toggleReplyBox('${p.id}')"`
+      : '';
+    const replyCount = replyCounts[p.id] || 0;
+    return `<div class="feed-post" data-live="1" data-postid="${p.id}">
       <div class="feed-tag-pill">${tagPill} <span style="background:rgba(34,197,94,0.15);color:#22c55e;padding:1px 7px;border-radius:10px;font-size:9px;margin-left:4px;">● LIVE</span></div>
       <div class="feed-post-top">
         <div class="feed-ava" style="background:var(--accent);color:white;">${ava}</div>
@@ -1227,11 +1267,113 @@ function renderLivePosts(posts, type) {
       <div class="feed-body">${body}</div>
       <div class="feed-actions">
         <button class="feed-action" onclick="toggleLike(this)">♥ <span>0</span></button>
-        <button class="feed-action">${replyIcon} <span>0 ${replyLabel}</span></button>
+        <button class="feed-action reply-toggle" ${replyBtnAction} id="reply-btn-${p.id}">${replyIcon} <span>${replyCount} ${replyLabel}</span></button>
         <button class="feed-action">${shareLabel}</button>
+      </div>
+      ${repliesBlockHtml}
+    </div>`;
+  }).join('');
+
+  // Start a live reply listener for each opinion post (only once per post)
+  if (type === 'opinions') {
+    posts.forEach(p => {
+      if (!replyListeners[p.id]) {
+        startReplyListener(p.id);
+      }
+    });
+  }
+}
+
+function toggleReplyBox(postId) {
+  if (!requireAuth('reply', 'Sign in to reply to this post.')) return;
+  const compose = document.getElementById('reply-compose-' + postId);
+  if (!compose) return;
+  compose.classList.toggle('open');
+  if (compose.classList.contains('open')) {
+    setTimeout(() => compose.querySelector('textarea')?.focus(), 50);
+  }
+}
+
+function startReplyListener(postId) {
+  try {
+    const repliesRef = window.fbCollection(window.fbDb, 'opinions', postId, 'replies');
+    const q = window.fbQuery(repliesRef, window.fbOrderBy('createdAt', 'asc'), window.fbLimit(100));
+    replyListeners[postId] = window.fbOnSnapshot(q, snapshot => {
+      const replies = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+      replyCounts[postId] = replies.length;
+      renderReplies(postId, replies);
+      updateReplyCountLabel(postId, replies.length);
+    }, err => console.error('Reply listener error for post', postId, err));
+  } catch (e) {
+    console.error('Could not start reply listener for post', postId, e);
+  }
+}
+
+function renderReplies(postId, replies) {
+  const list = document.getElementById('replies-list-' + postId);
+  if (!list) return;
+  if (!replies.length) {
+    list.innerHTML = '';
+    return;
+  }
+  list.innerHTML = replies.map(r => {
+    const name = escapeHtml(r.authorName || 'OurWorld Citizen');
+    const initials = getInitials(r.authorName || 'OW');
+    const ava = r.authorPhoto ? `<img src="${escapeHtml(r.authorPhoto)}" alt="">` : initials;
+    const body = escapeHtml(r.text || '');
+    const time = timeAgo(r.createdAt);
+    return `<div class="reply-item">
+      <div class="reply-ava">${ava}</div>
+      <div class="reply-body">
+        <div class="reply-header">
+          <span class="reply-name">${name}</span>
+          <span class="reply-time">${time}</span>
+        </div>
+        <div class="reply-text">${body}</div>
       </div>
     </div>`;
   }).join('');
+}
+
+function updateReplyCountLabel(postId, count) {
+  const btn = document.getElementById('reply-btn-' + postId);
+  if (!btn) return;
+  const span = btn.querySelector('span');
+  if (span) span.textContent = count + ' ' + (count === 1 ? 'reply' : 'replies');
+}
+
+async function postReply(postId, btn) {
+  if (!requireAuth('reply', 'Sign in to reply.')) return;
+  const compose = document.getElementById('reply-compose-' + postId);
+  if (!compose) return;
+  const textarea = compose.querySelector('textarea');
+  const text = textarea.value.trim();
+  if (!text) return;
+  if (isBlocked(text)) { showModToast(); textarea.value = ''; return; }
+  const user = window.currentUser;
+  btn.disabled = true;
+  const originalLabel = btn.textContent;
+  btn.textContent = 'Posting...';
+  try {
+    await window.fbAddDoc(
+      window.fbCollection(window.fbDb, 'opinions', postId, 'replies'),
+      {
+        text: text,
+        authorId: user.uid,
+        authorName: user.displayName || (user.email ? user.email.split('@')[0] : 'Citizen'),
+        authorPhoto: user.photoURL || null,
+        createdAt: window.fbServerTimestamp()
+      }
+    );
+    textarea.value = '';
+    // Keep the compose box open after replying — feels more like a conversation
+  } catch (err) {
+    console.error('Failed to post reply:', err);
+    alert('Could not reply right now. Please try again.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalLabel;
+  }
 }
 
 async function saveOpinion(text) {
