@@ -275,6 +275,9 @@ section.active { display: block; }
 .feed-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .feed-live { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--green); font-weight: 500; }
 .feed-live .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 1.5s infinite; }
+.sound-toggle { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; width: 32px; height: 32px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; color: var(--accent2); font-family: inherit; transition: all 0.15s; margin-left: 8px; padding: 0; }
+.sound-toggle:hover { border-color: var(--accent); background: var(--bg2); }
+.sound-toggle.muted { color: var(--muted); }
 .feed-compose { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 16px; position: relative; }
 .feed-compose textarea { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px; color: var(--text); font-size: 14px; font-family: inherit; resize: none; outline: none; height: 80px; transition: border-color 0.15s; }
 .feed-compose textarea::placeholder { color: var(--muted); }
@@ -676,7 +679,10 @@ input:focus { border-color: var(--accent); }
 <section id="opinions">
   <div class="feed-header">
     <div><div class="section-title">💬 Opinions</div><div class="section-sub">Share your views with citizens worldwide.</div></div>
-    <div class="feed-live"><div class="live-dot"></div> Live</div>
+    <div style="display:flex;align-items:center;">
+      <div class="feed-live"><div class="live-dot"></div> Live</div>
+      <button class="sound-toggle" id="sound-toggle-btn" onclick="toggleSound()" title="Toggle notification sound">🔔</button>
+    </div>
   </div>
   <div class="feed-compose" id="feed-compose-area">
     <textarea id="feed-input" placeholder="What's your view on the world today?"></textarea>
@@ -1209,6 +1215,108 @@ const replyListeners = {};
 // Cache reply counts so the button label is up to date
 const replyCounts = {};
 
+// ============ SMART DING SYSTEM ============
+// Plays a subtle "pop" sound when a new post or reply arrives from another user.
+// Smart rules: never your own posts, never on first page-load, never if tab not visible,
+// only when on Opinions section, and can be muted via header toggle.
+
+let dingEnabled = (localStorage.getItem('owDingEnabled') !== 'false'); // default on
+let pageReady = false; // flips true ~2 seconds after load to avoid initial flood
+let seenOpinionIds = new Set(); // posts we've already seen — only NEW ones ding
+let seenReplyIds = {}; // map of postId -> Set of reply IDs already seen
+let dingInitialized = false;
+let audioCtx = null;
+
+setTimeout(() => { pageReady = true; }, 2000);
+
+function toggleSound() {
+  dingEnabled = !dingEnabled;
+  localStorage.setItem('owDingEnabled', dingEnabled ? 'true' : 'false');
+  const btn = document.getElementById('sound-toggle-btn');
+  if (btn) {
+    btn.textContent = dingEnabled ? '🔔' : '🔕';
+    btn.classList.toggle('muted', !dingEnabled);
+    btn.title = dingEnabled ? 'Notifications on — tap to mute' : 'Notifications muted — tap to enable';
+  }
+  // Test ding when turning on so user knows it works
+  if (dingEnabled) {
+    pageReady = true; // force-allow this user-initiated test
+    playDing();
+  }
+}
+
+// Sync mute button state with stored preference on load
+function refreshSoundToggleUI() {
+  const btn = document.getElementById('sound-toggle-btn');
+  if (btn) {
+    btn.textContent = dingEnabled ? '🔔' : '🔕';
+    btn.classList.toggle('muted', !dingEnabled);
+  }
+}
+
+function shouldDing() {
+  if (!dingEnabled) return false;
+  if (!pageReady) return false;
+  if (document.hidden) return false; // tab not visible
+  // Only when Opinions section is the active one
+  const opinionsSection = document.getElementById('opinions');
+  if (!opinionsSection || !opinionsSection.classList.contains('active')) return false;
+  return true;
+}
+
+function playDing() {
+  try {
+    // Lazily create audio context (browsers require it after a user interaction)
+    if (!audioCtx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      audioCtx = new AC();
+    }
+    // Resume if suspended (some browsers suspend audio until next interaction)
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+
+    const now = audioCtx.currentTime;
+    // Soft two-tone "pop" — first tone, slight pause, second tone
+    const tones = [
+      { freq: 880, start: 0,    dur: 0.07, vol: 0.10 },
+      { freq: 1320, start: 0.08, dur: 0.08, vol: 0.08 }
+    ];
+    tones.forEach(t => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = t.freq;
+      gain.gain.setValueAtTime(0, now + t.start);
+      gain.gain.linearRampToValueAtTime(t.vol, now + t.start + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + t.start + t.dur);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now + t.start);
+      osc.stop(now + t.start + t.dur);
+    });
+  } catch (e) {
+    // Silently ignore — audio is non-critical
+    console.warn('Ding failed:', e);
+  }
+}
+
+// Unlock audio after the first user interaction (required by browsers)
+function unlockAudioOnce() {
+  if (dingInitialized) return;
+  dingInitialized = true;
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    audioCtx = new AC();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+  } catch (e) {}
+  document.removeEventListener('click', unlockAudioOnce);
+  document.removeEventListener('touchstart', unlockAudioOnce);
+}
+document.addEventListener('click', unlockAudioOnce);
+document.addEventListener('touchstart', unlockAudioOnce);
+
+
 function renderLivePosts(posts, type) {
   // type: 'opinions' or 'shares'
   const containerId = (type === 'opinions') ? 'live-opinions' : 'live-shares';
@@ -1238,6 +1346,22 @@ function renderLivePosts(posts, type) {
 
   // Track which post IDs are now in the feed
   const incomingIds = new Set(posts.map(p => p.id));
+
+  // SMART DING: detect newly arrived posts from OTHER users (only Opinions)
+  if (isOpinion && shouldDing()) {
+    const myUid = window.currentUser?.uid;
+    const newFromOthers = posts.some(p => 
+      !seenOpinionIds.has(p.id) && p.authorId && p.authorId !== myUid
+    );
+    if (newFromOthers && seenOpinionIds.size > 0) {
+      // size > 0 means we've already had a render — not the first load
+      playDing();
+    }
+  }
+  // Update seen-set for opinions
+  if (isOpinion) {
+    posts.forEach(p => seenOpinionIds.add(p.id));
+  }
 
   // Remove any DOM nodes for posts that are no longer in the feed
   Array.from(container.children).forEach(node => {
@@ -1326,8 +1450,21 @@ function startReplyListener(postId) {
   try {
     const repliesRef = window.fbCollection(window.fbDb, 'opinions', postId, 'replies');
     const q = window.fbQuery(repliesRef, window.fbOrderBy('createdAt', 'asc'), window.fbLimit(100));
+    if (!seenReplyIds[postId]) seenReplyIds[postId] = new Set();
     replyListeners[postId] = window.fbOnSnapshot(q, snapshot => {
       const replies = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+      // SMART DING: detect newly arrived replies from OTHER users
+      if (shouldDing()) {
+        const myUid = window.currentUser?.uid;
+        const newFromOthers = replies.some(r =>
+          !seenReplyIds[postId].has(r.id) && r.authorId && r.authorId !== myUid
+        );
+        if (newFromOthers && seenReplyIds[postId].size > 0) {
+          // size > 0 means we've already seen replies before — not the first load
+          playDing();
+        }
+      }
+      replies.forEach(r => seenReplyIds[postId].add(r.id));
       replyCounts[postId] = replies.length;
       renderReplies(postId, replies);
       updateReplyCountLabel(postId, replies.length);
@@ -1525,6 +1662,8 @@ function toggleMic(){if(!('webkitSpeechRecognition'in window)&&!('SpeechRecognit
 document.addEventListener('DOMContentLoaded', () => {
   // Wait a beat for Firebase to settle
   setTimeout(() => { if (!window.currentUser) injectSignInPrompts(); }, 300);
+  // Sync the ding toggle button with stored preference
+  refreshSoundToggleUI();
 });
 
 // Allow Enter to submit auth form
