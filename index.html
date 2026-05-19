@@ -203,7 +203,7 @@ section.active { display: block; }
 .vote-bar-wrap { margin-top: 12px; }
 .vote-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; }
 .vote-bar { height: 5px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
-.vote-fill { height: 100%; background: var(--accent); border-radius: 3px; }
+.vote-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.6s ease; }
 .pill { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
 .pill-green { background: rgba(34,197,94,0.15); color: var(--green); }
 .pill-amber { background: rgba(245,158,11,0.15); color: var(--amber); }
@@ -215,8 +215,12 @@ section.active { display: block; }
 .vote-opt { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: all 0.15s; display: flex; justify-content: space-between; align-items: center; }
 .vote-opt:hover { border-color: var(--accent); color: var(--accent2); }
 .vote-opt.selected { border-color: var(--accent); background: rgba(79,70,229,0.1); color: var(--accent2); }
+.vote-opt.your-vote { border-color: var(--green); background: rgba(34,197,94,0.1); color: #86efac; cursor: default; }
+.vote-opt.your-vote:hover { border-color: var(--green); color: #86efac; }
+.your-vote-badge { background: rgba(34,197,94,0.2); color: var(--green); font-size: 10px; padding: 2px 8px; border-radius: 10px; margin-left: 8px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
 .vote-btn { background: var(--accent); color: white; border: none; border-radius: 10px; padding: 14px 24px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.15s; width: 100%; }
 .vote-btn:hover { background: #4338ca; }
+.vote-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 .about-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
 .about-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
 .about-card .icon { font-size: 22px; margin-bottom: 8px; }
@@ -623,11 +627,9 @@ input:focus { border-color: var(--accent); }
 <!-- REFERENDUMS -->
 <section id="referendums">
   <div class="section-title">🗳️ Referendums</div>
-  <div class="section-sub">Browse and cast your vote on active referendums.</div>
-  <div class="cards-grid">
-    <div class="card" onclick="showRef('plastics')"><div class="card-tag">Environment <span class="pill pill-green">Active</span></div><h3>Ban Single-Use Plastics Nationwide</h3><p>Prohibit manufacture and sale of single-use plastic items including bags, straws, and cutlery.</p><div class="vote-bar-wrap"><div class="vote-label"><span>Yes — Full Ban</span><span>68%</span></div><div class="vote-bar"><div class="vote-fill" style="width:68%"></div></div></div><div class="card-meta">🗳 3,241 votes</div></div>
-    <div class="card" onclick="showRef('healthcare')"><div class="card-tag">Healthcare <span class="pill pill-green">Active</span></div><h3>Universal Basic Healthcare Access</h3><p>Guarantee healthcare access for all citizens regardless of income or employment status.</p><div class="vote-bar-wrap"><div class="vote-label"><span>Yes — Universal</span><span>74%</span></div><div class="vote-bar"><div class="vote-fill" style="width:74%"></div></div></div><div class="card-meta">🗳 8,102 votes</div></div>
-    <div class="card" onclick="showRef('wage')"><div class="card-tag">Economy <span class="pill pill-green">Active</span></div><h3>Minimum Wage Increase to $20/hr</h3><p>Raise the national minimum wage to $20 per hour, phased in over 3 years.</p><div class="vote-bar-wrap"><div class="vote-label"><span>Yes, immediately</span><span>52%</span></div><div class="vote-bar"><div class="vote-fill" style="width:52%"></div></div></div><div class="card-meta">🗳 5,890 votes</div></div>
+  <div class="section-sub">Browse and cast your vote on active referendums. <span style="color:var(--green);">● Live</span></div>
+  <div class="cards-grid" id="referendums-grid">
+    <!-- Cards rendered dynamically by renderReferendumCards() -->
   </div>
   <div id="ref-detail-area" style="margin-top:24px;display:none;"></div>
 </section>
@@ -882,8 +884,8 @@ input:focus { border-color: var(--accent); }
     GoogleAuthProvider, signInWithPopup, signOut, updateProfile
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
   import {
-    getFirestore, collection, addDoc, query, orderBy, limit,
-    onSnapshot, serverTimestamp, doc
+    getFirestore, collection, addDoc, setDoc, getDoc, query, orderBy, limit,
+    onSnapshot, serverTimestamp, doc, where
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -911,22 +913,28 @@ input:focus { border-color: var(--accent); }
   window.fbUpdateProfile = updateProfile;
   window.fbCollection = collection;
   window.fbAddDoc = addDoc;
+  window.fbSetDoc = setDoc;
+  window.fbGetDoc = getDoc;
   window.fbQuery = query;
   window.fbOrderBy = orderBy;
   window.fbLimit = limit;
   window.fbOnSnapshot = onSnapshot;
   window.fbServerTimestamp = serverTimestamp;
   window.fbDoc = doc;
+  window.fbWhere = where;
 
   // Listen for auth state changes
   onAuthStateChanged(auth, (user) => {
     window.currentUser = user;
     updateAuthUI(user);
+    // When user signs in, refresh their vote status on any open referendum
+    if (user) refreshCurrentRefDetail();
   });
 
   // Start real-time listeners as soon as Firebase is ready
   window.addEventListener('DOMContentLoaded', () => {
     startFeedListeners();
+    startReferendumListeners();
   });
 </script>
 
@@ -1080,7 +1088,8 @@ function runPendingAction() {
     show('share');
     setTimeout(() => document.getElementById('share-input')?.focus(), 200);
   } else if (pendingAction === 'vote') {
-    // Just close — user will click vote again
+    // User can now click vote again — refresh the detail view
+    refreshCurrentRefDetail();
   } else if (pendingAction === 'video') {
     // Same — user clicks join again
   }
@@ -1216,14 +1225,10 @@ const replyListeners = {};
 const replyCounts = {};
 
 // ============ SMART DING SYSTEM ============
-// Plays a subtle "pop" sound when a new post or reply arrives from another user.
-// Smart rules: never your own posts, never on first page-load, never if tab not visible,
-// only when on Opinions section, and can be muted via header toggle.
-
 let dingEnabled = (localStorage.getItem('owDingEnabled') !== 'false'); // default on
-let pageReady = false; // flips true ~2 seconds after load to avoid initial flood
-let seenOpinionIds = new Set(); // posts we've already seen — only NEW ones ding
-let seenReplyIds = {}; // map of postId -> Set of reply IDs already seen
+let pageReady = false;
+let seenOpinionIds = new Set();
+let seenReplyIds = {};
 let dingInitialized = false;
 let audioCtx = null;
 
@@ -1238,14 +1243,12 @@ function toggleSound() {
     btn.classList.toggle('muted', !dingEnabled);
     btn.title = dingEnabled ? 'Notifications on — tap to mute' : 'Notifications muted — tap to enable';
   }
-  // Test ding when turning on so user knows it works
   if (dingEnabled) {
-    pageReady = true; // force-allow this user-initiated test
+    pageReady = true;
     playDing();
   }
 }
 
-// Sync mute button state with stored preference on load
 function refreshSoundToggleUI() {
   const btn = document.getElementById('sound-toggle-btn');
   if (btn) {
@@ -1257,8 +1260,7 @@ function refreshSoundToggleUI() {
 function shouldDing() {
   if (!dingEnabled) return false;
   if (!pageReady) return false;
-  if (document.hidden) return false; // tab not visible
-  // Only when Opinions section is the active one
+  if (document.hidden) return false;
   const opinionsSection = document.getElementById('opinions');
   if (!opinionsSection || !opinionsSection.classList.contains('active')) return false;
   return true;
@@ -1266,19 +1268,15 @@ function shouldDing() {
 
 function playDing() {
   try {
-    // Lazily create audio context (browsers require it after a user interaction)
     if (!audioCtx) {
       const AC = window.AudioContext || window.webkitAudioContext;
       if (!AC) return;
       audioCtx = new AC();
     }
-    // Resume if suspended (some browsers suspend audio until next interaction)
     if (audioCtx.state === 'suspended') audioCtx.resume();
-
     const now = audioCtx.currentTime;
-    // Soft two-tone "pop" — first tone, slight pause, second tone
     const tones = [
-      { freq: 880, start: 0,    dur: 0.07, vol: 0.10 },
+      { freq: 880, start: 0, dur: 0.07, vol: 0.10 },
       { freq: 1320, start: 0.08, dur: 0.08, vol: 0.08 }
     ];
     tones.forEach(t => {
@@ -1294,13 +1292,9 @@ function playDing() {
       osc.start(now + t.start);
       osc.stop(now + t.start + t.dur);
     });
-  } catch (e) {
-    // Silently ignore — audio is non-critical
-    console.warn('Ding failed:', e);
-  }
+  } catch (e) { console.warn('Ding failed:', e); }
 }
 
-// Unlock audio after the first user interaction (required by browsers)
 function unlockAudioOnce() {
   if (dingInitialized) return;
   dingInitialized = true;
@@ -1316,13 +1310,10 @@ function unlockAudioOnce() {
 document.addEventListener('click', unlockAudioOnce);
 document.addEventListener('touchstart', unlockAudioOnce);
 
-
 function renderLivePosts(posts, type) {
-  // type: 'opinions' or 'shares'
   const containerId = (type === 'opinions') ? 'live-opinions' : 'live-shares';
   let container = document.getElementById(containerId);
   if (!container) {
-    // Insert live container at top of scroll area, before the seeded demo posts
     const scrollId = (type === 'opinions') ? 'feed-scroll' : 'share-scroll';
     const scroll = document.getElementById(scrollId);
     if (!scroll) return;
@@ -1343,42 +1334,33 @@ function renderLivePosts(posts, type) {
   const replyIcon = (type === 'opinions') ? '💬' : '🔁';
   const shareLabel = (type === 'opinions') ? '↗ Share' : '↗ Link';
   const isOpinion = (type === 'opinions');
-
-  // Track which post IDs are now in the feed
   const incomingIds = new Set(posts.map(p => p.id));
 
-  // SMART DING: detect newly arrived posts from OTHER users (only Opinions)
   if (isOpinion && shouldDing()) {
     const myUid = window.currentUser?.uid;
     const newFromOthers = posts.some(p => 
       !seenOpinionIds.has(p.id) && p.authorId && p.authorId !== myUid
     );
     if (newFromOthers && seenOpinionIds.size > 0) {
-      // size > 0 means we've already had a render — not the first load
       playDing();
     }
   }
-  // Update seen-set for opinions
   if (isOpinion) {
     posts.forEach(p => seenOpinionIds.add(p.id));
   }
 
-  // Remove any DOM nodes for posts that are no longer in the feed
   Array.from(container.children).forEach(node => {
     if (!incomingIds.has(node.dataset.postid)) {
       node.remove();
     }
   });
 
-  // Build/update posts in order (newest first — posts already arrive desc-sorted)
   posts.forEach((p, index) => {
     let postEl = container.querySelector(`[data-postid="${p.id}"]`);
     if (postEl) {
-      // Post already in DOM — just update the timestamp (everything else is static)
       const timeEl = postEl.querySelector('.feed-time');
       if (timeEl) timeEl.textContent = timeAgo(p.createdAt);
     } else {
-      // Build new post element
       const name = escapeHtml(p.authorName || 'OurWorld Citizen');
       const initials = getInitials(p.authorName || 'OW');
       const ava = p.authorPhoto ? `<img src="${escapeHtml(p.authorPhoto)}" alt="">` : initials;
@@ -1416,7 +1398,6 @@ function renderLivePosts(posts, type) {
         </div>
         ${repliesBlockHtml}
       `;
-      // Insert at the correct index position so order matches the posts array (newest first)
       const expectedNext = container.children[index];
       if (expectedNext) {
         container.insertBefore(postEl, expectedNext);
@@ -1426,7 +1407,6 @@ function renderLivePosts(posts, type) {
     }
   });
 
-  // Start a live reply listener for each opinion post (only once per post)
   if (isOpinion) {
     posts.forEach(p => {
       if (!replyListeners[p.id]) {
@@ -1453,14 +1433,12 @@ function startReplyListener(postId) {
     if (!seenReplyIds[postId]) seenReplyIds[postId] = new Set();
     replyListeners[postId] = window.fbOnSnapshot(q, snapshot => {
       const replies = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-      // SMART DING: detect newly arrived replies from OTHER users
       if (shouldDing()) {
         const myUid = window.currentUser?.uid;
         const newFromOthers = replies.some(r =>
           !seenReplyIds[postId].has(r.id) && r.authorId && r.authorId !== myUid
         );
         if (newFromOthers && seenReplyIds[postId].size > 0) {
-          // size > 0 means we've already seen replies before — not the first load
           playDing();
         }
       }
@@ -1477,10 +1455,7 @@ function startReplyListener(postId) {
 function renderReplies(postId, replies) {
   const list = document.getElementById('replies-list-' + postId);
   if (!list) return;
-  if (!replies.length) {
-    list.innerHTML = '';
-    return;
-  }
+  if (!replies.length) { list.innerHTML = ''; return; }
   list.innerHTML = replies.map(r => {
     const name = escapeHtml(r.authorName || 'OurWorld Citizen');
     const initials = getInitials(r.authorName || 'OW');
@@ -1531,7 +1506,6 @@ async function postReply(postId, btn) {
       }
     );
     textarea.value = '';
-    // Keep the compose box open after replying — feels more like a conversation
   } catch (err) {
     console.error('Failed to post reply:', err);
     alert('Could not reply right now. Please try again.');
@@ -1562,6 +1536,205 @@ async function saveShare(text) {
     createdAt: window.fbServerTimestamp()
   });
 }
+
+// ============ LIVE REFERENDUMS & VOTING ============
+// Each referendum has baseline numbers (kept for visual continuity on day 1)
+// and live vote counts from Firestore that get added on top.
+const refs = {
+  plastics: {
+    title: 'Should single-use plastics be banned nationwide?',
+    desc: 'A proposal to prohibit the manufacture and sale of single-use plastic items including bags, straws, and cutlery.',
+    cardTag: 'Environment',
+    options: ['Yes — Full National Ban', 'Partial Ban (cities only)', 'No — Industry Self-Regulation'],
+    // Baseline = visual starting point (% of starting voters, totals 100)
+    baseTotalVotes: 3241,
+    basePcts: [68, 22, 10]
+  },
+  healthcare: {
+    title: 'Should universal basic healthcare be guaranteed?',
+    desc: 'A proposal to guarantee healthcare access for all citizens regardless of income, employment, or immigration status.',
+    cardTag: 'Healthcare',
+    options: ['Yes — Full Universal Access', 'Yes — Means-tested access', 'No — Private market'],
+    baseTotalVotes: 8102,
+    basePcts: [74, 18, 8]
+  },
+  wage: {
+    title: 'Should the minimum wage increase to $20/hr?',
+    desc: 'A proposal to raise the national minimum wage to $20 per hour.',
+    cardTag: 'Economy',
+    options: ['Yes, immediately', 'Yes, phased over 3 years', 'No increase'],
+    baseTotalVotes: 5890,
+    basePcts: [52, 31, 17]
+  }
+};
+
+// Real-time vote tallies per referendum, populated by Firestore listeners.
+// Shape: { [refKey]: [count_for_opt0, count_for_opt1, count_for_opt2] }
+let liveVoteTallies = {};
+// The currently signed-in user's vote per referendum (refKey -> option index)
+let myVotes = {};
+// Which referendum is currently being viewed in detail (so we can refresh it)
+let currentRefKey = null;
+// Which option the user has selected in the detail view (before submitting)
+let selectedOpt = null;
+
+// Compute the combined baseline + live vote counts per option
+function computeRefCounts(refKey) {
+  const r = refs[refKey];
+  const baseCounts = r.basePcts.map(p => Math.round(r.baseTotalVotes * p / 100));
+  const liveCounts = liveVoteTallies[refKey] || r.options.map(() => 0);
+  const combined = baseCounts.map((b, i) => b + (liveCounts[i] || 0));
+  const total = combined.reduce((a, b) => a + b, 0);
+  const pcts = combined.map(c => total > 0 ? Math.round(c / total * 100) : 0);
+  return { combined, total, pcts };
+}
+
+function renderReferendumCards() {
+  const grid = document.getElementById('referendums-grid');
+  if (!grid) return;
+  const keys = Object.keys(refs);
+  grid.innerHTML = keys.map(key => {
+    const r = refs[key];
+    const { total, pcts } = computeRefCounts(key);
+    const leadingPct = pcts[0]; // first option's percentage on the card
+    const leadingLabel = r.options[0];
+    const voted = (myVotes[key] !== undefined);
+    const votedBadge = voted ? `<span class="pill pill-blue" style="margin-left:6px;">✓ You voted</span>` : '';
+    return `<div class="card" onclick="showRef('${key}')">
+      <div class="card-tag">${escapeHtml(r.cardTag)} <span class="pill pill-green">Active</span>${votedBadge}</div>
+      <h3>${escapeHtml(r.title.replace(/^Should /, '').replace(/\?$/, ''))}</h3>
+      <p>${escapeHtml(r.desc.substring(0, 110))}${r.desc.length > 110 ? '...' : ''}</p>
+      <div class="vote-bar-wrap">
+        <div class="vote-label"><span>${escapeHtml(leadingLabel)}</span><span>${leadingPct}%</span></div>
+        <div class="vote-bar"><div class="vote-fill" style="width:${leadingPct}%"></div></div>
+      </div>
+      <div class="card-meta">🗳 ${total.toLocaleString()} votes</div>
+    </div>`;
+  }).join('');
+}
+
+function startReferendumListeners() {
+  if (!window.fbDb) { setTimeout(startReferendumListeners, 200); return; }
+  Object.keys(refs).forEach(refKey => {
+    try {
+      // Listen to all votes for this referendum
+      const votesRef = window.fbCollection(window.fbDb, 'referendums', refKey, 'votes');
+      window.fbOnSnapshot(votesRef, snapshot => {
+        const tallies = refs[refKey].options.map(() => 0);
+        let myCurrentVote;
+        snapshot.forEach(d => {
+          const v = d.data();
+          if (typeof v.option === 'number' && v.option >= 0 && v.option < tallies.length) {
+            tallies[v.option]++;
+          }
+          // d.id is the voter's uid — check if this is the current user
+          if (window.currentUser && d.id === window.currentUser.uid) {
+            myCurrentVote = v.option;
+          }
+        });
+        liveVoteTallies[refKey] = tallies;
+        if (myCurrentVote !== undefined) {
+          myVotes[refKey] = myCurrentVote;
+        } else {
+          delete myVotes[refKey];
+        }
+        renderReferendumCards();
+        // If user is currently viewing this referendum's detail, refresh that too
+        if (currentRefKey === refKey) renderRefDetail(refKey);
+      }, err => console.error('Votes listener error for', refKey, err));
+    } catch (e) { console.error('Could not start votes listener for', refKey, e); }
+  });
+}
+
+function showRef(key) {
+  currentRefKey = key;
+  selectedOpt = null;
+  const area = document.getElementById('ref-detail-area');
+  area.style.display = 'block';
+  renderRefDetail(key);
+  area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function renderRefDetail(key) {
+  const r = refs[key];
+  const area = document.getElementById('ref-detail-area');
+  if (!area) return;
+  const { combined, total, pcts } = computeRefCounts(key);
+  const userVoted = (myVotes[key] !== undefined);
+  const userChoice = myVotes[key];
+
+  const optionsHtml = r.options.map((o, i) => {
+    const isMyVote = (userVoted && i === userChoice);
+    const isSelected = (!userVoted && selectedOpt === i);
+    const cls = isMyVote ? 'vote-opt your-vote' : (isSelected ? 'vote-opt selected' : 'vote-opt');
+    const onclick = userVoted ? '' : `onclick="selectOpt(this, ${i})"`;
+    const badge = isMyVote ? '<span class="your-vote-badge">Your vote</span>' : '';
+    return `<div class="${cls}" ${onclick}>
+      <span>${escapeHtml(o)}${badge}</span>
+      <span style="font-size:12px;color:var(--muted)">${pcts[i]}% · ${combined[i].toLocaleString()}</span>
+    </div>`;
+  }).join('');
+
+  let footerHtml;
+  if (userVoted) {
+    footerHtml = `<div style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);color:#86efac;border-radius:10px;padding:12px 16px;font-size:13px;text-align:center;">✅ Your vote has been counted. Thank you for participating in direct democracy. Results above update live.</div>`;
+  } else {
+    footerHtml = `<button class="vote-btn" id="cast-vote-btn" onclick="castVote()">Submit Vote ➜</button>`;
+  }
+
+  area.innerHTML = `<div class="ref-detail">
+    <h2>${escapeHtml(r.title)}</h2>
+    <p>${escapeHtml(r.desc)}</p>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+      <span style="color:var(--green);">● Live</span> · ${total.toLocaleString()} total votes
+    </div>
+    <div class="vote-options">${optionsHtml}</div>
+    ${footerHtml}
+  </div>`;
+}
+
+function refreshCurrentRefDetail() {
+  if (currentRefKey) renderRefDetail(currentRefKey);
+}
+
+function selectOpt(el, i) {
+  if (myVotes[currentRefKey] !== undefined) return; // already voted, can't change
+  document.querySelectorAll('.vote-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedOpt = i;
+}
+
+async function castVote() {
+  if (selectedOpt === null) { alert('Please select an option first.'); return; }
+  if (!requireAuth('vote', 'Sign in to cast your vote — one citizen, one vote.')) return;
+  if (myVotes[currentRefKey] !== undefined) {
+    alert('You\'ve already voted on this referendum.');
+    return;
+  }
+  const btn = document.getElementById('cast-vote-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Casting vote...'; }
+  const user = window.currentUser;
+  try {
+    // Vote doc ID = user UID. This enforces one vote per user automatically.
+    const voteDocRef = window.fbDoc(window.fbDb, 'referendums', currentRefKey, 'votes', user.uid);
+    await window.fbSetDoc(voteDocRef, {
+      option: selectedOpt,
+      voterName: user.displayName || (user.email ? user.email.split('@')[0] : 'Citizen'),
+      createdAt: window.fbServerTimestamp()
+    });
+    // Listener will pick this up and refresh the UI — no manual re-render needed
+    // But provide instant feedback by setting locally:
+    myVotes[currentRefKey] = selectedOpt;
+    renderRefDetail(currentRefKey);
+    renderReferendumCards();
+  } catch (err) {
+    console.error('Failed to cast vote:', err);
+    alert('Could not submit your vote right now. Please try again.');
+    if (btn) { btn.disabled = false; btn.textContent = 'Submit Vote ➜'; }
+  }
+}
+
+// ============ MODERATION ============
 const BLOCKLIST = ['fuck','f**k','fuk','fuuk','shit','sh1t','sht','cunt','c**t','bitch','b1tch','bastard','asshole','arsehole','a**hole','dick','d1ck','cock','c0ck','pussy','nigger','nigga','n1gger','faggot','fag','f4ggot','retard','ret4rd','whore','wh0re','slut','sl*t','twat','prick','wanker','w4nker','bollocks','motherfucker','mofo','kill yourself','kys','go die','rape','r4pe','nazi','n4zi','hitler'];
 function isBlocked(t){const l=t.toLowerCase();return BLOCKLIST.some(w=>l.includes(w));}
 let toastTimer=null;
@@ -1572,7 +1745,18 @@ function closeMore(){document.getElementById('more-overlay').classList.remove('o
 document.querySelectorAll('.drop-toggle').forEach(btn=>{btn.addEventListener('click',function(e){e.stopPropagation();const d=this.closest('.nav-dropdown'),isOpen=d.classList.contains('open');document.querySelectorAll('.nav-dropdown').forEach(x=>x.classList.remove('open'));if(!isOpen)d.classList.add('open');});});
 document.addEventListener('click',()=>document.querySelectorAll('.nav-dropdown').forEach(d=>d.classList.remove('open')));
 let chatHistory=[],chatOpen=false;
-function show(id,el){document.querySelectorAll('section,.hero').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));if(el)el.classList.add('active');const rda=document.getElementById('ref-detail-area');if(rda)rda.style.display='none';window.scrollTo(0,0);return false;}
+function show(id,el){
+  document.querySelectorAll('section,.hero').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  if(el)el.classList.add('active');
+  const rda=document.getElementById('ref-detail-area');
+  if(rda)rda.style.display='none';
+  // Clear current referendum tracking when leaving referendums section
+  if (id !== 'referendums') currentRefKey = null;
+  window.scrollTo(0,0);
+  return false;
+}
 
 function launchVideo(id){
   if (!requireAuth('video', 'Sign in to join the OurWorld video chat — keeps the community safe.')) return;
@@ -1582,16 +1766,6 @@ function launchVideoMobile(e){
   e.preventDefault();
   if (!requireAuth('video', 'Sign in to join the OurWorld video chat — keeps the community safe.')) return;
   window.open('https://ourworld.daily.co/ourworld-chat', '_blank');
-}
-
-const refs={plastics:{title:'Should single-use plastics be banned nationwide?',desc:'A proposal to prohibit the manufacture and sale of single-use plastic items including bags, straws, and cutlery.',options:['Yes — Full National Ban','Partial Ban (cities only)','No — Industry Self-Regulation'],pcts:[68,22,10]},healthcare:{title:'Should universal basic healthcare be guaranteed?',desc:'A proposal to guarantee healthcare access for all citizens regardless of income, employment, or immigration status.',options:['Yes — Full Universal Access','Yes — Means-tested access','No — Private market'],pcts:[74,18,8]},wage:{title:'Should the minimum wage increase to $20/hr?',desc:'A proposal to raise the national minimum wage to $20 per hour.',options:['Yes, immediately','Yes, phased over 3 years','No increase'],pcts:[52,31,17]}};
-let selectedOpt=null;
-function showRef(key){const r=refs[key],area=document.getElementById('ref-detail-area');selectedOpt=null;area.style.display='block';area.innerHTML='<div class="ref-detail"><h2>'+r.title+'</h2><p>'+r.desc+'</p><div class="vote-options">'+r.options.map((o,i)=>'<div class="vote-opt" onclick="selectOpt(this,'+i+')">'+o+'<span style="font-size:12px;color:var(--muted)">'+r.pcts[i]+'%</span></div>').join('')+'</div><button class="vote-btn" onclick="castVote()">Submit Vote ➜</button></div>';area.scrollIntoView({behavior:'smooth',block:'start'});}
-function selectOpt(el,i){document.querySelectorAll('.vote-opt').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');selectedOpt=i;}
-function castVote(){
-  if(selectedOpt===null){alert('Please select an option first.');return;}
-  if (!requireAuth('vote', 'Sign in to cast your vote — one citizen, one vote.')) return;
-  document.getElementById('ref-detail-area').innerHTML='<div class="ref-detail" style="text-align:center;padding:40px"><div style="font-size:40px;margin-bottom:12px">✅</div><h2 style="margin-bottom:8px">Vote Submitted!</h2><p>Your voice has been counted. Thank you for participating in direct democracy.</p></div>';
 }
 
 function toggleChat(){chatOpen=!chatOpen;document.getElementById('chat-window').classList.toggle('open',chatOpen);if(chatOpen)document.getElementById('chat-input').focus();}
@@ -1615,7 +1789,6 @@ function postToFeed(){
     .then(() => {
       input.value='';
       document.getElementById('feed-char').textContent='280 characters remaining';
-      // The live listener will render the new post automatically
     })
     .catch(err => {
       console.error('Failed to save opinion:', err);
@@ -1658,11 +1831,11 @@ document.querySelectorAll('.news-tab,.studio-filter').forEach(tab=>{tab.addEvent
 let recognition=null,micActive=false;
 function toggleMic(){if(!('webkitSpeechRecognition'in window)&&!('SpeechRecognition'in window)){alert('Sorry, your browser does not support voice input. Try Chrome.');return;}if(micActive){recognition.stop();return;}const SR=window.SpeechRecognition||window.webkitSpeechRecognition;recognition=new SR();recognition.lang='en-US';recognition.interimResults=false;recognition.onstart=()=>{micActive=true;document.getElementById('chat-mic').classList.add('listening');};recognition.onresult=e=>{document.getElementById('chat-input').value=e.results[0][0].transcript;};recognition.onend=()=>{micActive=false;document.getElementById('chat-mic').classList.remove('listening');};recognition.onerror=()=>{micActive=false;document.getElementById('chat-mic').classList.remove('listening');};recognition.start();}
 
-// Run prompt injection on load in case user not signed in yet when auth state arrives late
 document.addEventListener('DOMContentLoaded', () => {
+  // Render referendum cards from data
+  renderReferendumCards();
   // Wait a beat for Firebase to settle
   setTimeout(() => { if (!window.currentUser) injectSignInPrompts(); }, 300);
-  // Sync the ding toggle button with stored preference
   refreshSoundToggleUI();
 });
 
