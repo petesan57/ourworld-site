@@ -333,6 +333,45 @@ section.active { display: block; }
 .signin-prompt-btn { background: var(--accent); color: white; border: none; border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
 .signin-prompt-btn:hover { background: #4338ca; }
 
+/* ========================= YOUTUBE SHORTS ========================= */
+.yt-loading { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 40px 24px; text-align: center; color: var(--muted); font-size: 14px; }
+.yt-loading .yt-spinner { display: inline-block; width: 32px; height: 32px; border: 3px solid var(--bg3); border-top-color: var(--accent); border-radius: 50%; animation: ytspin 0.8s linear infinite; margin-bottom: 12px; }
+@keyframes ytspin { to { transform: rotate(360deg); } }
+.yt-error { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.3); border-radius: 12px; padding: 16px 18px; color: #fca5a5; font-size: 13px; line-height: 1.6; }
+.yt-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 0; overflow: hidden; cursor: pointer; transition: border-color 0.2s, transform 0.15s; display: flex; flex-direction: column; }
+.yt-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.yt-card:active { transform: scale(0.98); }
+.yt-thumb-wrap { position: relative; background: var(--bg3); aspect-ratio: 16/9; overflow: hidden; }
+.yt-thumb-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.yt-play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.15); transition: background 0.2s; }
+.yt-card:hover .yt-play-overlay { background: rgba(0,0,0,0.35); }
+.yt-play-icon { width: 50px; height: 50px; border-radius: 50%; background: rgba(79,70,229,0.95); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(0,0,0,0.4); }
+.yt-play-icon::after { content: ''; border-left: 14px solid white; border-top: 9px solid transparent; border-bottom: 9px solid transparent; margin-left: 4px; }
+.yt-duration { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.85); color: white; font-size: 11px; padding: 2px 6px; border-radius: 4px; font-weight: 500; }
+.yt-info { padding: 12px 14px 14px; }
+.yt-tag { font-size: 10px; color: var(--accent2); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; font-weight: 600; }
+.yt-title { font-size: 14px; font-weight: 600; line-height: 1.4; margin-bottom: 8px; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.yt-meta-row { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted); }
+.yt-channel { color: var(--accent2); font-weight: 500; }
+.yt-dot { color: var(--border); }
+
+/* YouTube video player modal */
+.yt-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 10001; align-items: center; justify-content: center; padding: 20px; }
+.yt-modal.open { display: flex; }
+.yt-modal-inner { width: 100%; max-width: 900px; position: relative; }
+.yt-modal-close { position: absolute; top: -40px; right: 0; background: none; border: none; color: white; font-size: 28px; cursor: pointer; padding: 4px 12px; border-radius: 6px; transition: background 0.15s; }
+.yt-modal-close:hover { background: rgba(255,255,255,0.1); }
+.yt-modal-player { position: relative; padding-bottom: 56.25%; height: 0; background: black; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+.yt-modal-player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+.yt-modal-title { color: white; font-size: 14px; margin-top: 16px; text-align: center; padding: 0 20px; line-height: 1.5; }
+.yt-modal-meta { color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 6px; text-align: center; }
+
+@media (max-width: 768px) {
+  .yt-modal { padding: 12px; }
+  .yt-modal-close { top: -34px; font-size: 24px; }
+}
+/* ======================= END YOUTUBE SHORTS ======================= */
+
 #mod-toast { position: fixed; bottom: calc(var(--bottom-nav-height) + 16px); left: 50%; transform: translateX(-50%); background: #3b1a1a; border: 1px solid var(--red); color: #fca5a5; border-radius: 10px; padding: 12px 20px; font-size: 13px; font-weight: 500; z-index: 99999; display: none; text-align: center; max-width: 320px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
 #mod-toast.show { display: block; }
 #welcome-toast { position: fixed; bottom: calc(var(--bottom-nav-height) + 16px); left: 50%; transform: translateX(-50%); background: rgba(34,197,94,0.15); border: 1px solid var(--green); color: #86efac; border-radius: 10px; padding: 12px 20px; font-size: 13px; font-weight: 500; z-index: 99999; display: none; text-align: center; max-width: 320px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
@@ -440,6 +479,16 @@ input:focus { border-color: var(--accent); }
     <div class="auth-toggle">
       <span id="auth-toggle-text">Already have an account? </span><a onclick="toggleAuthMode()" id="auth-toggle-link">Sign in</a>
     </div>
+  </div>
+</div>
+
+<!-- YOUTUBE VIDEO MODAL -->
+<div class="yt-modal" id="yt-modal" onclick="closeYtModalIfBackdrop(event)">
+  <div class="yt-modal-inner">
+    <button class="yt-modal-close" onclick="closeYtModal()" title="Close">&times;</button>
+    <div class="yt-modal-player" id="yt-modal-player"></div>
+    <div class="yt-modal-title" id="yt-modal-title"></div>
+    <div class="yt-modal-meta" id="yt-modal-meta"></div>
   </div>
 </div>
 
@@ -726,15 +775,19 @@ input:focus { border-color: var(--accent); }
   </div>
 </section>
 
-<!-- SHORTS -->
+<!-- SHORTS — now powered by live YouTube Data API v3 -->
 <section id="shorts">
   <div class="section-title">🎥 Shorts</div>
-  <div class="section-sub">Quick video updates from citizens and activists around the globe.</div>
-  <div class="news-tabs"><div class="news-tab active">🔥 Trending</div><div class="news-tab">🌍 Climate</div><div class="news-tab">⚖️ Justice</div><div class="news-tab">💰 Economy</div><div class="news-tab">🗳️ Democracy</div></div>
-  <div class="cards-grid">
-    <div class="card" style="cursor:default;"><div style="background:var(--bg3);border-radius:10px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;margin-bottom:12px;border:1px solid var(--border);position:relative;overflow:hidden;"><div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a1a3e,#0f0f1a);"></div><div style="position:relative;text-align:center;"><div style="font-size:36px;margin-bottom:6px;">▶️</div><div style="font-size:11px;color:var(--muted);">1:42</div></div><div style="position:absolute;top:8px;left:8px;background:rgba(239,68,68,0.9);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;">LIVE</div></div><div class="card-tag">🌿 Environment <span class="pill pill-green">48.2k views</span></div><h3>Amazon deforestation — filmed from the ground, right now</h3><div class="card-meta">📍 Pará, Brazil · <strong style="color:var(--accent2);">Tupã Juruna</strong></div></div>
-    <div class="card" style="cursor:default;"><div style="background:var(--bg3);border-radius:10px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;margin-bottom:12px;border:1px solid var(--border);position:relative;overflow:hidden;"><div style="position:absolute;inset:0;background:linear-gradient(135deg,#1e1a0f,#0f0f1a);"></div><div style="position:relative;text-align:center;"><div style="font-size:36px;margin-bottom:6px;">▶️</div><div style="font-size:11px;color:var(--muted);">4:07</div></div></div><div class="card-tag">⚖️ Justice <span class="pill pill-amber">22.1k views</span></div><h3>Why I'm suing my government — and how OurWorld helped</h3><div class="card-meta">📍 Accra, Ghana · <strong style="color:var(--accent2);">Kwame Asante</strong></div></div>
-    <div class="card" style="cursor:default;"><div style="background:var(--bg3);border-radius:10px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;margin-bottom:12px;border:1px solid var(--border);position:relative;overflow:hidden;"><div style="position:absolute;inset:0;background:linear-gradient(135deg,#0f1a0f,#080810);"></div><div style="position:relative;text-align:center;"><div style="font-size:36px;margin-bottom:6px;">▶️</div><div style="font-size:11px;color:var(--muted);">5:44</div></div></div><div class="card-tag">🌿 Climate <span class="pill pill-amber">54.9k views</span></div><h3>Our village flooded for the 4th year running</h3><div class="card-meta">📍 Sylhet, Bangladesh · <strong style="color:var(--accent2);">Fatema Begum</strong></div></div>
+  <div class="section-sub">Live citizen journalism from around the world — powered by YouTube. <span style="color:var(--green);">● Live</span></div>
+  <div class="news-tabs" id="yt-tabs">
+    <div class="news-tab active" data-yt-query="citizen journalism world news" data-yt-label="🔥 Trending">🔥 Trending</div>
+    <div class="news-tab" data-yt-query="climate change activism protest" data-yt-label="🌍 Climate">🌍 Climate</div>
+    <div class="news-tab" data-yt-query="human rights protest justice" data-yt-label="⚖️ Justice">⚖️ Justice</div>
+    <div class="news-tab" data-yt-query="economic inequality workers rights" data-yt-label="💰 Economy">💰 Economy</div>
+    <div class="news-tab" data-yt-query="democracy election voting citizens" data-yt-label="🗳️ Democracy">🗳️ Democracy</div>
+  </div>
+  <div class="cards-grid" id="yt-results">
+    <div class="yt-loading"><div class="yt-spinner"></div><div>Loading live videos from YouTube...</div></div>
   </div>
 </section>
 
@@ -1164,18 +1217,14 @@ function requireAuth(action, message) {
 }
 
 // ============ FIRESTORE: REAL-TIME FEEDS ============
-// Posts save to the database and appear instantly on every device watching.
-
 let opinionsUnsub = null;
 let sharesUnsub = null;
 
 function startFeedListeners() {
   if (!window.fbDb) {
-    // Firebase not loaded yet, retry shortly
     setTimeout(startFeedListeners, 200);
     return;
   }
-  // OPINIONS listener
   try {
     const q = window.fbQuery(
       window.fbCollection(window.fbDb, 'opinions'),
@@ -1187,7 +1236,6 @@ function startFeedListeners() {
     }, err => console.error('Opinions listener error:', err));
   } catch (e) { console.error('Could not start opinions listener:', e); }
 
-  // SHARES listener
   try {
     const q = window.fbQuery(
       window.fbCollection(window.fbDb, 'shares'),
@@ -1219,13 +1267,11 @@ function timeAgo(ts) {
   return date.toLocaleDateString();
 }
 
-// Track which posts already have active reply listeners (avoid duplicates)
 const replyListeners = {};
-// Cache reply counts so the button label is up to date
 const replyCounts = {};
 
 // ============ SMART DING SYSTEM ============
-let dingEnabled = (localStorage.getItem('owDingEnabled') !== 'false'); // default on
+let dingEnabled = (localStorage.getItem('owDingEnabled') !== 'false');
 let pageReady = false;
 let seenOpinionIds = new Set();
 let seenReplyIds = {};
@@ -1338,7 +1384,7 @@ function renderLivePosts(posts, type) {
 
   if (isOpinion && shouldDing()) {
     const myUid = window.currentUser?.uid;
-    const newFromOthers = posts.some(p => 
+    const newFromOthers = posts.some(p =>
       !seenOpinionIds.has(p.id) && p.authorId && p.authorId !== myUid
     );
     if (newFromOthers && seenOpinionIds.size > 0) {
@@ -1538,15 +1584,12 @@ async function saveShare(text) {
 }
 
 // ============ LIVE REFERENDUMS & VOTING ============
-// Each referendum has baseline numbers (kept for visual continuity on day 1)
-// and live vote counts from Firestore that get added on top.
 const refs = {
   plastics: {
     title: 'Should single-use plastics be banned nationwide?',
     desc: 'A proposal to prohibit the manufacture and sale of single-use plastic items including bags, straws, and cutlery.',
     cardTag: 'Environment',
     options: ['Yes — Full National Ban', 'Partial Ban (cities only)', 'No — Industry Self-Regulation'],
-    // Baseline = visual starting point (% of starting voters, totals 100)
     baseTotalVotes: 3241,
     basePcts: [68, 22, 10]
   },
@@ -1568,17 +1611,11 @@ const refs = {
   }
 };
 
-// Real-time vote tallies per referendum, populated by Firestore listeners.
-// Shape: { [refKey]: [count_for_opt0, count_for_opt1, count_for_opt2] }
 let liveVoteTallies = {};
-// The currently signed-in user's vote per referendum (refKey -> option index)
 let myVotes = {};
-// Which referendum is currently being viewed in detail (so we can refresh it)
 let currentRefKey = null;
-// Which option the user has selected in the detail view (before submitting)
 let selectedOpt = null;
 
-// Compute the combined baseline + live vote counts per option
 function computeRefCounts(refKey) {
   const r = refs[refKey];
   const baseCounts = r.basePcts.map(p => Math.round(r.baseTotalVotes * p / 100));
@@ -1596,7 +1633,7 @@ function renderReferendumCards() {
   grid.innerHTML = keys.map(key => {
     const r = refs[key];
     const { total, pcts } = computeRefCounts(key);
-    const leadingPct = pcts[0]; // first option's percentage on the card
+    const leadingPct = pcts[0];
     const leadingLabel = r.options[0];
     const voted = (myVotes[key] !== undefined);
     const votedBadge = voted ? `<span class="pill pill-blue" style="margin-left:6px;">✓ You voted</span>` : '';
@@ -1617,7 +1654,6 @@ function startReferendumListeners() {
   if (!window.fbDb) { setTimeout(startReferendumListeners, 200); return; }
   Object.keys(refs).forEach(refKey => {
     try {
-      // Listen to all votes for this referendum
       const votesRef = window.fbCollection(window.fbDb, 'referendums', refKey, 'votes');
       window.fbOnSnapshot(votesRef, snapshot => {
         const tallies = refs[refKey].options.map(() => 0);
@@ -1627,7 +1663,6 @@ function startReferendumListeners() {
           if (typeof v.option === 'number' && v.option >= 0 && v.option < tallies.length) {
             tallies[v.option]++;
           }
-          // d.id is the voter's uid — check if this is the current user
           if (window.currentUser && d.id === window.currentUser.uid) {
             myCurrentVote = v.option;
           }
@@ -1639,7 +1674,6 @@ function startReferendumListeners() {
           delete myVotes[refKey];
         }
         renderReferendumCards();
-        // If user is currently viewing this referendum's detail, refresh that too
         if (currentRefKey === refKey) renderRefDetail(refKey);
       }, err => console.error('Votes listener error for', refKey, err));
     } catch (e) { console.error('Could not start votes listener for', refKey, e); }
@@ -1698,7 +1732,7 @@ function refreshCurrentRefDetail() {
 }
 
 function selectOpt(el, i) {
-  if (myVotes[currentRefKey] !== undefined) return; // already voted, can't change
+  if (myVotes[currentRefKey] !== undefined) return;
   document.querySelectorAll('.vote-opt').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
   selectedOpt = i;
@@ -1715,15 +1749,12 @@ async function castVote() {
   if (btn) { btn.disabled = true; btn.textContent = 'Casting vote...'; }
   const user = window.currentUser;
   try {
-    // Vote doc ID = user UID. This enforces one vote per user automatically.
     const voteDocRef = window.fbDoc(window.fbDb, 'referendums', currentRefKey, 'votes', user.uid);
     await window.fbSetDoc(voteDocRef, {
       option: selectedOpt,
       voterName: user.displayName || (user.email ? user.email.split('@')[0] : 'Citizen'),
       createdAt: window.fbServerTimestamp()
     });
-    // Listener will pick this up and refresh the UI — no manual re-render needed
-    // But provide instant feedback by setting locally:
     myVotes[currentRefKey] = selectedOpt;
     renderRefDetail(currentRefKey);
     renderReferendumCards();
@@ -1733,6 +1764,195 @@ async function castVote() {
     if (btn) { btn.disabled = false; btn.textContent = 'Submit Vote ➜'; }
   }
 }
+
+// ============================================================
+// ============ YOUTUBE DATA API v3 INTEGRATION ===============
+// ============================================================
+// Live citizen journalism videos in the Shorts section.
+// Free quota: 10,000 units/day. Each search = 100 units.
+// With 1-hour caching, ONE search serves all visitors for that hour.
+// Per-keyword cache means each tab counts separately, but only once per hour.
+
+const YT_API_KEY = 'AIzaSyB47BDZ3i4tN8_KjVxn0HEiFqzMm1Jhgpc';
+const YT_CACHE_DURATION_MS = 60 * 60 * 1000; // 1 hour
+const YT_RESULTS_PER_SEARCH = 12; // ask YouTube for 12 videos per tab
+
+function getYtCache(query) {
+  try {
+    const raw = localStorage.getItem('yt_cache_' + query);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (Date.now() - parsed.timestamp > YT_CACHE_DURATION_MS) {
+      localStorage.removeItem('yt_cache_' + query);
+      return null;
+    }
+    return parsed.videos;
+  } catch (e) { return null; }
+}
+
+function setYtCache(query, videos) {
+  try {
+    localStorage.setItem('yt_cache_' + query, JSON.stringify({
+      timestamp: Date.now(),
+      videos: videos
+    }));
+  } catch (e) { /* localStorage full or unavailable — fail silently */ }
+}
+
+async function fetchYouTubeVideos(query) {
+  // Try cache first
+  const cached = getYtCache(query);
+  if (cached) return cached;
+
+  // Build YouTube search URL
+  // type=video → only videos (not channels/playlists)
+  // safeSearch=strict → filters explicit content
+  // relevanceLanguage=en → prefer English results for the global audience
+  // order=relevance → most relevant first
+  const url = 'https://www.googleapis.com/youtube/v3/search'
+    + '?part=snippet'
+    + '&type=video'
+    + '&safeSearch=strict'
+    + '&relevanceLanguage=en'
+    + '&order=relevance'
+    + '&maxResults=' + YT_RESULTS_PER_SEARCH
+    + '&q=' + encodeURIComponent(query)
+    + '&key=' + YT_API_KEY;
+
+  const res = await fetch(url);
+  if (!res.ok) {
+    const errorBody = await res.text();
+    console.error('YouTube API error:', res.status, errorBody);
+    throw new Error('YouTube API request failed: ' + res.status);
+  }
+  const data = await res.json();
+  if (!data.items || !data.items.length) {
+    return [];
+  }
+  const videos = data.items.map(item => ({
+    id: item.id.videoId,
+    title: item.snippet.title,
+    channel: item.snippet.channelTitle,
+    publishedAt: item.snippet.publishedAt,
+    thumbnail: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url || item.snippet.thumbnails.default?.url,
+    description: item.snippet.description
+  }));
+  setYtCache(query, videos);
+  return videos;
+}
+
+function decodeHtmlEntities(s) {
+  // YouTube returns titles with HTML entities (&amp; &#39; etc) — decode them
+  const txt = document.createElement('textarea');
+  txt.innerHTML = s;
+  return txt.value;
+}
+
+function timeAgoFromDate(isoString) {
+  const date = new Date(isoString);
+  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (seconds < 60) return 'just now';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return minutes + ' min ago';
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return hours + 'h ago';
+  const days = Math.floor(hours / 24);
+  if (days < 7) return days + 'd ago';
+  const weeks = Math.floor(days / 7);
+  if (weeks < 5) return weeks + 'w ago';
+  const months = Math.floor(days / 30);
+  if (months < 12) return months + 'mo ago';
+  const years = Math.floor(days / 365);
+  return years + 'y ago';
+}
+
+function renderYouTubeVideos(videos, label) {
+  const grid = document.getElementById('yt-results');
+  if (!grid) return;
+  if (!videos.length) {
+    grid.innerHTML = '<div class="yt-error">No videos found for this topic. Try another tab.</div>';
+    return;
+  }
+  grid.innerHTML = videos.map(v => {
+    const title = escapeHtml(decodeHtmlEntities(v.title));
+    const channel = escapeHtml(decodeHtmlEntities(v.channel));
+    const when = timeAgoFromDate(v.publishedAt);
+    const thumb = escapeHtml(v.thumbnail || '');
+    return `<div class="yt-card" onclick="openYtModal('${v.id}', ${JSON.stringify(title).replace(/"/g,'&quot;')}, ${JSON.stringify(channel).replace(/"/g,'&quot;')}, '${when}')">
+      <div class="yt-thumb-wrap">
+        <img src="${thumb}" alt="" loading="lazy">
+        <div class="yt-play-overlay"><div class="yt-play-icon"></div></div>
+      </div>
+      <div class="yt-info">
+        <div class="yt-tag">${escapeHtml(label)}</div>
+        <div class="yt-title">${title}</div>
+        <div class="yt-meta-row">
+          <span class="yt-channel">${channel}</span>
+          <span class="yt-dot">•</span>
+          <span>${when}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function loadYouTubeTab(query, label) {
+  const grid = document.getElementById('yt-results');
+  if (!grid) return;
+  // Show loading state immediately (unless cached — then it's instant)
+  const cached = getYtCache(query);
+  if (!cached) {
+    grid.innerHTML = '<div class="yt-loading"><div class="yt-spinner"></div><div>Loading live videos from YouTube...</div></div>';
+  }
+  try {
+    const videos = await fetchYouTubeVideos(query);
+    renderYouTubeVideos(videos, label);
+  } catch (err) {
+    console.error('Failed to load YouTube videos:', err);
+    grid.innerHTML = `<div class="yt-error">
+      ⚠️ Couldn't load videos right now. This usually means:
+      <ul style="margin:10px 0 0 20px;line-height:1.7;">
+        <li>The YouTube API key restrictions are still propagating (wait 5 mins after creating)</li>
+        <li>Your daily quota is used up (resets at midnight Pacific time)</li>
+        <li>Internet connection is offline</li>
+      </ul>
+      <div style="margin-top:10px;">Please try again shortly.</div>
+    </div>`;
+  }
+}
+
+// ============ YOUTUBE VIDEO MODAL ============
+function openYtModal(videoId, title, channel, when) {
+  const modal = document.getElementById('yt-modal');
+  const player = document.getElementById('yt-modal-player');
+  const titleEl = document.getElementById('yt-modal-title');
+  const metaEl = document.getElementById('yt-modal-meta');
+  // Use autoplay; rel=0 to limit related videos to same channel; modestbranding hides YT logo
+  player.innerHTML = `<iframe src="https://www.youtube.com/embed/${encodeURIComponent(videoId)}?autoplay=1&rel=0&modestbranding=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  titleEl.textContent = title;
+  metaEl.textContent = channel + ' • ' + when;
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeYtModal() {
+  const modal = document.getElementById('yt-modal');
+  const player = document.getElementById('yt-modal-player');
+  player.innerHTML = ''; // Critical: removes iframe and STOPS the video
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeYtModalIfBackdrop(e) {
+  if (e.target.id === 'yt-modal') closeYtModal();
+}
+
+// Close modal on Escape key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('yt-modal')?.classList.contains('open')) {
+    closeYtModal();
+  }
+});
 
 // ============ MODERATION ============
 const BLOCKLIST = ['fuck','f**k','fuk','fuuk','shit','sh1t','sht','cunt','c**t','bitch','b1tch','bastard','asshole','arsehole','a**hole','dick','d1ck','cock','c0ck','pussy','nigger','nigga','n1gger','faggot','fag','f4ggot','retard','ret4rd','whore','wh0re','slut','sl*t','twat','prick','wanker','w4nker','bollocks','motherfucker','mofo','kill yourself','kys','go die','rape','r4pe','nazi','n4zi','hitler'];
@@ -1745,6 +1965,9 @@ function closeMore(){document.getElementById('more-overlay').classList.remove('o
 document.querySelectorAll('.drop-toggle').forEach(btn=>{btn.addEventListener('click',function(e){e.stopPropagation();const d=this.closest('.nav-dropdown'),isOpen=d.classList.contains('open');document.querySelectorAll('.nav-dropdown').forEach(x=>x.classList.remove('open'));if(!isOpen)d.classList.add('open');});});
 document.addEventListener('click',()=>document.querySelectorAll('.nav-dropdown').forEach(d=>d.classList.remove('open')));
 let chatHistory=[],chatOpen=false;
+
+let ytFirstLoad = true; // load YouTube only on first visit to Shorts section
+
 function show(id,el){
   document.querySelectorAll('section,.hero').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -1752,8 +1975,17 @@ function show(id,el){
   if(el)el.classList.add('active');
   const rda=document.getElementById('ref-detail-area');
   if(rda)rda.style.display='none';
-  // Clear current referendum tracking when leaving referendums section
   if (id !== 'referendums') currentRefKey = null;
+
+  // When user first opens Shorts, load the default tab (Trending)
+  if (id === 'shorts' && ytFirstLoad) {
+    ytFirstLoad = false;
+    const firstTab = document.querySelector('#yt-tabs .news-tab.active');
+    if (firstTab) {
+      loadYouTubeTab(firstTab.dataset.ytQuery, firstTab.dataset.ytLabel);
+    }
+  }
+
   window.scrollTo(0,0);
   return false;
 }
@@ -1827,14 +2059,29 @@ function postShare(){
 }
 
 function toggleLike(btn){const span=btn.querySelector('span'),count=parseInt(span.textContent);if(btn.classList.contains('liked')){btn.classList.remove('liked');span.textContent=count-1;}else{btn.classList.add('liked');span.textContent=count+1;}}
-document.querySelectorAll('.news-tab,.studio-filter').forEach(tab=>{tab.addEventListener('click',()=>{tab.closest('.news-tabs,.studio-filters').querySelectorAll('div').forEach(t=>t.classList.remove('active'));tab.classList.add('active');});});
+
+// YouTube tabs — switch query when clicked (only inside #yt-tabs)
+document.querySelectorAll('#yt-tabs .news-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('#yt-tabs .news-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    loadYouTubeTab(tab.dataset.ytQuery, tab.dataset.ytLabel);
+  });
+});
+
+// Other tab groups (innovators, studio etc) — original generic behaviour
+document.querySelectorAll('.news-tabs:not(#yt-tabs) .news-tab, .studio-filters .studio-filter').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    tab.closest('.news-tabs,.studio-filters').querySelectorAll('div').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+
 let recognition=null,micActive=false;
 function toggleMic(){if(!('webkitSpeechRecognition'in window)&&!('SpeechRecognition'in window)){alert('Sorry, your browser does not support voice input. Try Chrome.');return;}if(micActive){recognition.stop();return;}const SR=window.SpeechRecognition||window.webkitSpeechRecognition;recognition=new SR();recognition.lang='en-US';recognition.interimResults=false;recognition.onstart=()=>{micActive=true;document.getElementById('chat-mic').classList.add('listening');};recognition.onresult=e=>{document.getElementById('chat-input').value=e.results[0][0].transcript;};recognition.onend=()=>{micActive=false;document.getElementById('chat-mic').classList.remove('listening');};recognition.onerror=()=>{micActive=false;document.getElementById('chat-mic').classList.remove('listening');};recognition.start();}
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Render referendum cards from data
   renderReferendumCards();
-  // Wait a beat for Firebase to settle
   setTimeout(() => { if (!window.currentUser) injectSignInPrompts(); }, 300);
   refreshSoundToggleUI();
 });
