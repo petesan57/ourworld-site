@@ -370,6 +370,41 @@ section.active { display: block; }
   .yt-modal { padding: 12px; }
   .yt-modal-close { top: -34px; font-size: 24px; }
 }
+/* Random! and SEARCH special tabs */
+.news-tab.yt-special {
+  font-weight: 700;
+  background: rgba(79,70,229,0.18);
+  border: 1px solid var(--accent);
+  color: var(--accent3);
+}
+.news-tab.yt-special:hover { background: rgba(79,70,229,0.32); }
+.news-tab.yt-special.active {
+  background: var(--accent);
+  color: #fff;
+}
+/* Search panel */
+.yt-search-panel { display: none; margin: 4px 0 18px; }
+.yt-search-panel.show { display: block; }
+.yt-search-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.yt-search-row input {
+  flex: 1; min-width: 200px;
+  background: var(--bg2); border: 1px solid var(--border);
+  color: var(--text); font-family: inherit; font-size: 15px;
+  padding: 12px 14px; border-radius: 8px;
+}
+.yt-search-row input:focus { outline: none; border-color: var(--accent); }
+.yt-search-row button {
+  background: var(--accent); color: #fff; border: none;
+  font-family: inherit; font-size: 15px; font-weight: 600;
+  padding: 12px 20px; border-radius: 8px; cursor: pointer;
+  white-space: nowrap; transition: background 0.15s;
+}
+.yt-search-row button:hover { background: var(--accent2); }
+.yt-search-back {
+  display: inline-block; margin-top: 10px;
+  color: var(--muted); font-size: 13px; text-decoration: none;
+}
+.yt-search-back:hover { color: var(--accent2); }
 /* ======================= END YOUTUBE SHORTS ======================= */
 
 #mod-toast { position: fixed; bottom: calc(var(--bottom-nav-height) + 16px); left: 50%; transform: translateX(-50%); background: #3b1a1a; border: 1px solid var(--red); color: #fca5a5; border-radius: 10px; padding: 12px 20px; font-size: 13px; font-weight: 500; z-index: 99999; display: none; text-align: center; max-width: 320px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
@@ -785,6 +820,15 @@ input:focus { border-color: var(--accent); }
     <div class="news-tab" data-yt-query="human rights protest justice" data-yt-label="⚖️ Justice">⚖️ Justice</div>
     <div class="news-tab" data-yt-query="economic inequality workers rights" data-yt-label="💰 Economy">💰 Economy</div>
     <div class="news-tab" data-yt-query="democracy election voting citizens" data-yt-label="🗳️ Democracy">🗳️ Democracy</div>
+    <div class="news-tab yt-special" id="yt-random-tab">🎲 Random!</div>
+    <div class="news-tab yt-special" id="yt-search-tab">🔍 SEARCH</div>
+  </div>
+  <div class="yt-search-panel" id="yt-search-panel">
+    <div class="yt-search-row">
+      <input type="text" id="yt-search-input" placeholder="Search for anything on YouTube…" autocomplete="off">
+      <button id="yt-search-btn">Search YouTube</button>
+    </div>
+    <a href="#" class="yt-search-back" id="yt-search-back">← back to categories</a>
   </div>
   <div class="cards-grid" id="yt-results">
     <div class="yt-loading"><div class="yt-spinner"></div><div>Loading live videos from YouTube...</div></div>
@@ -2061,12 +2105,73 @@ function postShare(){
 function toggleLike(btn){const span=btn.querySelector('span'),count=parseInt(span.textContent);if(btn.classList.contains('liked')){btn.classList.remove('liked');span.textContent=count-1;}else{btn.classList.add('liked');span.textContent=count+1;}}
 
 // YouTube tabs — switch query when clicked (only inside #yt-tabs)
-document.querySelectorAll('#yt-tabs .news-tab').forEach(tab=>{
+// Pool of fun keywords for the Random! tab — picks a fresh one each click
+const YT_RANDOM_POOL = [
+  'fails', 'stand-up comedy', 'funny animals', 'bloopers',
+  'pranks', 'comedy sketches', 'try not to laugh', 'funny moments'
+];
+
+function setYtActiveTab(tabEl) {
+  document.querySelectorAll('#yt-tabs .news-tab').forEach(t=>t.classList.remove('active'));
+  if (tabEl) tabEl.classList.add('active');
+}
+
+function showYtSearchPanel(show) {
+  const panel = document.getElementById('yt-search-panel');
+  if (panel) panel.classList.toggle('show', show);
+}
+
+// Regular category tabs
+document.querySelectorAll('#yt-tabs .news-tab:not(.yt-special)').forEach(tab=>{
   tab.addEventListener('click',()=>{
-    document.querySelectorAll('#yt-tabs .news-tab').forEach(t=>t.classList.remove('active'));
-    tab.classList.add('active');
+    setYtActiveTab(tab);
+    showYtSearchPanel(false);
     loadYouTubeTab(tab.dataset.ytQuery, tab.dataset.ytLabel);
   });
+});
+
+// Random! tab — picks a random keyword from the pool every click
+const ytRandomTab = document.getElementById('yt-random-tab');
+if (ytRandomTab) {
+  ytRandomTab.addEventListener('click',()=>{
+    setYtActiveTab(ytRandomTab);
+    showYtSearchPanel(false);
+    const keyword = YT_RANDOM_POOL[Math.floor(Math.random() * YT_RANDOM_POOL.length)];
+    loadYouTubeTab(keyword, '🎲 ' + keyword);
+  });
+}
+
+// SEARCH tab — swaps the video grid for a search input
+const ytSearchTab = document.getElementById('yt-search-tab');
+const ytSearchInput = document.getElementById('yt-search-input');
+const ytSearchBtn = document.getElementById('yt-search-btn');
+const ytSearchBack = document.getElementById('yt-search-back');
+
+function runYtSearch() {
+  const term = (ytSearchInput.value || '').trim();
+  if (!term) { ytSearchInput.focus(); return; }
+  loadYouTubeTab(term, '🔍 ' + term);
+}
+
+if (ytSearchTab) {
+  ytSearchTab.addEventListener('click',()=>{
+    setYtActiveTab(ytSearchTab);
+    showYtSearchPanel(true);
+    const grid = document.getElementById('yt-results');
+    if (grid) grid.innerHTML = '<div class="yt-loading"><div>Type something above and hit Search YouTube.</div></div>';
+    if (ytSearchInput) ytSearchInput.focus();
+  });
+}
+if (ytSearchBtn) ytSearchBtn.addEventListener('click', runYtSearch);
+if (ytSearchInput) ytSearchInput.addEventListener('keydown', e=>{ if (e.key === 'Enter') runYtSearch(); });
+if (ytSearchBack) ytSearchBack.addEventListener('click', e=>{
+  e.preventDefault();
+  showYtSearchPanel(false);
+  const firstTab = document.querySelector('#yt-tabs .news-tab:not(.yt-special)');
+  if (firstTab) {
+    setYtActiveTab(firstTab);
+    loadYouTubeTab(firstTab.dataset.ytQuery, firstTab.dataset.ytLabel);
+  }
 });
 
 // Other tab groups (innovators, studio etc) — original generic behaviour
