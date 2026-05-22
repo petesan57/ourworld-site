@@ -1819,7 +1819,8 @@ async function castVote() {
 
 const YT_API_KEY = 'AIzaSyB47BDZ3i4tN8_KjVxn0HEiFqzMm1Jhgpc';
 const YT_CACHE_DURATION_MS = 60 * 60 * 1000; // 1 hour
-const YT_RESULTS_PER_SEARCH = 12; // ask YouTube for 12 videos per tab
+const YT_RESULTS_PER_SEARCH = 18; // ask for 18 — a buffer, since some get filtered out
+const YT_RESULTS_TO_SHOW = 12;    // display up to 12 embeddable videos
 
 function getYtCache(query) {
   try {
@@ -1873,7 +1874,7 @@ async function fetchYouTubeVideos(query) {
   if (!data.items || !data.items.length) {
     return [];
   }
-  const videos = data.items.map(item => ({
+  let videos = data.items.map(item => ({
     id: item.id.videoId,
     title: item.snippet.title,
     channel: item.snippet.channelTitle,
@@ -1881,6 +1882,32 @@ async function fetchYouTubeVideos(query) {
     thumbnail: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url || item.snippet.thumbnails.default?.url,
     description: item.snippet.description
   }));
+
+  // Second call: check status.embeddable so we never show a video
+  // the uploader has blocked from playing inside our player.
+  try {
+    const ids = videos.map(v => v.id).join(',');
+    const statusUrl = 'https://www.googleapis.com/youtube/v3/videos'
+      + '?part=status'
+      + '&id=' + encodeURIComponent(ids)
+      + '&key=' + YT_API_KEY;
+    const statusRes = await fetch(statusUrl);
+    if (statusRes.ok) {
+      const statusData = await statusRes.json();
+      const embeddable = {};
+      (statusData.items || []).forEach(item => {
+        embeddable[item.id] = item.status && item.status.embeddable;
+      });
+      // Keep only videos confirmed embeddable
+      videos = videos.filter(v => embeddable[v.id]);
+    }
+    // If the status call fails, we keep the unfiltered list rather than show nothing
+  } catch (e) {
+    console.error('Embeddable check failed — showing unfiltered results:', e);
+  }
+
+  // Trim to the display count
+  videos = videos.slice(0, YT_RESULTS_TO_SHOW);
   setYtCache(query, videos);
   return videos;
 }
