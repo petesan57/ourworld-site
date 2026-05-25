@@ -279,9 +279,8 @@ section.active { display: block; }
 .feed-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .feed-live { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--green); font-weight: 500; }
 .feed-live .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 1.5s infinite; }
-.sound-toggle { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; width: 32px; height: 32px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; color: var(--accent2); font-family: inherit; transition: all 0.15s; margin-left: 8px; padding: 0; }
-.sound-toggle:hover { border-color: var(--accent); background: var(--bg2); }
-.sound-toggle.muted { color: var(--muted); }
+.feed-action.discuss-live { color: var(--accent2); }
+.feed-action.discuss-live:hover { color: var(--accent3); }
 .feed-compose { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 16px; position: relative; }
 .feed-compose textarea { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px; color: var(--text); font-size: 14px; font-family: inherit; resize: none; outline: none; height: 80px; transition: border-color 0.15s; }
 .feed-compose textarea::placeholder { color: var(--muted); }
@@ -767,7 +766,6 @@ input:focus { border-color: var(--accent); }
     <div><div class="section-title">💬 Opinions</div><div class="section-sub">Share your views with citizens worldwide.</div></div>
     <div style="display:flex;align-items:center;">
       <div class="feed-live"><div class="live-dot"></div> Live</div>
-      <button class="sound-toggle" id="sound-toggle-btn" onclick="toggleSound()" title="Toggle notification sound">🔔</button>
     </div>
   </div>
   <div class="feed-compose" id="feed-compose-area">
@@ -775,11 +773,11 @@ input:focus { border-color: var(--accent); }
     <div class="feed-compose-footer"><span id="feed-char">280 characters remaining</span><button class="feed-post-btn" onclick="postToFeed()">Post ➜</button></div>
   </div>
   <div class="feed-scroll" id="feed-scroll">
-    <div class="feed-post"><div class="feed-tag-pill">🌍 Climate</div><div class="feed-post-top"><div class="feed-ava">AM</div><div class="feed-meta"><div class="feed-name">Amara Diallo</div><div class="feed-location">🇸🇳 Dakar, Senegal</div></div><div class="feed-time">2m ago</div></div><div class="feed-body">Africa bears the heaviest cost of climate change yet contributes the least emissions. Direct democracy must give developing nations equal weight in global environmental decisions.</div><div class="feed-actions"><button class="feed-action" onclick="toggleLike(this)">♥ <span>47</span></button><button class="feed-action">💬 <span>12 replies</span></button><button class="feed-action">↗ Share</button></div></div>
-    <div class="feed-post"><div class="feed-tag-pill">⚖️ Democracy</div><div class="feed-post-top"><div class="feed-ava">LK</div><div class="feed-meta"><div class="feed-name">Lena Kovář</div><div class="feed-location">🇨🇿 Prague, Czech Republic</div></div><div class="feed-time">11m ago</div></div><div class="feed-body">Politicians promise change every election cycle and deliver almost none of it. OurWorld's model — citizens voting directly on issues — is the only logical evolution of democracy.</div><div class="feed-actions"><button class="feed-action" onclick="toggleLike(this)">♥ <span>89</span></button><button class="feed-action">💬 <span>34 replies</span></button><button class="feed-action">↗ Share</button></div></div>
-    <div class="feed-post"><div class="feed-tag-pill">🏥 Healthcare</div><div class="feed-post-top"><div class="feed-ava">JO</div><div class="feed-meta"><div class="feed-name">James Okonkwo</div><div class="feed-location">🇳🇬 Lagos, Nigeria</div></div><div class="feed-time">28m ago</div></div><div class="feed-body">Universal healthcare is not a luxury — it is a right. No child should die from a preventable illness because their family cannot afford a doctor.</div><div class="feed-actions"><button class="feed-action" onclick="toggleLike(this)">♥ <span>134</span></button><button class="feed-action">💬 <span>56 replies</span></button><button class="feed-action">↗ Share</button></div></div>
-    <div class="feed-post"><div class="feed-tag-pill">💰 Economy</div><div class="feed-post-top"><div class="feed-ava">SP</div><div class="feed-meta"><div class="feed-name">Sofia Papadaki</div><div class="feed-location">🇬🇷 Athens, Greece</div></div><div class="feed-time">45m ago</div></div><div class="feed-body">Greece lived through austerity imposed by institutions nobody voted for. Light capitalism and heavy democracy is exactly the balance we need.</div><div class="feed-actions"><button class="feed-action" onclick="toggleLike(this)">♥ <span>62</span></button><button class="feed-action">💬 <span>19 replies</span></button><button class="feed-action">↗ Share</button></div></div>
-    <div class="feed-post"><div class="feed-tag-pill">✊ Justice</div><div class="feed-post-top"><div class="feed-ava">RB</div><div class="feed-meta"><div class="feed-name">Rosa Benitez</div><div class="feed-location">🇲🇽 Mexico City, Mexico</div></div><div class="feed-time">2h ago</div></div><div class="feed-body">Corruption thrives in the dark. Transparency, citizen oversight, and zero tolerance — these aren't ideals, they are minimum requirements for a functioning society.</div><div class="feed-actions"><button class="feed-action" onclick="toggleLike(this)">♥ <span>201</span></button><button class="feed-action">💬 <span>88 replies</span></button><button class="feed-action">↗ Share</button></div></div>
+    <div class="feed-post"><div class="feed-tag-pill">🌍 Climate</div><div class="feed-post-top"><div class="feed-ava">AM</div><div class="feed-meta"><div class="feed-name">Amara Diallo</div><div class="feed-location">🇸🇳 Dakar, Senegal</div></div><div class="feed-time">2m ago</div></div><div class="feed-body">Africa bears the heaviest cost of climate change yet contributes the least emissions. Direct democracy must give developing nations equal weight in global environmental decisions.</div><div class="feed-actions"><button class="feed-action" onclick="toggleLike(this)">♥ <span>47</span></button><button class="feed-action">💬 <span>12 replies</span></button><button class="feed-action discuss-live" onclick="discussLive()">🎥 Discuss live</button><button class="feed-action">↗ Share</button></div></div>
+    <div class="feed-post"><div class="feed-tag-pill">⚖️ Democracy</div><div class="feed-post-top"><div class="feed-ava">LK</div><div class="feed-meta"><div class="feed-name">Lena Kovář</div><div class="feed-location">🇨🇿 Prague, Czech Republic</div></div><div class="feed-time">11m ago</div></div><div class="feed-body">Politicians promise change every election cycle and deliver almost none of it. OurWorld's model — citizens voting directly on issues — is the only logical evolution of democracy.</div><div class="feed-actions"><button class="feed-action" onclick="toggleLike(this)">♥ <span>89</span></button><button class="feed-action">💬 <span>34 replies</span></button><button class="feed-action discuss-live" onclick="discussLive()">🎥 Discuss live</button><button class="feed-action">↗ Share</button></div></div>
+    <div class="feed-post"><div class="feed-tag-pill">🏥 Healthcare</div><div class="feed-post-top"><div class="feed-ava">JO</div><div class="feed-meta"><div class="feed-name">James Okonkwo</div><div class="feed-location">🇳🇬 Lagos, Nigeria</div></div><div class="feed-time">28m ago</div></div><div class="feed-body">Universal healthcare is not a luxury — it is a right. No child should die from a preventable illness because their family cannot afford a doctor.</div><div class="feed-actions"><button class="feed-action" onclick="toggleLike(this)">♥ <span>134</span></button><button class="feed-action">💬 <span>56 replies</span></button><button class="feed-action discuss-live" onclick="discussLive()">🎥 Discuss live</button><button class="feed-action">↗ Share</button></div></div>
+    <div class="feed-post"><div class="feed-tag-pill">💰 Economy</div><div class="feed-post-top"><div class="feed-ava">SP</div><div class="feed-meta"><div class="feed-name">Sofia Papadaki</div><div class="feed-location">🇬🇷 Athens, Greece</div></div><div class="feed-time">45m ago</div></div><div class="feed-body">Greece lived through austerity imposed by institutions nobody voted for. Light capitalism and heavy democracy is exactly the balance we need.</div><div class="feed-actions"><button class="feed-action" onclick="toggleLike(this)">♥ <span>62</span></button><button class="feed-action">💬 <span>19 replies</span></button><button class="feed-action discuss-live" onclick="discussLive()">🎥 Discuss live</button><button class="feed-action">↗ Share</button></div></div>
+    <div class="feed-post"><div class="feed-tag-pill">✊ Justice</div><div class="feed-post-top"><div class="feed-ava">RB</div><div class="feed-meta"><div class="feed-name">Rosa Benitez</div><div class="feed-location">🇲🇽 Mexico City, Mexico</div></div><div class="feed-time">2h ago</div></div><div class="feed-body">Corruption thrives in the dark. Transparency, citizen oversight, and zero tolerance — these aren't ideals, they are minimum requirements for a functioning society.</div><div class="feed-actions"><button class="feed-action" onclick="toggleLike(this)">♥ <span>201</span></button><button class="feed-action">💬 <span>88 replies</span></button><button class="feed-action discuss-live" onclick="discussLive()">🎥 Discuss live</button><button class="feed-action">↗ Share</button></div></div>
   </div>
 </section>
 
@@ -1314,91 +1312,17 @@ function timeAgo(ts) {
 const replyListeners = {};
 const replyCounts = {};
 
-// ============ SMART DING SYSTEM ============
-let dingEnabled = (localStorage.getItem('owDingEnabled') !== 'false');
-let pageReady = false;
+// ============ POST TRACKING ============
 let seenOpinionIds = new Set();
 let seenReplyIds = {};
-let dingInitialized = false;
-let audioCtx = null;
 
-setTimeout(() => { pageReady = true; }, 2000);
-
-function toggleSound() {
-  dingEnabled = !dingEnabled;
-  localStorage.setItem('owDingEnabled', dingEnabled ? 'true' : 'false');
-  const btn = document.getElementById('sound-toggle-btn');
-  if (btn) {
-    btn.textContent = dingEnabled ? '🔔' : '🔕';
-    btn.classList.toggle('muted', !dingEnabled);
-    btn.title = dingEnabled ? 'Notifications on — tap to mute' : 'Notifications muted — tap to enable';
-  }
-  if (dingEnabled) {
-    pageReady = true;
-    playDing();
-  }
+// ============ DISCUSS LIVE ============
+// Opens the shared OurWorld video room so citizens can take a discussion
+// face-to-face. Reuses the existing Daily.co room. Desktop and mobile both
+// open it in a new tab to avoid Safari iframe restrictions.
+function discussLive() {
+  window.open('https://ourworld.daily.co/ourworld-chat', '_blank');
 }
-
-function refreshSoundToggleUI() {
-  const btn = document.getElementById('sound-toggle-btn');
-  if (btn) {
-    btn.textContent = dingEnabled ? '🔔' : '🔕';
-    btn.classList.toggle('muted', !dingEnabled);
-  }
-}
-
-function shouldDing() {
-  if (!dingEnabled) return false;
-  if (!pageReady) return false;
-  if (document.hidden) return false;
-  const opinionsSection = document.getElementById('opinions');
-  if (!opinionsSection || !opinionsSection.classList.contains('active')) return false;
-  return true;
-}
-
-function playDing() {
-  try {
-    if (!audioCtx) {
-      const AC = window.AudioContext || window.webkitAudioContext;
-      if (!AC) return;
-      audioCtx = new AC();
-    }
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    const now = audioCtx.currentTime;
-    const tones = [
-      { freq: 880, start: 0, dur: 0.07, vol: 0.10 },
-      { freq: 1320, start: 0.08, dur: 0.08, vol: 0.08 }
-    ];
-    tones.forEach(t => {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.value = t.freq;
-      gain.gain.setValueAtTime(0, now + t.start);
-      gain.gain.linearRampToValueAtTime(t.vol, now + t.start + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + t.start + t.dur);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start(now + t.start);
-      osc.stop(now + t.start + t.dur);
-    });
-  } catch (e) { console.warn('Ding failed:', e); }
-}
-
-function unlockAudioOnce() {
-  if (dingInitialized) return;
-  dingInitialized = true;
-  try {
-    const AC = window.AudioContext || window.webkitAudioContext;
-    if (!AC) return;
-    audioCtx = new AC();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-  } catch (e) {}
-  document.removeEventListener('click', unlockAudioOnce);
-  document.removeEventListener('touchstart', unlockAudioOnce);
-}
-document.addEventListener('click', unlockAudioOnce);
-document.addEventListener('touchstart', unlockAudioOnce);
 
 function renderLivePosts(posts, type) {
   const containerId = (type === 'opinions') ? 'live-opinions' : 'live-shares';
@@ -1426,15 +1350,6 @@ function renderLivePosts(posts, type) {
   const isOpinion = (type === 'opinions');
   const incomingIds = new Set(posts.map(p => p.id));
 
-  if (isOpinion && shouldDing()) {
-    const myUid = window.currentUser?.uid;
-    const newFromOthers = posts.some(p =>
-      !seenOpinionIds.has(p.id) && p.authorId && p.authorId !== myUid
-    );
-    if (newFromOthers && seenOpinionIds.size > 0) {
-      playDing();
-    }
-  }
   if (isOpinion) {
     posts.forEach(p => seenOpinionIds.add(p.id));
   }
@@ -1466,6 +1381,7 @@ function renderLivePosts(posts, type) {
         </div>` : '';
       const replyBtnAction = isOpinion ? `onclick="toggleReplyBox('${p.id}')"` : '';
       const replyCount = replyCounts[p.id] || 0;
+      const discussBtnHtml = isOpinion ? `<button class="feed-action discuss-live" onclick="discussLive()">🎥 Discuss live</button>` : '';
       postEl = document.createElement('div');
       postEl.className = 'feed-post';
       postEl.dataset.live = '1';
@@ -1485,6 +1401,7 @@ function renderLivePosts(posts, type) {
           <button class="feed-action" onclick="toggleLike(this)">♥ <span>0</span></button>
           <button class="feed-action reply-toggle" ${replyBtnAction} id="reply-btn-${p.id}">${replyIcon} <span>${replyCount} ${replyLabel}</span></button>
           <button class="feed-action">${shareLabel}</button>
+          ${discussBtnHtml}
         </div>
         ${repliesBlockHtml}
       `;
@@ -1523,15 +1440,6 @@ function startReplyListener(postId) {
     if (!seenReplyIds[postId]) seenReplyIds[postId] = new Set();
     replyListeners[postId] = window.fbOnSnapshot(q, snapshot => {
       const replies = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-      if (shouldDing()) {
-        const myUid = window.currentUser?.uid;
-        const newFromOthers = replies.some(r =>
-          !seenReplyIds[postId].has(r.id) && r.authorId && r.authorId !== myUid
-        );
-        if (newFromOthers && seenReplyIds[postId].size > 0) {
-          playDing();
-        }
-      }
       replies.forEach(r => seenReplyIds[postId].add(r.id));
       replyCounts[postId] = replies.length;
       renderReplies(postId, replies);
@@ -2215,7 +2123,6 @@ function toggleMic(){if(!('webkitSpeechRecognition'in window)&&!('SpeechRecognit
 document.addEventListener('DOMContentLoaded', () => {
   renderReferendumCards();
   setTimeout(() => { if (!window.currentUser) injectSignInPrompts(); }, 300);
-  refreshSoundToggleUI();
 });
 
 // Allow Enter to submit auth form
