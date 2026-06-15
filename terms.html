@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms of Service · OurWorld</title>
+<meta name="description" content="The terms under which you can use OurWorld.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080810; --bg2: #0f0f1a; --bg3: #1a1a2e;
+    --accent: #4f46e5; --accent2: #818cf8; --accent3: #c7d2fe;
+    --text: #e0e7ff; --muted: #6b7280; --border: #2e2e4a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.7; min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent2); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  header.bar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(8,8,16,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; height: 64px;
+  }
+  .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: var(--text); }
+  .logo span { color: var(--accent2); }
+  .back { font-size: 14px; color: var(--muted); }
+  .back:hover { color: var(--accent2); text-decoration: none; }
+
+  main { max-width: 760px; margin: 0 auto; padding: 56px 24px 96px; }
+  .eyebrow {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent2);
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(32px, 6vw, 46px); line-height: 1.1; margin-bottom: 16px;
+  }
+  .updated { color: var(--muted); font-size: 14px; margin-bottom: 12px; }
+  .lede { color: var(--accent3); font-size: 17px; margin-bottom: 40px; }
+
+  section { margin-bottom: 38px; }
+  h2 {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 21px;
+    margin-bottom: 14px; padding-top: 8px; display: flex; gap: 12px; align-items: baseline;
+  }
+  h2 .n { color: var(--accent2); font-size: 15px; font-weight: 800; min-width: 24px; }
+  p { margin-bottom: 14px; color: var(--text); }
+  ul { margin: 0 0 14px 22px; }
+  li { margin-bottom: 9px; }
+  strong { color: #fff; font-weight: 600; }
+
+  .note {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent2); border-radius: 10px;
+    padding: 16px 18px; margin: 8px 0 14px; font-size: 15px; color: var(--accent3);
+  }
+
+  footer {
+    border-top: 1px solid var(--border); padding: 32px 24px;
+    text-align: center; color: var(--muted); font-size: 14px;
+  }
+  footer a { margin: 0 10px; }
+  .toc { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 40px; }
+  .toc a {
+    font-size: 13px; color: var(--muted); border: 1px solid var(--border);
+    padding: 5px 12px; border-radius: 20px;
+  }
+  .toc a:hover { color: var(--accent2); border-color: var(--accent2); text-decoration: none; }
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="logo" href="index.html">Our<span>World</span></a>
+  <a class="back" href="index.html">← Back to OurWorld</a>
+</header>
+
+<main>
+  <div class="eyebrow">Legal</div>
+  <h1>Terms of Service</h1>
+  <div class="updated">Last updated: 15 June 2026</div>
+  <p class="lede">These terms set out the deal between you and OurWorld. We’ve kept them plain and honest — the same way we try to run the platform.</p>
+
+  <div class="toc">
+    <a href="#agreement">Agreement</a>
+    <a href="#who">Who can use it</a>
+    <a href="#what">What OurWorld is</a>
+    <a href="#account">Your account</a>
+    <a href="#content">Your content</a>
+    <a href="#conduct">Acceptable use</a>
+    <a href="#moderation">Moderation</a>
+    <a href="#ai">AI assistant</a>
+    <a href="#third">Third-party services</a>
+    <a href="#availability">Availability</a>
+    <a href="#liability">Liability</a>
+    <a href="#changes">Changes</a>
+    <a href="#law">Governing law</a>
+    <a href="#contact">Contact</a>
+  </div>
+
+  <section id="agreement">
+    <h2><span class="n">1</span> Agreement to these terms</h2>
+    <p>By using OurWorld, you agree to these Terms of Service. If you don’t agree with them, please don’t use the platform. These terms work alongside our <a href="privacy.html">Privacy Policy</a>, which explains how we handle your information.</p>
+    <p>OurWorld is a trading name of <strong>Peter Sanford</strong>, an individual based in the United Kingdom.</p>
+  </section>
+
+  <section id="who">
+    <h2><span class="n">2</span> Who can use OurWorld</h2>
+    <p>You must be <strong>16 or older</strong> to use OurWorld. By using it, you confirm that you meet this age requirement and that any information you give us when signing up is accurate.</p>
+  </section>
+
+  <section id="what">
+    <h2><span class="n">3</span> What OurWorld is</h2>
+    <p>OurWorld is a platform for civic discussion and community participation — sharing opinions, discussing issues, and taking part in referendum-style votes on questions of public interest.</p>
+    <div class="note">
+      <strong>Important:</strong> Referendums and votes on OurWorld are expressions of public and community opinion only. They are <strong>not</strong> official government elections or referendums, they are not run on behalf of any public authority, and they carry no legal or governmental force. OurWorld is independent and is not affiliated with any government, political party, or public body.
+    </div>
+  </section>
+
+  <section id="account">
+    <h2><span class="n">4</span> Your account</h2>
+    <p>You’re responsible for keeping your account secure and for activity that happens under it. Please use accurate information, keep one account per person, and let us know if you think someone else has accessed your account.</p>
+  </section>
+
+  <section id="content">
+    <h2><span class="n">5</span> Your content</h2>
+    <p>You keep ownership of everything you post on OurWorld. By posting, you give us a non-exclusive, royalty-free licence to host, store and display your content within the platform so the service can work — for example, showing your opinion in the public feed.</p>
+    <p>You’re responsible for what you post, and you confirm you have the right to post it. Remember that opinions, shares and replies are <strong>public</strong> and visible to anyone who uses OurWorld.</p>
+  </section>
+
+  <section id="conduct">
+    <h2><span class="n">6</span> Acceptable use</h2>
+    <p>OurWorld is built for honest, good-faith debate. You agree <strong>not</strong> to:</p>
+    <ul>
+      <li>post unlawful, hateful, harassing, threatening or abusive content;</li>
+      <li>make accusations against people without evidence;</li>
+      <li>post other people’s private or personal information without permission;</li>
+      <li>impersonate anyone, or misrepresent who you are;</li>
+      <li>spam, flood the platform, or post misleading content to manipulate opinion;</li>
+      <li>attempt to cast more than one vote per referendum, or otherwise manipulate voting;</li>
+      <li>try to break, probe or interfere with the platform’s security or other people’s use of it.</li>
+    </ul>
+    <p>OurWorld uses automated word-filtering to screen out clearly abusive content, but this doesn’t replace your responsibility to follow these rules.</p>
+  </section>
+
+  <section id="moderation">
+    <h2><span class="n">7</span> Moderation and removal</h2>
+    <p>We may remove content, or suspend or close accounts, that breach these terms or that we reasonably believe are harmful to the community. Wherever practical we’ll act fairly and proportionately.</p>
+  </section>
+
+  <section id="ai">
+    <h2><span class="n">8</span> The AI assistant</h2>
+    <p>OurWorld includes an AI chat assistant. Its responses are generated automatically and <strong>may be inaccurate, incomplete or out of date</strong>. They are for general information only and are not legal, financial, medical or professional advice. Always check anything important with a qualified source before relying on it.</p>
+  </section>
+
+  <section id="third">
+    <h2><span class="n">9</span> Third-party services</h2>
+    <p>OurWorld uses other services to provide certain features — including live video discussion (Daily.co) and embedded short videos (YouTube). Your use of those features may also be governed by the relevant provider’s own terms, and we aren’t responsible for third-party content or services.</p>
+  </section>
+
+  <section id="availability">
+    <h2><span class="n">10</span> Availability of the service</h2>
+    <p>OurWorld is an independent, self-funded project and is provided “as is” and “as available”. We don’t guarantee that it will always be available, uninterrupted, or free of errors, and we may change, suspend or discontinue features at any time.</p>
+  </section>
+
+  <section id="liability">
+    <h2><span class="n">11</span> Limitation of liability</h2>
+    <p>To the fullest extent permitted by law, OurWorld is not liable for any indirect or consequential loss, or for loss arising from your use of (or inability to use) the platform, from content posted by other users, or from third-party services. Nothing in these terms limits any liability that cannot be limited under UK law.</p>
+  </section>
+
+  <section id="changes">
+    <h2><span class="n">12</span> Changes to the service and these terms</h2>
+    <p>We may update these terms from time to time. When we do, we’ll change the “Last updated” date above. By continuing to use OurWorld after a change, you accept the updated terms.</p>
+  </section>
+
+  <section id="law">
+    <h2><span class="n">13</span> Governing law</h2>
+    <p>These terms are governed by the laws of <strong>England and Wales</strong>, and any disputes will be subject to the exclusive jurisdiction of the courts of England and Wales.</p>
+  </section>
+
+  <section id="contact">
+    <h2><span class="n">14</span> Contact us</h2>
+    <p>Questions about these terms? Email <a href="mailto:petesanford.com@gmail.com">petesanford.com@gmail.com</a>.</p>
+  </section>
+</main>
+
+<footer>
+  <div>
+    <a href="index.html">OurWorld</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Service</a>
+  </div>
+  <p style="margin-top:12px;">© 2026 OurWorld. A platform for people who want change.</p>
+</footer>
+</body>
+</html>
