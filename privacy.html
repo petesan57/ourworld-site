@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy · OurWorld</title>
+<meta name="description" content="How OurWorld collects, uses, and protects your personal information.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080810; --bg2: #0f0f1a; --bg3: #1a1a2e;
+    --accent: #4f46e5; --accent2: #818cf8; --accent3: #c7d2fe;
+    --text: #e0e7ff; --muted: #6b7280; --border: #2e2e4a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.7; min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent2); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Top bar */
+  header.bar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(8,8,16,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; height: 64px;
+  }
+  .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: var(--text); }
+  .logo span { color: var(--accent2); }
+  .back { font-size: 14px; color: var(--muted); }
+  .back:hover { color: var(--accent2); text-decoration: none; }
+
+  /* Document */
+  main { max-width: 760px; margin: 0 auto; padding: 56px 24px 96px; }
+  .eyebrow {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent2);
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(32px, 6vw, 46px); line-height: 1.1; margin-bottom: 16px;
+  }
+  .updated { color: var(--muted); font-size: 14px; margin-bottom: 12px; }
+  .lede { color: var(--accent3); font-size: 17px; margin-bottom: 40px; }
+
+  section { margin-bottom: 38px; }
+  h2 {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 21px;
+    margin-bottom: 14px; padding-top: 8px; display: flex; gap: 12px; align-items: baseline;
+  }
+  h2 .n { color: var(--accent2); font-size: 15px; font-weight: 800; min-width: 24px; }
+  h3 { font-size: 16px; font-weight: 600; margin: 18px 0 8px; color: var(--accent3); }
+  p { margin-bottom: 14px; color: var(--text); }
+  ul { margin: 0 0 14px 22px; }
+  li { margin-bottom: 9px; }
+  strong { color: #fff; font-weight: 600; }
+
+  .note {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent2); border-radius: 10px;
+    padding: 16px 18px; margin: 8px 0 14px; font-size: 15px; color: var(--accent3);
+  }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border); padding: 32px 24px;
+    text-align: center; color: var(--muted); font-size: 14px;
+  }
+  footer a { margin: 0 10px; }
+  .toc { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 40px; }
+  .toc a {
+    font-size: 13px; color: var(--muted); border: 1px solid var(--border);
+    padding: 5px 12px; border-radius: 20px;
+  }
+  .toc a:hover { color: var(--accent2); border-color: var(--accent2); text-decoration: none; }
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="logo" href="index.html">Our<span>World</span></a>
+  <a class="back" href="index.html">← Back to OurWorld</a>
+</header>
+
+<main>
+  <div class="eyebrow">Legal</div>
+  <h1>Privacy Policy</h1>
+  <div class="updated">Last updated: 15 June 2026</div>
+  <p class="lede">OurWorld is built to be honest with you — including about your data. This policy explains, in plain English, what we collect, why, and the control you have over it.</p>
+
+  <div class="toc">
+    <a href="#who">Who we are</a>
+    <a href="#collect">What we collect</a>
+    <a href="#use">How we use it</a>
+    <a href="#share">Who we share with</a>
+    <a href="#transfers">International transfers</a>
+    <a href="#retention">Retention</a>
+    <a href="#rights">Your rights</a>
+    <a href="#children">Children</a>
+    <a href="#security">Security</a>
+    <a href="#changes">Changes</a>
+    <a href="#contact">Contact</a>
+  </div>
+
+  <section id="who">
+    <h2><span class="n">1</span> Who we are</h2>
+    <p>OurWorld (“OurWorld”, “we”, “us”) is a civic-engagement and discussion platform. OurWorld is a trading name of <strong>Peter Sanford</strong>, an individual based in the United Kingdom, who is the “data controller” responsible for your personal information under UK data protection law.</p>
+    <p>If you have any questions about this policy or your data, contact us at <a href="mailto:petesanford.com@gmail.com">petesanford.com@gmail.com</a>.</p>
+  </section>
+
+  <section id="collect">
+    <h2><span class="n">2</span> The information we collect</h2>
+
+    <h3>Account information</h3>
+    <p>When you create an account or sign in — by email and password, or with Google — we collect your <strong>email address</strong>, the <strong>display name</strong> you choose or that Google provides, your <strong>profile photo</strong> (only if you sign in with Google and have one), and a unique account identifier generated by our sign-in provider. Authentication is handled by Google Firebase.</p>
+
+    <h3>Content you create</h3>
+    <p>OurWorld is a public platform. When you post an <strong>opinion</strong>, share a link, reply to others, or take part in a <strong>referendum vote</strong>, that contribution — together with your display name and photo — is visible to anyone who visits OurWorld.</p>
+    <p>Each vote records which option you chose, is shown on the site only as part of combined totals, and is linked to your account so that each person can vote only once per referendum. The underlying record (your chosen option and display name) is stored in our database to make that one-person-one-vote check possible.</p>
+
+    <h3>Messages to the AI assistant</h3>
+    <p>If you use the in-app AI chat assistant, the messages you send are passed to <strong>Anthropic</strong> (the makers of Claude) so that a response can be generated. Please don’t share sensitive personal information in those messages.</p>
+
+    <h3>Usage and analytics</h3>
+    <p>We use <strong>GoatCounter</strong>, a privacy-friendly analytics tool, to understand roughly how many people visit and which sections are used. It does not use tracking cookies and is designed not to collect information that identifies you personally.</p>
+
+    <h3>Information stored on your device</h3>
+    <p>OurWorld saves small pieces of information in your browser’s local storage — for example, to remember that you’ve already heard the welcome music on your first visit, to cache content so the site loads faster, and to keep your preferences. These are not advertising or cross-site tracking cookies.</p>
+  </section>
+
+  <section id="use">
+    <h2><span class="n">3</span> How and why we use your information</h2>
+    <p>We use your information to:</p>
+    <ul>
+      <li>provide your account and let you sign in;</li>
+      <li>display your public contributions (opinions, shares, replies and vote tallies);</li>
+      <li>make sure each person votes only once in a referendum;</li>
+      <li>keep the platform safe — for example, automated word-filtering that screens out abusive content;</li>
+      <li>enable optional features you choose to use, such as live video discussion and the AI assistant;</li>
+      <li>understand overall usage through privacy-friendly analytics.</li>
+    </ul>
+    <p>Under UK GDPR, our legal bases are: <strong>your consent</strong> (which you give by signing in and choosing to post or use optional features, and which you can withdraw at any time); <strong>performance of a contract</strong> (providing the service you’ve signed up for); and our <strong>legitimate interests</strong> in running a safe, functioning platform and understanding how it’s used.</p>
+  </section>
+
+  <section id="share">
+    <h2><span class="n">4</span> Who we share your information with</h2>
+    <p>We do <strong>not</strong> sell your personal data and we don’t show advertising. We use a small number of trusted service providers to make OurWorld work:</p>
+    <ul>
+      <li><strong>Google Firebase</strong> — account sign-in and our database, where accounts, posts and votes are stored. Database data is hosted in Google’s European (Frankfurt) region.</li>
+      <li><strong>Anthropic</strong> — processes the messages you send to the AI assistant to generate replies.</li>
+      <li><strong>Daily.co</strong> — powers live video discussion, but only if you choose to join a video room.</li>
+      <li><strong>YouTube / Google</strong> — short videos are embedded from YouTube. When you watch them, Google may collect information under its own privacy policy.</li>
+      <li><strong>GoatCounter</strong> — privacy-friendly visitor analytics.</li>
+      <li><strong>Netlify</strong> — hosts the website itself.</li>
+    </ul>
+    <p>We may also disclose information if we’re legally required to do so, or to protect the rights and safety of our users.</p>
+  </section>
+
+  <section id="transfers">
+    <h2><span class="n">5</span> International data transfers</h2>
+    <p>Some of our providers (such as Anthropic, Daily.co and Netlify) are based outside the UK, including in the United States. Where your data is transferred outside the UK, we rely on the safeguards those providers have in place, such as UK/EU-approved data transfer mechanisms, to keep it protected.</p>
+  </section>
+
+  <section id="retention">
+    <h2><span class="n">6</span> How long we keep it</h2>
+    <p>We keep your account information and contributions for as long as your account is active. If you ask us to delete your account, we will remove your account information and aim to remove or anonymise your contributions, except where we’re required to keep something by law.</p>
+  </section>
+
+  <section id="rights">
+    <h2><span class="n">7</span> Your rights</h2>
+    <p>Under UK data protection law you have the right to:</p>
+    <ul>
+      <li>access the personal information we hold about you;</li>
+      <li>ask us to correct anything that’s inaccurate;</li>
+      <li>ask us to delete your information (“right to erasure”);</li>
+      <li>ask us to restrict or object to how we use it;</li>
+      <li>receive a copy of your information in a portable format;</li>
+      <li>withdraw consent at any time, where we rely on consent.</li>
+    </ul>
+    <p>To exercise any of these, email <a href="mailto:petesanford.com@gmail.com">petesanford.com@gmail.com</a>. You also have the right to complain to the UK’s data protection regulator, the Information Commissioner’s Office (ICO), at <a href="https://ico.org.uk" target="_blank" rel="noopener">ico.org.uk</a>.</p>
+  </section>
+
+  <section id="children">
+    <h2><span class="n">8</span> Children</h2>
+    <p>OurWorld is intended for people aged <strong>16 and over</strong>. It is not directed at children, and we do not knowingly collect information from anyone under 16. If you believe a child has provided us with personal information, please contact us and we will delete it.</p>
+  </section>
+
+  <section id="security">
+    <h2><span class="n">9</span> Security</h2>
+    <p>We take reasonable steps to protect your information. Connections to OurWorld are encrypted, and access to the database is governed by security rules that prevent people from tampering with content that isn’t theirs. No online service can be guaranteed to be completely secure, but we work to keep your data safe.</p>
+  </section>
+
+  <section id="changes">
+    <h2><span class="n">10</span> Changes to this policy</h2>
+    <p>We may update this policy from time to time. When we do, we’ll change the “Last updated” date at the top. If the changes are significant, we’ll make a reasonable effort to let you know.</p>
+  </section>
+
+  <section id="contact">
+    <h2><span class="n">11</span> Contact us</h2>
+    <p>For any privacy questions or requests, email <a href="mailto:petesanford.com@gmail.com">petesanford.com@gmail.com</a>.</p>
+  </section>
+</main>
+
+<footer>
+  <div>
+    <a href="index.html">OurWorld</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Service</a>
+  </div>
+  <p style="margin-top:12px;">© 2026 OurWorld. A platform for people who want change.</p>
+</footer>
+</body>
+</html>
