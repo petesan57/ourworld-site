@@ -227,6 +227,21 @@ section.active { display: block; }
 .about-card h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
 .about-card p { font-size: 12px; color: var(--muted); line-height: 1.5; }
 .quote-block { background: var(--bg2); border-left: 3px solid var(--accent); border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 24px 0; font-size: 14px; color: var(--accent3); font-style: italic; line-height: 1.7; }
+/* FOUNDER / ABOUT & CONTACT PANEL */
+.fdr-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+.fdr-photos { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 22px; }
+.fdr-photos img { width: 100%; height: auto; max-height: 360px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border); display: block; }
+.fdr-name { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+.fdr-role { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent2); background: rgba(79,70,229,0.12); border: 1px solid var(--border); padding: 5px 12px; border-radius: 999px; margin-bottom: 18px; }
+.fdr-bio { color: var(--text); font-size: 15px; line-height: 1.75; }
+.fdr-bio p { margin-bottom: 14px; }
+.fdr-bio p:last-child { margin-bottom: 0; }
+.fdr-contact { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.fdr-btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-size: 14px; font-weight: 600; padding: 11px 20px; border-radius: 10px; transition: all 0.15s; font-family: inherit; }
+.fdr-btn-primary { background: var(--accent); color: #fff; border: 1px solid var(--accent); }
+.fdr-btn-primary:hover { background: #4338ca; }
+.fdr-btn-ghost { background: transparent; color: var(--accent2); border: 1px solid var(--border); }
+.fdr-btn-ghost:hover { border-color: var(--accent); color: var(--accent3); background: var(--bg3); }
 .biz-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
 .biz-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
 .biz-card .biz-tag { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 6px; }
@@ -467,6 +482,7 @@ input:focus { border-color: var(--accent); }
   .lp-section { padding: 3rem 1.2rem; }
   .cards-grid { grid-template-columns: 1fr; }
   .about-grid { grid-template-columns: repeat(2,1fr); }
+  .fdr-card { padding: 18px; }
   .studio-grid { grid-template-columns: repeat(2,1fr); }
   .minerals-grid { grid-template-columns: repeat(2,1fr); }
   .justice-stats { grid-template-columns: repeat(3,1fr); }
@@ -555,6 +571,7 @@ input:focus { border-color: var(--accent); }
       </div>
     </div>
     <a href="#" onclick="show('about',this)">🛡️ About</a>
+    <a href="#" onclick="show('founder',this)">👤 Founder</a>
     <div class="nav-dropdown">
       <button class="drop-toggle" id="social-toggle">🌐 Social</button>
       <div class="drop-menu">
@@ -603,6 +620,7 @@ input:focus { border-color: var(--accent); }
   <div class="more-overlay-title">All Sections</div>
   <div class="more-grid">
     <button class="more-item" onclick="show('about'); closeMore(); setBottomNav(null,'About')"><span class="more-icon">🛡️</span><span class="more-label">About</span></button>
+    <button class="more-item" onclick="show('founder'); closeMore(); setBottomNav(null,'Founder')"><span class="more-icon">👤</span><span class="more-label">Founder</span></button>
     <button class="more-item" onclick="show('proposals'); closeMore(); setBottomNav(null,'Proposals')"><span class="more-icon">📋</span><span class="more-label">Proposals</span></button>
     <button class="more-item" onclick="show('results'); closeMore(); setBottomNav(null,'Results')"><span class="more-icon">📊</span><span class="more-label">Results</span></button>
     <button class="more-item" onclick="show('connect'); closeMore(); setBottomNav(null,'Connect')"><span class="more-icon">❤️</span><span class="more-label">Connect</span></button>
@@ -705,7 +723,7 @@ input:focus { border-color: var(--accent); }
     </div>
     <div class="lp-cta-note">Free forever · No spam · Unsubscribe anytime</div>
   </div>
-  <div class="lp-footer-line">© 2026 OurWorld · Light Capitalism. Heavy Democracy. Zero Corruption.<br><a href="privacy.html" style="color:var(--accent2);text-decoration:none;">Privacy Policy</a> · <a href="terms.html" style="color:var(--accent2);text-decoration:none;">Terms of Service</a></div>
+  <div class="lp-footer-line">© 2026 OurWorld · Light Capitalism. Heavy Democracy. Zero Corruption.<br><a href="#" onclick="show('founder'); return false;" style="color:var(--accent2);text-decoration:none;">About the Founder</a> · <a href="privacy.html" style="color:var(--accent2);text-decoration:none;">Privacy Policy</a> · <a href="terms.html" style="color:var(--accent2);text-decoration:none;">Terms of Service</a></div>
 </div>
 
 <!-- REFERENDUMS -->
@@ -759,6 +777,29 @@ input:focus { border-color: var(--accent); }
     <div class="about-card"><div class="icon">🌍</div><h4>Environment</h4><p>The planet gets a vote too.</p></div>
   </div>
   <p style="margin-top:24px;color:var(--muted);font-size:13px;">Light Capitalism · Heavy Democracy · Zero Corruption</p>
+</section>
+
+<!-- FOUNDER -->
+<section id="founder">
+  <div class="section-title">👤 The Founder</div>
+  <div class="section-sub">The person behind OurWorld.</div>
+  <div class="fdr-card">
+    <div class="fdr-photos">
+      <img src="peter-ow-1.jpg" alt="Peter Sanford" loading="lazy">
+    </div>
+    <div class="fdr-name">Peter Sanford</div>
+    <div class="fdr-role">Musician · Writer · Activist</div>
+    <div class="fdr-bio">
+      <p>Peter Sanford is the creator of OurWorld. He built the platform around a simple conviction: that ordinary people, given honest tools and a real vote, can shape the decisions that affect their lives.</p>
+      <p>OurWorld is deliberately built against the grain of modern social media — no engagement farming, no outrage harvesting, no addictive mechanics, no party colours. Just direct democracy, transparency, and a place to be heard. It's honest civic theatre, and every part of it is held to one standard: no accusation without evidence.</p>
+      <p>Alongside OurWorld, Peter runs <em>The Imperfect Storm</em>, an environmental campaign holding developers and polluters to account in his corner of Oxfordshire — built on that same evidence-first standard.</p>
+      <p>He'd genuinely like to hear from you, whether you want to get involved, challenge something, or just say hello.</p>
+    </div>
+    <div class="fdr-contact">
+      <a class="fdr-btn fdr-btn-primary" href="mailto:petesanford.com@gmail.com">✉️ Email Peter</a>
+      <a class="fdr-btn fdr-btn-ghost" href="https://x.com/PeteSanford" target="_blank" rel="noopener">𝕏 @PeteSanford</a>
+    </div>
+  </div>
 </section>
 
 <!-- OPINIONS -->
